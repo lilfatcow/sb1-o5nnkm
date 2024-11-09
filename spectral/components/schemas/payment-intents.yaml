@@ -1,0 +1,221 @@
+PaymentMethod:
+  type: string
+  enum:
+    - sepa_credit
+    - sepa_debit
+    - us_ach_credit
+    - us_ach_debit
+    - gb_bacs_credit
+    - gb_bacs_debit
+    - card
+    - ideal
+    - sofort
+    - giropay
+    - bancontact
+    - eps
+    - p24
+    - multibanco
+    - blik
+    - paysafecard
+  description: Available payment methods
+
+PaymentObject:
+  type: object
+  required:
+    - id
+    - type
+  properties:
+    id:
+      type: string
+      format: uuid
+      description: ID of the object
+    type:
+      type: string
+      enum: [payable]
+      description: Type of the object
+
+PaymentParty:
+  type: object
+  required:
+    - id
+    - type
+  properties:
+    id:
+      type: string
+      format: uuid
+      description: ID of the party
+    type:
+      type: string
+      enum: [entity]
+      description: Type of the party
+    bank_accounts:
+      type: array
+      items:
+        $ref: './bank-accounts.yaml#/BankAccount'
+      description: List of bank accounts
+    name:
+      type: string
+      description: Name of the party
+
+PaymentInvoiceFile:
+  type: object
+  required:
+    - mimetype
+    - name
+    - url
+  properties:
+    mimetype:
+      type: string
+      description: MIME type of the file
+    name:
+      type: string
+      description: Name of the file
+    url:
+      type: string
+      format: uri
+      description: URL to download the file
+
+PaymentInvoice:
+  type: object
+  required:
+    - due_date
+    - file
+    - issue_date
+  properties:
+    due_date:
+      type: string
+      description: Due date of the invoice
+    file:
+      $ref: '#/PaymentInvoiceFile'
+    issue_date:
+      type: string
+      description: Issue date of the invoice
+
+UpdatePaymentIntent:
+  type: object
+  required:
+    - amount
+  properties:
+    amount:
+      type: integer
+      description: New amount for the payment intent
+
+PaymentIntent:
+  type: object
+  required:
+    - id
+    - updated_at
+    - amount
+    - currency
+    - payment_methods
+    - recipient
+    - status
+  properties:
+    id:
+      type: string
+      format: uuid
+      description: Unique identifier of the payment intent
+    updated_at:
+      type: string
+      format: date-time
+      description: When the payment intent was last updated
+    amount:
+      type: integer
+      description: Amount in minor units
+    currency:
+      type: string
+      description: Currency code
+    payment_methods:
+      type: array
+      items:
+        $ref: '#/PaymentMethod'
+      description: Available payment methods
+    recipient:
+      $ref: '#/PaymentParty'
+      description: Payment recipient
+    status:
+      type: string
+      description: Current status of the payment intent
+    application_fee_amount:
+      type: integer
+      description: Application fee amount in minor units
+    batch_payment_id:
+      type: string
+      format: uuid
+      description: ID of the batch payment this intent belongs to
+    invoice:
+      $ref: '#/PaymentInvoice'
+    object:
+      $ref: '#/PaymentObject'
+    payer:
+      $ref: '#/PaymentParty'
+      description: Payment payer
+    payment_link_id:
+      type: string
+      format: uuid
+      description: ID of the payment link used to create this intent
+    payment_reference:
+      type: string
+      description: Payment reference number
+    provider:
+      type: string
+      description: Payment provider
+    selected_payment_method:
+      $ref: '#/PaymentMethod'
+
+PaymentIntentList:
+  type: object
+  required:
+    - data
+  properties:
+    data:
+      type: array
+      items:
+        $ref: '#/PaymentIntent'
+      description: List of payment intents
+    next_pagination_token:
+      type: string
+      description: Token for getting the next page of results
+    prev_pagination_token:
+      type: string
+      description: Token for getting the previous page of results
+
+PaymentIntentHistory:
+  type: object
+  required:
+    - id
+    - created_at
+    - updated_at
+    - payment_intent_id
+    - status
+  properties:
+    id:
+      type: string
+      format: uuid
+      description: Unique identifier of the history record
+    created_at:
+      type: string
+      format: date-time
+      description: When the history record was created
+    updated_at:
+      type: string
+      format: date-time
+      description: When the history record was last updated
+    payment_intent_id:
+      type: string
+      format: uuid
+      description: ID of the payment intent this history record belongs to
+    status:
+      type: string
+      description: Status of the payment intent at this point in history
+
+PaymentIntentHistoryList:
+  type: object
+  required:
+    - data
+  properties:
+    data:
+      type: array
+      items:
+        $ref: '#/PaymentIntentHistory'
+      description: List of payment intent history records

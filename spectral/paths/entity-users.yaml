@@ -1,0 +1,484 @@
+/entity_users:
+  get:
+    operationId: getEntityUsers
+    tags:
+      - Entity Users
+    description: Retrieve a list of all entity users
+    security:
+      - bearerAuth: []
+    parameters:
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+      - $ref: '../components/parameters.yaml#/PaginationOrder'
+      - $ref: '../components/parameters.yaml#/PaginationLimit'
+      - $ref: '../components/parameters.yaml#/PaginationToken'
+      - name: sort
+        in: query
+        required: false
+        schema:
+          type: string
+          enum: [updated_at]
+          default: updated_at
+        description: Field to sort by
+      - name: id__in
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Filter by user IDs (comma-separated)
+      - name: id__not_in
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Exclude user IDs (comma-separated)
+      - name: role_id
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+        description: Filter by role ID
+      - name: role_id__in
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Filter by role IDs (comma-separated)
+      - name: login
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Filter by login
+      - name: status
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Filter by status
+      - name: first_name
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Filter by first name
+      - $ref: '../components/parameters.yaml#/CreatedAtGt'
+      - $ref: '../components/parameters.yaml#/CreatedAtLt'
+      - $ref: '../components/parameters.yaml#/CreatedAtGte'
+      - $ref: '../components/parameters.yaml#/CreatedAtLte'
+    responses:
+      '200':
+        description: Entity users retrieved successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/entity-users.yaml#/EntityUserList'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '403':
+        $ref: '../responses/errors.yaml#/Forbidden'
+      '406':
+        $ref: '../responses/errors.yaml#/NotAcceptable'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+
+  post:
+    operationId: createEntityUser
+    tags:
+      - Entity Users
+    description: Create a new entity user from the specified values
+    security:
+      - bearerAuth: []
+    parameters:
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/entity-users.yaml#/CreateEntityUserRequest'
+    responses:
+      '200':
+        description: Entity user created successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/entity-users.yaml#/EntityUser'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+
+/entity_users/{entity_user_id}:
+  get:
+    operationId: getEntityUserById
+    tags:
+      - Entity Users
+    description: Retrieve an entity user by its ID
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: entity_user_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the entity user to retrieve
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    responses:
+      '200':
+        description: Entity user retrieved successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/entity-users.yaml#/EntityUser'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '404':
+        $ref: '../responses/errors.yaml#/NotFound'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+
+  patch:
+    operationId: updateEntityUser
+    tags:
+      - Entity Users
+    description: Change the specified fields with provided values
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: entity_user_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the entity user to update
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              email:
+                type: string
+                format: email
+                description: An entity user business email
+              first_name:
+                type: string
+                description: First name
+              last_name:
+                type: string
+                description: Last name
+              login:
+                type: string
+                description: Login
+              phone:
+                type: string
+                description: An entity user phone number in the international format
+              role_id:
+                type: string
+                format: uuid
+                description: UUID of the role assigned to this entity user
+              title:
+                type: string
+                description: Title
+    responses:
+      '200':
+        description: Entity user updated successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/entity-users.yaml#/EntityUser'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '404':
+        $ref: '../responses/errors.yaml#/NotFound'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+
+  delete:
+    operationId: deleteEntityUser
+    tags:
+      - Entity Users
+    description: Delete an entity user by its ID
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: entity_user_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the entity user to delete
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    responses:
+      '204':
+        description: Entity user deleted successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '404':
+        $ref: '../responses/errors.yaml#/NotFound'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+
+/entity_users/me:
+  get:
+    operationId: getCurrentEntityUser
+    tags:
+      - Entity Users
+    description: Retrieve the current authenticated entity user
+    security:
+      - bearerAuth: []
+    parameters:
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    responses:
+      '200':
+        description: Current entity user retrieved successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/entity-users.yaml#/EntityUser'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+
+  patch:
+    operationId: updateCurrentEntityUser
+    tags:
+      - Entity Users
+    description: Change the specified fields with provided values
+    security:
+      - bearerAuth: []
+    parameters:
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              email:
+                type: string
+                format: email
+                description: An entity user business email
+              first_name:
+                type: string
+                description: First name
+              last_name:
+                type: string
+                description: Last name
+              phone:
+                type: string
+                description: An entity user phone number in the international format
+              title:
+                type: string
+                description: Title
+    responses:
+      '200':
+        description: Entity user updated successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/entity-users.yaml#/EntityUser'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+
+/entity_users/my_role:
+  get:
+    operationId: getCurrentUserRole
+    tags:
+      - Entity Users
+    description: Retrieves information of a role assigned to this entity user
+    security:
+      - bearerAuth: []
+    parameters:
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    responses:
+      '200':
+        description: Current user's role retrieved successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/roles.yaml#/Role'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+
+/entity_users/my_entity:
+  get:
+    operationId: getMyEntity
+    tags:
+      - Entity Users
+    description: Retrieves information of an entity, which this entity user belongs to
+    security:
+      - bearerAuth: []
+    parameters:
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    responses:
+      '200':
+        description: Entity retrieved successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/entities.yaml#/Entity'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+
+  patch:
+    operationId: updateMyEntity
+    tags:
+      - Entity Users
+    description: Update information of an entity, which this entity user belongs to
+    security:
+      - bearerAuth: []
+    parameters:
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/entities.yaml#/UpdateEntityRequest'
+    responses:
+      '200':
+        description: Entity updated successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/entities.yaml#/Entity'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'

@@ -1,0 +1,379 @@
+/approval_requests:
+  get:
+    operationId: getApprovalRequests
+    tags:
+      - Approval Requests
+    description: Get all approval requests
+    security:
+      - bearerAuth: []
+    parameters:
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+      - $ref: '../components/parameters.yaml#/PaginationOrder'
+      - $ref: '../components/parameters.yaml#/PaginationLimit'
+      - $ref: '../components/parameters.yaml#/PaginationToken'
+      - name: sort
+        in: query
+        required: false
+        schema:
+          type: string
+          enum: [created_at, updated_at]
+        description: Field to sort by
+      - $ref: '../components/parameters.yaml#/CreatedAtGt'
+      - $ref: '../components/parameters.yaml#/CreatedAtLt'
+      - $ref: '../components/parameters.yaml#/CreatedAtGte'
+      - $ref: '../components/parameters.yaml#/CreatedAtLte'
+      - name: updated_at__gt
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+        description: Filter by update date (greater than)
+      - name: updated_at__lt
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+        description: Filter by update date (less than)
+      - name: updated_at__gte
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+        description: Filter by update date (greater than or equal)
+      - name: updated_at__lte
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+        description: Filter by update date (less than or equal)
+      - name: object_id
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Filter by object ID
+      - name: object_id__in
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Filter by object IDs (comma-separated)
+      - name: status
+        in: query
+        required: false
+        schema:
+          $ref: '../components/schemas/approval-requests.yaml#/ApprovalRequestStatus'
+      - name: status__in
+        in: query
+        required: false
+        schema:
+          $ref: '../components/schemas/approval-requests.yaml#/ApprovalRequestStatus'
+      - name: user_id
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+        description: Filter by user ID
+      - name: role_id
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+        description: Filter by role ID
+      - name: object_type
+        in: query
+        required: false
+        schema:
+          $ref: '../components/schemas/approval-requests.yaml#/ApprovalRequestObjectType'
+      - name: object_type__in
+        in: query
+        required: false
+        schema:
+          $ref: '../components/schemas/approval-requests.yaml#/ApprovalRequestObjectType'
+      - name: created_by
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+        description: Filter by creator
+    responses:
+      '200':
+        description: Approval requests retrieved successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/approval-requests.yaml#/ApprovalRequestList'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '403':
+        $ref: '../responses/errors.yaml#/Forbidden'
+      '406':
+        $ref: '../responses/errors.yaml#/NotAcceptable'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+      '500':
+        $ref: '../responses/errors.yaml#/InternalServerError'
+
+  post:
+    operationId: createApprovalRequest
+    tags:
+      - Approval Requests
+    description: Create a new approval request
+    security:
+      - bearerAuth: []
+    parameters:
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            oneOf:
+              - $ref: '../components/schemas/approval-requests.yaml#/CreateApprovalRequestByRole'
+              - $ref: '../components/schemas/approval-requests.yaml#/CreateApprovalRequestByUser'
+    responses:
+      '200':
+        description: Approval request created successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/approval-requests.yaml#/ApprovalRequest'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '403':
+        $ref: '../responses/errors.yaml#/Forbidden'
+      '404':
+        $ref: '../responses/errors.yaml#/NotFound'
+      '406':
+        $ref: '../responses/errors.yaml#/NotAcceptable'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+      '500':
+        $ref: '../responses/errors.yaml#/InternalServerError'
+
+/approval_requests/{approval_request_id}:
+  get:
+    operationId: getApprovalRequestById
+    tags:
+      - Approval Requests
+    description: Get an approval request by ID
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: approval_request_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the approval request to retrieve
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    responses:
+      '200':
+        description: Approval request retrieved successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/approval-requests.yaml#/ApprovalRequest'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '403':
+        $ref: '../responses/errors.yaml#/Forbidden'
+      '404':
+        $ref: '../responses/errors.yaml#/NotFound'
+      '406':
+        $ref: '../responses/errors.yaml#/NotAcceptable'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+      '500':
+        $ref: '../responses/errors.yaml#/InternalServerError'
+
+/approval_requests/{approval_request_id}/approve:
+  post:
+    operationId: approveApprovalRequest
+    tags:
+      - Approval Requests
+    description: Approve an approval request
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: approval_request_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the approval request to approve
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    responses:
+      '200':
+        description: Approval request approved successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/approval-requests.yaml#/ApprovalRequest'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '403':
+        $ref: '../responses/errors.yaml#/Forbidden'
+      '404':
+        $ref: '../responses/errors.yaml#/NotFound'
+      '409':
+        $ref: '../responses/errors.yaml#/Conflict'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+      '500':
+        $ref: '../responses/errors.yaml#/InternalServerError'
+
+/approval_requests/{approval_request_id}/cancel:
+  post:
+    operationId: cancelApprovalRequest
+    tags:
+      - Approval Requests
+    description: Cancel an approval request
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: approval_request_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the approval request to cancel
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    responses:
+      '200':
+        description: Approval request cancelled successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/approval-requests.yaml#/ApprovalRequest'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '403':
+        $ref: '../responses/errors.yaml#/Forbidden'
+      '404':
+        $ref: '../responses/errors.yaml#/NotFound'
+      '409':
+        $ref: '../responses/errors.yaml#/Conflict'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+      '500':
+        $ref: '../responses/errors.yaml#/InternalServerError'
+
+/approval_requests/{approval_request_id}/reject:
+  post:
+    operationId: rejectApprovalRequest
+    tags:
+      - Approval Requests
+    description: Reject an approval request
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: approval_request_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the approval request to reject
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    responses:
+      '200':
+        description: Approval request rejected successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/approval-requests.yaml#/ApprovalRequest'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '403':
+        $ref: '../responses/errors.yaml#/Forbidden'
+      '404':
+        $ref: '../responses/errors.yaml#/NotFound'
+      '409':
+        $ref: '../responses/errors.yaml#/Conflict'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+      '500':
+        $ref: '../responses/errors.yaml#/InternalServerError'

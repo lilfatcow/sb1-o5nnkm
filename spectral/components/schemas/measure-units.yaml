@@ -1,0 +1,59 @@
+CreateMeasureUnit:
+  type: object
+  required:
+    - name
+  properties:
+    name:
+      type: string
+      description: Name of the measure unit
+    description:
+      type: string
+      description: Description of the measure unit
+
+UpdateMeasureUnit:
+  type: object
+  properties:
+    name:
+      type: string
+      description: Name of the measure unit
+    description:
+      type: string
+      description: Description of the measure unit
+
+MeasureUnit:
+  type: object
+  required:
+    - id
+    - created_at
+    - updated_at
+    - name
+  properties:
+    id:
+      type: string
+      format: uuid
+      description: Unique identifier of the measure unit
+    created_at:
+      type: string
+      format: date-time
+      description: When the measure unit was created
+    updated_at:
+      type: string
+      format: date-time
+      description: When the measure unit was last updated
+    name:
+      type: string
+      description: Name of the measure unit
+    description:
+      type: string
+      description: Description of the measure unit
+
+MeasureUnitList:
+  type: object
+  required:
+    - data
+  properties:
+    data:
+      type: array
+      items:
+        $ref: '#/MeasureUnit'
+      description: List of measure units

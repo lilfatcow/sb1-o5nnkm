@@ -1,0 +1,193 @@
+MailStatus:
+  type: string
+  enum:
+    - pending
+    - processing
+    - sent
+    - partially_sent
+    - failed
+  description: Status of a mail sent by receivable
+
+MailRecipient:
+  type: object
+  required:
+    - email
+    - is_success
+  properties:
+    email:
+      type: string
+      format: email
+      description: Email address of the recipient
+    is_success:
+      type: boolean
+      description: Whether the email was successfully sent to this recipient
+
+MailRecipients:
+  type: object
+  properties:
+    bcc:
+      type: array
+      items:
+        $ref: '#/MailRecipient'
+      description: BCC recipients
+    cc:
+      type: array
+      items:
+        $ref: '#/MailRecipient'
+      description: CC recipients
+    to:
+      type: array
+      items:
+        $ref: '#/MailRecipient'
+      description: Main recipients
+
+Mail:
+  type: object
+  required:
+    - id
+    - created_at
+    - updated_at
+    - status
+  properties:
+    id:
+      type: string
+      format: uuid
+      description: Unique identifier of the mail
+    created_at:
+      type: string
+      format: date-time
+      description: The time the mail task was created
+    updated_at:
+      type: string
+      format: date-time
+      description: The time the mail task was updated
+    status:
+      $ref: '#/MailStatus'
+    recipients:
+      $ref: '#/MailRecipients'
+
+MailList:
+  type: object
+  required:
+    - data
+  properties:
+    data:
+      type: array
+      items:
+        $ref: '#/Mail'
+      description: List of mails
+    next_pagination_token:
+      type: string
+      description: Token for getting the next page of results
+    prev_pagination_token:
+      type: string
+      description: Token for getting the previous page of results
+
+HistoryEventType:
+  type: string
+  enum:
+    - status_changed
+    - receivable_updated
+    - based_on_receivable_created
+    - payment_received
+    - mail_sent
+  description: Type of history event
+
+HistoryEventData:
+  oneOf:
+    - type: object
+      required:
+        - new_status
+        - old_status
+      properties:
+        new_status:
+          $ref: '#/ReceivableStatus'
+        old_status:
+          $ref: '#/ReceivableStatus'
+      description: Status change event data
+    - type: object
+      required:
+        - changes
+      properties:
+        changes:
+          type: object
+          additionalProperties: true
+      description: Update event data
+    - type: object
+      required:
+        - based_on_id
+      properties:
+        based_on_id:
+          type: string
+          format: uuid
+      description: Based on creation event data
+    - type: object
+      required:
+        - payment_id
+        - amount
+      properties:
+        payment_id:
+          type: string
+          format: uuid
+        amount:
+          type: integer
+      description: Payment received event data
+    - type: object
+      required:
+        - mail_id
+      properties:
+        mail_id:
+          type: string
+          format: uuid
+      description: Mail sent event data
+
+ReceivableHistoryRecord:
+  type: object
+  required:
+    - id
+    - event_type
+    - event_data
+    - receivable_id
+    - timestamp
+  properties:
+    id:
+      type: string
+      format: uuid
+      description: ID of the history record
+    event_type:
+      $ref: '#/HistoryEventType'
+    event_data:
+      $ref: '#/HistoryEventData'
+    receivable_id:
+      type: string
+      format: uuid
+      description: ID of receivable that was changed
+    timestamp:
+      type: string
+      format: date-time
+      description: Timestamp when the event has happened
+    current_pdf_url:
+      type: string
+      format: uri
+      description: Link to the PDF that shows the state of the document after this change
+    entity_user_id:
+      type: string
+      format: uuid
+      description: ID of the entity user who triggered this event
+
+ReceivableHistoryList:
+  type: object
+  required:
+    - data
+  properties:
+    data:
+      type: array
+      items:
+        $ref: '#/ReceivableHistoryRecord'
+      description: List of history records
+    next_pagination_token:
+      type: string
+      description: Token for getting the next page of results
+    prev_pagination_token:
+      type: string
+      description: Token for getting the previous page of results

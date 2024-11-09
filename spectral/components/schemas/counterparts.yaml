@@ -1,0 +1,458 @@
+CounterpartAddress:
+  type: object
+  required:
+    - city
+    - country
+    - line1
+    - postal_code
+  properties:
+    city:
+      type: string
+      description: City name
+    country:
+      type: string
+      pattern: ^[A-Z]{2}$
+      description: Two-letter ISO country code (ISO 3166-1 alpha-2)
+    line1:
+      type: string
+      description: Street address
+    line2:
+      type: string
+      description: Additional address information (if any)
+    postal_code:
+      type: string
+      description: ZIP or postal code
+    state:
+      type: string
+      description: State, region, province, or county
+
+CreateCounterpartIndividual:
+  type: object
+  required:
+    - type
+    - individual
+  properties:
+    type:
+      type: string
+      enum: [individual]
+      default: individual
+      description: The counterpart type
+    individual:
+      type: object
+      required:
+        - address
+        - first_name
+        - is_customer
+        - is_vendor
+        - last_name
+      properties:
+        address:
+          $ref: '#/CounterpartAddress'
+        first_name:
+          type: string
+          description: The person's first name
+        is_customer:
+          type: boolean
+          description: Indicates if the counterpart is a customer
+        is_vendor:
+          type: boolean
+          description: Indicates if the counterpart is a vendor
+        last_name:
+          type: string
+          description: The person's last name
+        email:
+          type: string
+          format: email
+          description: The person's email address
+        phone:
+          type: string
+          description: The person's phone number
+        tag_ids:
+          type: array
+          items:
+            type: string
+            format: uuid
+          description: A list of IDs of user-defined tags assigned to this counterpart
+        title:
+          type: string
+          description: The person's title or honorific (e.g., Mr., Ms., Dr., Prof.)
+    language:
+      type: string
+      pattern: ^[a-z]{2}$
+      description: The language used to generate pdf documents for this counterpart
+    reminders_enabled:
+      type: boolean
+      description: Whether payment reminders are enabled
+    tax_id:
+      type: string
+      description: The counterpart's taxpayer identification number
+
+CreateCounterpartOrganization:
+  type: object
+  required:
+    - type
+    - organization
+  properties:
+    type:
+      type: string
+      enum: [organization]
+      default: organization
+      description: The counterpart type
+    organization:
+      type: object
+      required:
+        - address
+        - is_customer
+        - is_vendor
+        - legal_name
+      properties:
+        address:
+          $ref: '#/CounterpartAddress'
+        is_customer:
+          type: boolean
+          description: Indicates if the counterpart is a customer
+        is_vendor:
+          type: boolean
+          description: Indicates if the counterpart is a vendor
+        legal_name:
+          type: string
+          description: The legal name of the organization
+        email:
+          type: string
+          format: email
+          description: The organization's email address
+        phone:
+          type: string
+          description: The organization's phone number
+        tag_ids:
+          type: array
+          items:
+            type: string
+            format: uuid
+          description: A list of IDs of user-defined tags assigned to this counterpart
+    language:
+      type: string
+      pattern: ^[a-z]{2}$
+      description: The language used to generate pdf documents for this counterpart
+    reminders_enabled:
+      type: boolean
+      description: Whether payment reminders are enabled
+    tax_id:
+      type: string
+      description: The counterpart's taxpayer identification number
+
+UpdateCounterpartIndividual:
+  type: object
+  required:
+    - individual
+  properties:
+    individual:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          description: The person's email address
+        first_name:
+          type: string
+          description: The person's first name
+        is_customer:
+          type: boolean
+          description: Indicates if the counterpart is a customer
+        is_vendor:
+          type: boolean
+          description: Indicates if the counterpart is a vendor
+        last_name:
+          type: string
+          description: The person's last name
+        phone:
+          type: string
+          description: The person's phone number
+        tag_ids:
+          type: array
+          items:
+            type: string
+            format: uuid
+          description: A list of IDs of user-defined tags assigned to this counterpart
+        title:
+          type: string
+          description: The person's title or honorific (e.g., Mr., Ms., Dr., Prof.)
+    default_billing_address_id:
+      type: string
+      format: uuid
+      description: ID of the counterpart's billing address
+    default_shipping_address_id:
+      type: string
+      format: uuid
+      description: ID of the shipping address
+    language:
+      type: string
+      pattern: ^[a-z]{2}$
+      description: The language used to generate pdf documents for this counterpart
+    reminders_enabled:
+      type: boolean
+      description: Whether payment reminders are enabled
+    tax_id:
+      type: string
+      description: The counterpart's taxpayer identification number
+
+UpdateCounterpartOrganization:
+  type: object
+  required:
+    - organization
+  properties:
+    organization:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          description: The organization's email address
+        is_customer:
+          type: boolean
+          description: Indicates if the counterpart is a customer
+        is_vendor:
+          type: boolean
+          description: Indicates if the counterpart is a vendor
+        legal_name:
+          type: string
+          description: The legal name of the organization
+        phone:
+          type: string
+          description: The organization's phone number
+        tag_ids:
+          type: array
+          items:
+            type: string
+            format: uuid
+          description: A list of IDs of user-defined tags assigned to this counterpart
+    default_billing_address_id:
+      type: string
+      format: uuid
+      description: ID of the counterpart's billing address
+    default_shipping_address_id:
+      type: string
+      format: uuid
+      description: ID of the shipping address
+    language:
+      type: string
+      pattern: ^[a-z]{2}$
+      description: The language used to generate pdf documents for this counterpart
+    reminders_enabled:
+      type: boolean
+      description: Whether payment reminders are enabled
+    tax_id:
+      type: string
+      description: The counterpart's taxpayer identification number
+
+CounterpartTag:
+  type: object
+  required:
+    - id
+    - created_at
+    - updated_at
+    - name
+  properties:
+    id:
+      type: string
+      format: uuid
+      description: Unique identifier of the tag
+    created_at:
+      type: string
+      format: date-time
+      description: Creation timestamp
+    updated_at:
+      type: string
+      format: date-time
+      description: Last update timestamp
+    created_by_entity_user_id:
+      type: string
+      format: uuid
+      description: ID of the entity user who created this tag
+    description:
+      type: string
+      description: Optional description of the tag
+    name:
+      type: string
+      description: Name of the tag
+
+CounterpartIndividual:
+  type: object
+  properties:
+    email:
+      type: string
+      format: email
+      description: Email address
+    first_name:
+      type: string
+      description: First name
+    is_customer:
+      type: boolean
+      description: Whether this person is a customer
+    is_vendor:
+      type: boolean
+      description: Whether this person is a vendor
+    last_name:
+      type: string
+      description: Last name
+    phone:
+      type: string
+      description: Phone number
+    tags:
+      type: array
+      items:
+        $ref: '#/CounterpartTag'
+      description: Tags associated with this counterpart
+    title:
+      type: string
+      description: Title (e.g., Mr., Ms., Dr.)
+
+CounterpartOrganization:
+  type: object
+  properties:
+    email:
+      type: string
+      format: email
+      description: Email address
+    is_customer:
+      type: boolean
+      description: Whether this organization is a customer
+    is_vendor:
+      type: boolean
+      description: Whether this organization is a vendor
+    legal_name:
+      type: string
+      description: Legal name of the organization
+    phone:
+      type: string
+      description: Phone number
+    tags:
+      type: array
+      items:
+        $ref: '#/CounterpartTag'
+      description: Tags associated with this counterpart
+
+CounterpartIndividualResponse:
+  type: object
+  required:
+    - id
+    - created_at
+    - updated_at
+    - type
+    - individual
+  properties:
+    id:
+      type: string
+      format: uuid
+      description: Unique ID of the counterpart
+    created_at:
+      type: string
+      format: date-time
+      description: Date and time when the counterpart was created
+    updated_at:
+      type: string
+      format: date-time
+      description: Date and time when the counterpart was last updated
+    type:
+      type: string
+      enum: [individual, organization]
+      description: The counterpart type
+    individual:
+      $ref: '#/CounterpartIndividual'
+    created_automatically:
+      type: boolean
+      description: Whether the counterpart was created automatically by OCR
+    default_billing_address_id:
+      type: string
+      format: uuid
+      description: ID of the default billing address
+    default_shipping_address_id:
+      type: string
+      format: uuid
+      description: ID of the default shipping address
+    created_by_entity_user_id:
+      type: string
+      format: uuid
+      description: Entity user ID of counterpart creator
+    language:
+      type: string
+      pattern: ^[a-z]{2}$
+      description: Language code for documents
+    reminders_enabled:
+      type: boolean
+      description: Whether payment reminders are enabled
+    tax_id:
+      type: string
+      description: Tax ID number
+
+CounterpartOrganizationResponse:
+  type: object
+  required:
+    - id
+    - created_at
+    - updated_at
+    - type
+    - organization
+  properties:
+    id:
+      type: string
+      format: uuid
+      description: Unique ID of the counterpart
+    created_at:
+      type: string
+      format: date-time
+      description: Date and time when the counterpart was created
+    updated_at:
+      type: string
+      format: date-time
+      description: Date and time when the counterpart was last updated
+    type:
+      type: string
+      enum: [individual, organization]
+      description: The counterpart type
+    organization:
+      $ref: '#/CounterpartOrganization'
+    created_automatically:
+      type: boolean
+      description: Whether the counterpart was created automatically by OCR
+    default_billing_address_id:
+      type: string
+      format: uuid
+      description: ID of the default billing address
+    default_shipping_address_id:
+      type: string
+      format: uuid
+      description: ID of the default shipping address
+    created_by_entity_user_id:
+      type: string
+      format: uuid
+      description: Entity user ID of counterpart creator
+    language:
+      type: string
+      pattern: ^[a-z]{2}$
+      description: Language code for documents
+    reminders_enabled:
+      type: boolean
+      description: Whether payment reminders are enabled
+    tax_id:
+      type: string
+      description: Tax ID number
+
+CounterpartList:
+  type: object
+  required:
+    - data
+  properties:
+    data:
+      type: array
+      items:
+        oneOf:
+          - $ref: '#/CounterpartIndividualResponse'
+          - $ref: '#/CounterpartOrganizationResponse'
+      description: List of counterparts
+    next_pagination_token:
+      type: string
+      description: Token for getting the next page of results
+    prev_pagination_token:
+      type: string
+      description: Token for getting the previous page of results

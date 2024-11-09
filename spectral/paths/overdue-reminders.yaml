@@ -1,0 +1,219 @@
+openapi: 3.0.0
+paths:
+  /overdue_reminders:
+    get:
+      operationId: getOverdueReminders
+      tags:
+        - Overdue Reminders
+      description: Get all overdue reminder configurations
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '../components/parameters.yaml#/MoniteVersion'
+        - $ref: '../components/parameters.yaml#/MoniteEntityId'
+      responses:
+        '200':
+          description: Overdue reminders retrieved successfully
+          headers:
+            x-monite-version:
+              $ref: '../components/headers.yaml#/MoniteVersion'
+            x-request-id:
+              $ref: '../components/headers.yaml#/RequestId'
+            x-process-time:
+              $ref: '../components/headers.yaml#/ProcessTime'
+            x-monite-entity-id:
+              $ref: '../components/headers.yaml#/MoniteEntityId'
+          content:
+            application/json:
+              schema:
+                $ref: '../components/schemas/overdue-reminders.yaml#/OverdueReminderList'
+        '401':
+          $ref: '../responses/errors.yaml#/Unauthorized'
+        '403':
+          $ref: '../responses/errors.yaml#/Forbidden'
+        '422':
+          $ref: '../responses/errors.yaml#/UnprocessableEntity'
+        '500':
+          $ref: '../responses/errors.yaml#/InternalServerError'
+
+    post:
+      operationId: createOverdueReminder
+      tags:
+        - Overdue Reminders
+      description: Create a new overdue reminder configuration
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '../components/parameters.yaml#/MoniteVersion'
+        - $ref: '../components/parameters.yaml#/MoniteEntityId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/overdue-reminders.yaml#/CreateOverdueReminder'
+      responses:
+        '200':
+          description: Overdue reminder created successfully
+          headers:
+            x-monite-version:
+              $ref: '../components/headers.yaml#/MoniteVersion'
+            x-request-id:
+              $ref: '../components/headers.yaml#/RequestId'
+            x-process-time:
+              $ref: '../components/headers.yaml#/ProcessTime'
+            x-monite-entity-id:
+              $ref: '../components/headers.yaml#/MoniteEntityId'
+          content:
+            application/json:
+              schema:
+                $ref: '../components/schemas/overdue-reminders.yaml#/OverdueReminder'
+        '400':
+          $ref: '../responses/errors.yaml#/BadRequest'
+        '401':
+          $ref: '../responses/errors.yaml#/Unauthorized'
+        '403':
+          $ref: '../responses/errors.yaml#/Forbidden'
+        '422':
+          $ref: '../responses/errors.yaml#/UnprocessableEntity'
+        '500':
+          $ref: '../responses/errors.yaml#/InternalServerError'
+
+  /overdue_reminders/{overdue_reminder_id}:
+    get:
+      operationId: getOverdueReminderById
+      tags:
+        - Overdue Reminders
+      description: Get an overdue reminder configuration by ID
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: overdue_reminder_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: The ID of the overdue reminder to retrieve
+        - $ref: '../components/parameters.yaml#/MoniteVersion'
+        - $ref: '../components/parameters.yaml#/MoniteEntityId'
+      responses:
+        '200':
+          description: Overdue reminder retrieved successfully
+          headers:
+            x-monite-version:
+              $ref: '../components/headers.yaml#/MoniteVersion'
+            x-request-id:
+              $ref: '../components/headers.yaml#/RequestId'
+            x-process-time:
+              $ref: '../components/headers.yaml#/ProcessTime'
+            x-monite-entity-id:
+              $ref: '../components/headers.yaml#/MoniteEntityId'
+          content:
+            application/json:
+              schema:
+                $ref: '../components/schemas/overdue-reminders.yaml#/OverdueReminder'
+        '401':
+          $ref: '../responses/errors.yaml#/Unauthorized'
+        '403':
+          $ref: '../responses/errors.yaml#/Forbidden'
+        '404':
+          $ref: '../responses/errors.yaml#/NotFound'
+        '422':
+          $ref: '../responses/errors.yaml#/UnprocessableEntity'
+        '500':
+          $ref: '../responses/errors.yaml#/InternalServerError'
+
+    patch:
+      operationId: updateOverdueReminder
+      tags:
+        - Overdue Reminders
+      description: Update an overdue reminder configuration
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: overdue_reminder_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: The ID of the overdue reminder to update
+        - $ref: '../components/parameters.yaml#/MoniteVersion'
+        - $ref: '../components/parameters.yaml#/MoniteEntityId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/overdue-reminders.yaml#/UpdateOverdueReminder'
+      responses:
+        '200':
+          description: Overdue reminder updated successfully
+          headers:
+            x-monite-version:
+              $ref: '../components/headers.yaml#/MoniteVersion'
+            x-request-id:
+              $ref: '../components/headers.yaml#/RequestId'
+            x-process-time:
+              $ref: '../components/headers.yaml#/ProcessTime'
+            x-monite-entity-id:
+              $ref: '../components/headers.yaml#/MoniteEntityId'
+          content:
+            application/json:
+              schema:
+                $ref: '../components/schemas/overdue-reminders.yaml#/OverdueReminder'
+        '400':
+          $ref: '../responses/errors.yaml#/BadRequest'
+        '401':
+          $ref: '../responses/errors.yaml#/Unauthorized'
+        '403':
+          $ref: '../responses/errors.yaml#/Forbidden'
+        '404':
+          $ref: '../responses/errors.yaml#/NotFound'
+        '422':
+          $ref: '../responses/errors.yaml#/UnprocessableEntity'
+        '500':
+          $ref: '../responses/errors.yaml#/InternalServerError'
+
+    delete:
+      operationId: deleteOverdueReminder
+      tags:
+        - Overdue Reminders
+      description: Delete an overdue reminder configuration
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: overdue_reminder_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: The ID of the overdue reminder to delete
+        - $ref: '../components/parameters.yaml#/MoniteVersion'
+        - $ref: '../components/parameters.yaml#/MoniteEntityId'
+      responses:
+        '204':
+          description: Overdue reminder deleted successfully
+          headers:
+            x-monite-version:
+              $ref: '../components/headers.yaml#/MoniteVersion'
+            x-request-id:
+              $ref: '../components/headers.yaml#/RequestId'
+            x-process-time:
+              $ref: '../components/headers.yaml#/ProcessTime'
+            x-monite-entity-id:
+              $ref: '../components/headers.yaml#/MoniteEntityId'
+        '400':
+          $ref: '../responses/errors.yaml#/BadRequest'
+        '401':
+          $ref: '../responses/errors.yaml#/Unauthorized'
+        '403':
+          $ref: '../responses/errors.yaml#/Forbidden'
+        '404':
+          $ref: '../responses/errors.yaml#/NotFound'
+        '422':
+          $ref: '../responses/errors.yaml#/UnprocessableEntity'
+        '500':
+          $ref: '../responses/errors.yaml#/InternalServerError'

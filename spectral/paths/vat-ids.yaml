@@ -1,0 +1,238 @@
+/entities/{entity_id}/vat_ids:
+  get:
+    operationId: getEntityVatIds
+    tags:
+      - Entity VAT IDs
+    description: Get all VAT IDs associated with this entity
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: entity_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the entity to get VAT IDs for
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    responses:
+      '200':
+        description: VAT IDs retrieved successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/vat-ids.yaml#/VatIdList'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+
+  post:
+    operationId: createEntityVatId
+    tags:
+      - Entity VAT IDs
+    description: Create a new VAT ID for this entity
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: entity_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the entity to create a VAT ID for
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/vat-ids.yaml#/CreateVatIdRequest'
+    responses:
+      '200':
+        description: VAT ID created successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/vat-ids.yaml#/VatId'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '404':
+        $ref: '../responses/errors.yaml#/NotFound'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+
+/entities/{entity_id}/vat_ids/{vat_id}:
+  get:
+    operationId: getEntityVatId
+    tags:
+      - Entity VAT IDs
+    description: Get a specific VAT ID by its ID
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: entity_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the entity that owns the VAT ID
+      - name: vat_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the VAT ID to retrieve
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    responses:
+      '200':
+        description: VAT ID retrieved successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/vat-ids.yaml#/VatId'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '404':
+        $ref: '../responses/errors.yaml#/NotFound'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+
+  patch:
+    operationId: updateEntityVatId
+    tags:
+      - Entity VAT IDs
+    description: Update a VAT ID by its ID
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: entity_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the entity that owns the VAT ID
+      - name: vat_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the VAT ID to update
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/vat-ids.yaml#/UpdateVatIdRequest'
+    responses:
+      '200':
+        description: VAT ID updated successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/vat-ids.yaml#/VatId'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '404':
+        $ref: '../responses/errors.yaml#/NotFound'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+
+  delete:
+    operationId: deleteEntityVatId
+    tags:
+      - Entity VAT IDs
+    description: Delete a VAT ID by its ID
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: entity_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the entity that owns the VAT ID
+      - name: vat_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the VAT ID to delete
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    responses:
+      '204':
+        description: VAT ID deleted successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '404':
+        $ref: '../responses/errors.yaml#/NotFound'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'

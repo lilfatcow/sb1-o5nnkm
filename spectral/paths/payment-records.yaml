@@ -1,0 +1,171 @@
+/payment_records:
+  get:
+    operationId: getPaymentRecords
+    tags:
+      - Payment Records
+    description: Get all payment records
+    security:
+      - bearerAuth: []
+    parameters:
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+      - $ref: '../components/parameters.yaml#/PaginationOrder'
+      - $ref: '../components/parameters.yaml#/PaginationLimit'
+      - $ref: '../components/parameters.yaml#/PaginationToken'
+      - name: sort
+        in: query
+        required: false
+        schema:
+          type: string
+          enum: [paid_at, amount]
+        description: Field to sort by
+      - name: is_external
+        in: query
+        required: false
+        schema:
+          type: boolean
+        description: Filter by external payment status
+      - name: object_id
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Filter by object ID
+    responses:
+      '200':
+        description: Payment records retrieved successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/payment-records.yaml#/PaymentRecordList'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '403':
+        $ref: '../responses/errors.yaml#/Forbidden'
+      '404':
+        $ref: '../responses/errors.yaml#/NotFound'
+      '406':
+        $ref: '../responses/errors.yaml#/NotAcceptable'
+      '409':
+        $ref: '../responses/errors.yaml#/Conflict'
+      '416':
+        $ref: '../responses/errors.yaml#/RangeNotSatisfiable'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+      '500':
+        $ref: '../responses/errors.yaml#/InternalServerError'
+
+  post:
+    operationId: createPaymentRecord
+    tags:
+      - Payment Records
+    description: Create a new payment record
+    security:
+      - bearerAuth: []
+    parameters:
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/payment-records.yaml#/CreatePaymentRecord'
+    responses:
+      '200':
+        description: Payment record created successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/payment-records.yaml#/PaymentRecord'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '403':
+        $ref: '../responses/errors.yaml#/Forbidden'
+      '404':
+        $ref: '../responses/errors.yaml#/NotFound'
+      '406':
+        $ref: '../responses/errors.yaml#/NotAcceptable'
+      '409':
+        $ref: '../responses/errors.yaml#/Conflict'
+      '416':
+        $ref: '../responses/errors.yaml#/RangeNotSatisfiable'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+      '500':
+        $ref: '../responses/errors.yaml#/InternalServerError'
+
+/payment_records/{payment_record_id}:
+  get:
+    operationId: getPaymentRecord
+    tags:
+      - Payment Records
+    description: Get a specific payment record by ID
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: payment_record_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the payment record to retrieve
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    responses:
+      '200':
+        description: Payment record retrieved successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/payment-records.yaml#/PaymentRecord'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '403':
+        $ref: '../responses/errors.yaml#/Forbidden'
+      '404':
+        $ref: '../responses/errors.yaml#/NotFound'
+      '406':
+        $ref: '../responses/errors.yaml#/NotAcceptable'
+      '409':
+        $ref: '../responses/errors.yaml#/Conflict'
+      '416':
+        $ref: '../responses/errors.yaml#/RangeNotSatisfiable'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+      '500':
+        $ref: '../responses/errors.yaml#/InternalServerError'

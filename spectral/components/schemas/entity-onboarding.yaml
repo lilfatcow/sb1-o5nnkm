@@ -1,0 +1,82 @@
+EstimatedMonthlyRevenue:
+  type: object
+  required:
+    - amount
+    - currency
+  properties:
+    amount:
+      type: integer
+      description: The revenue amount in minor units
+    currency:
+      $ref: './currencies.yaml#/Currency'
+
+BusinessProfile:
+  type: object
+  properties:
+    description_of_goods_or_services:
+      type: string
+      description: Required for US entities. A free-form description of the products the entity sells (whether online or at offline retail stores) or the services it provides to its customers.
+    estimated_monthly_revenue:
+      $ref: '#/EstimatedMonthlyRevenue'
+      description: Required for US entities. The approximate revenue that the business generates per month.
+    mcc:
+      type: string
+      description: The merchant category code of the entity. MCCs are used to classify businesses based on the goods or services they provide.
+    operating_countries:
+      type: array
+      items:
+        type: string
+        pattern: ^[A-Z]{2}$
+      description: Required for US entities. A list of primary countries where the business conducts its operations, such as selling products or providing services. Use two-letter country codes (ISO 3166-2 alpha-2).
+    url:
+      type: string
+      format: uri
+      description: The business's publicly available website.
+
+OwnershipDeclaration:
+  type: object
+  properties:
+    date:
+      type: string
+      format: date-time
+      description: The date and time (in the ISO 8601 format) when the beneficial owner attestation was made.
+    ip:
+      type: string
+      description: The IP address from which the beneficial owner attestation was made. If omitted or set to null in the request, the IP address is inferred from the request origin or the X-Forwarded-For request header.
+
+TOSAcceptance:
+  type: object
+  properties:
+    date:
+      type: string
+      format: date-time
+      description: The date and time (in the ISO 8601 format) when the entity representative accepted the service agreement.
+    ip:
+      type: string
+      description: The IP address from which the entity representative accepted the service agreement. If omitted or set to null in the request, the IP address is inferred from the request origin or the X-Forwarded-For request header.
+
+UpdateEntityOnboardingData:
+  type: object
+  properties:
+    business_profile:
+      $ref: '#/BusinessProfile'
+      description: Business information about the entity.
+    ownership_declaration:
+      $ref: '#/OwnershipDeclaration'
+      description: Used to attest that the beneficial owner information provided is both current and correct.
+    tos_acceptance:
+      $ref: '#/TOSAcceptance'
+      description: Details on the entity's acceptance of the service agreement.
+
+EntityOnboardingData:
+  type: object
+  properties:
+    business_profile:
+      $ref: '#/BusinessProfile'
+      description: Business information about the entity.
+    ownership_declaration:
+      $ref: '#/OwnershipDeclaration'
+      description: Used to attest that the beneficial owner information provided is both current and correct.
+    tos_acceptance:
+      $ref: '#/TOSAcceptance'
+      description: Details on the entity's acceptance of the service agreement.

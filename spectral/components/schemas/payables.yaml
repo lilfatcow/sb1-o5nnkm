@@ -1,0 +1,206 @@
+PayableValidationError:
+  type: object
+  additionalProperties: true
+  description: A validation error with details about what failed validation
+
+PayableValidationResponse:
+  type: object
+  required:
+    - id
+  properties:
+    id:
+      type: string
+      format: uuid
+      description: A unique ID assigned to this payable.
+    validation_errors:
+      type: array
+      items:
+        $ref: '#/PayableValidationError'
+      description: List of validation errors, if any were found
+
+PayableStatus:
+  type: string
+  enum:
+    - draft
+    - new
+    - pending_approval
+    - approved
+    - rejected
+    - paid
+    - canceled
+    - deleted
+  description: The status of the payable.
+
+Payable:
+  type: object
+  required:
+    - id
+    - created_at
+    - updated_at
+    - entity_id
+    - payable_origin
+    - source_of_payable_data
+    - status
+  properties:
+    id:
+      type: string
+      format: uuid
+      description: A unique ID assigned to this payable.
+    created_at:
+      type: string
+      format: date-time
+      description: UTC date and time when this payable was created. Timestamps follow the ISO 8601 format.
+    updated_at:
+      type: string
+      format: date-time
+      description: UTC date and time when this payable was last updated. Timestamps follow the ISO 8601 format.
+    entity_id:
+      type: string
+      format: uuid
+      description: The ID of the entity to which the payable was issued.
+    payable_origin:
+      type: string
+      enum: [upload, email]
+      description: Specifies how this payable was created in Monite - upload (created via an API call) or email (sent via email to the entity's mailbox).
+    source_of_payable_data:
+      type: string
+      enum: [ocr, user_specified]
+      description: Specifies how the property values of this payable were provided - ocr (Monite OCR service extracted the values from the provided PDF or image file) or user_specified (values were added or updated via an API call).
+    status:
+      $ref: '#/PayableStatus'
+    amount_due:
+      type: integer
+      description: How much is left to be paid on the invoice (in minor units).
+    amount_paid:
+      type: integer
+      description: How much was paid on the invoice (in minor units).
+    amount_to_pay:
+      type: integer
+      description: How much is left to be paid on the invoice (in minor units) with discounts from payment terms.
+    approval_policy_id:
+      type: string
+      format: uuid
+      description: Id of existing approval policy that applies to this payable, if any. A policy is applied if the payable matches the policy trigger conditions.
+    counterpart:
+      $ref: '../components/schemas/counterparts.yaml#/CounterpartResponse'
+    counterpart_address_id:
+      type: string
+      format: uuid
+      description: The ID of counterpart address object stored in counterparts service
+    counterpart_bank_account_id:
+      type: string
+      format: uuid
+      description: The ID of counterpart bank account object stored in counterparts service
+    counterpart_id:
+      type: string
+      format: uuid
+      description: The ID of the counterpart object that represents the vendor or supplier.
+    counterpart_raw_data:
+      $ref: '../components/schemas/counterparts.yaml#/CounterpartRawData'
+    counterpart_vat_id_id:
+      type: string
+      format: uuid
+      description: The ID of counterpart VAT ID object stored in counterparts service
+    created_by_role_id:
+      type: string
+      format: uuid
+      description: The ID of the role that the entity user who created this payable had at that time. If the payable was created using a partner access token, the value is null.
+    currency:
+      type: string
+      pattern: ^[A-Z]{3}$
+      description: The currency code of the currency used in the payable.
+    currency_exchange:
+      type: object
+      properties:
+        default_currency_code:
+          type: string
+          pattern: ^[A-Z]{3}$
+        rate:
+          type: number
+          format: double
+        total:
+          type: number
+          format: double
+    description:
+      type: string
+      description: An arbitrary description of this payable.
+    discount:
+      type: integer
+      description: The value of the additional discount that will be applied to the total amount, in minor units. For example, $12.50 is represented as 1250.
+    document_id:
+      type: string
+      description: A unique invoice number assigned by the invoice issuer for payment tracking purposes. This is different from id which is an internal ID created automatically by Monite.
+    due_date:
+      type: string
+      description: The date by which the payable must be paid, in the YYYY-MM-DD format. If the payable specifies payment terms with early payment discounts, this is the final payment date.
+    file:
+      $ref: '../components/schemas/files.yaml#/File'
+    file_id:
+      type: string
+      format: uuid
+      description: File id to retrieve file info from file saver.
+    issued_at:
+      type: string
+      description: The date when the payable was issued, in the YYYY-MM-DD format.
+    marked_as_paid_by_entity_user_id:
+      type: string
+      format: uuid
+      description: The ID of the entity user who marked this document as paid.
+    marked_as_paid_with_comment:
+      type: string
+      description: An arbitrary comment that describes how and when this payable was paid.
+    ocr_request_id:
+      type: string
+      description: Id of OCR request to match asynchronous result of processing payable.
+    ocr_status:
+      type: string
+      enum: [processing, error, success]
+      description: The status of the data recognition process using OCR.
+    other_extracted_data:
+      oneOf:
+        - $ref: '../components/schemas/ocr.yaml#/OcrExtractedData'
+        - $ref: '../components/schemas/ocr.yaml#/OcrExtractedDataRaw'
+    paid_at:
+      type: string
+      format: date-time
+      description: The date by which the payable was paid
+    partner_metadata:
+      type: object
+      additionalProperties: true
+      description: Metadata for partner needs
+    payment_terms:
+      $ref: '../components/schemas/payment-terms.yaml#/PaymentTerms'
+    project_id:
+      type: string
+      format: uuid
+      description: Project ID of a payable.
+    purchase_order_id:
+      type: string
+      format: uuid
+      description: The identifier of the purchase order to which this payable belongs.
+    sender:
+      type: string
+      description: The email address from which the invoice was sent to the entity.
+    subtotal:
+      type: integer
+      description: The subtotal amount to be paid, in minor units. For example, $12.50 is represented as 1250.
+    suggested_payment_term:
+      $ref: '../components/schemas/payment-terms.yaml#/SuggestedPaymentTerm'
+    tags:
+      type: array
+      items:
+        $ref: '../components/schemas/tags.yaml#/Tag'
+      description: A list of user-defined tags (labels) assigned to this payable. Tags can be used to trigger a specific approval policy for this payable.
+    tax:
+      type: integer
+      description: Registered tax percentage applied for a service price in minor units, e.g. 200 means 2%, 1050 means 10.5%.
+    tax_amount:
+      type: integer
+      description: Tax amount in minor units. For example, $12.50 is represented as 1250.
+    total_amount:
+      type: integer
+      description: The total amount to be paid, in minor units. For example, $12.50 is represented as 1250.
+    was_created_by_user_id:
+      type: string
+      format: uuid
+      description: ID of the user who created this payable.

@@ -1,0 +1,263 @@
+/tags:
+  get:
+    operationId: getTags
+    tags:
+      - Tags
+    description: Get a list of all tags. Tags can be assigned to resources to assist with searching and filtering. Tags can also be used as trigger conditions in payable approval policies.
+    security:
+      - bearerAuth: []
+    parameters:
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+      - $ref: '../components/parameters.yaml#/PaginationOrder'
+      - $ref: '../components/parameters.yaml#/PaginationLimit'
+      - $ref: '../components/parameters.yaml#/PaginationToken'
+      - name: sort
+        in: query
+        required: false
+        schema:
+          type: string
+          enum: [created_at, updated_at]
+        description: Field to sort by
+      - name: created_by_entity_user_id
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+        description: Filter by creator's entity user ID
+      - name: name__in
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Filter by tag names (comma-separated)
+      - name: id__in
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Filter by tag IDs (comma-separated)
+    responses:
+      '200':
+        description: Tags retrieved successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/tags.yaml#/TagList'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '403':
+        $ref: '../responses/errors.yaml#/Forbidden'
+      '406':
+        $ref: '../responses/errors.yaml#/NotAcceptable'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+      '500':
+        $ref: '../responses/errors.yaml#/InternalServerError'
+
+  post:
+    operationId: createTag
+    tags:
+      - Tags
+    description: |
+      Create a new tag. The tag name must be unique. Tag names are case-sensitive, that is Marketing and marketing are two different tags.
+
+      The response returns an auto-generated ID assigned to this tag. To assign this tag to a resource, send the tag ID in the tag_ids list when creating or updating a resource.
+    security:
+      - bearerAuth: []
+    parameters:
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/tags.yaml#/CreateTag'
+    responses:
+      '200':
+        description: Tag created successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/tags.yaml#/Tag'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '403':
+        $ref: '../responses/errors.yaml#/Forbidden'
+      '404':
+        $ref: '../responses/errors.yaml#/NotFound'
+      '406':
+        $ref: '../responses/errors.yaml#/NotAcceptable'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+      '500':
+        $ref: '../responses/errors.yaml#/InternalServerError'
+
+/tags/{tag_id}:
+  get:
+    operationId: getTagById
+    tags:
+      - Tags
+    description: Get information about a tag with the given ID.
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: tag_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the tag to retrieve
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    responses:
+      '200':
+        description: Tag retrieved successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/tags.yaml#/Tag'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '403':
+        $ref: '../responses/errors.yaml#/Forbidden'
+      '404':
+        $ref: '../responses/errors.yaml#/NotFound'
+      '406':
+        $ref: '../responses/errors.yaml#/NotAcceptable'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+      '500':
+        $ref: '../responses/errors.yaml#/InternalServerError'
+
+  patch:
+    operationId: updateTag
+    tags:
+      - Tags
+    description: Change the tag name. The new name must be unique among existing tags. Tag names are case-sensitive, that is Marketing and marketing are two different tags.
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: tag_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the tag to update
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/tags.yaml#/UpdateTag'
+    responses:
+      '200':
+        description: Tag updated successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/tags.yaml#/Tag'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '403':
+        $ref: '../responses/errors.yaml#/Forbidden'
+      '404':
+        $ref: '../responses/errors.yaml#/NotFound'
+      '406':
+        $ref: '../responses/errors.yaml#/NotAcceptable'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+      '500':
+        $ref: '../responses/errors.yaml#/InternalServerError'
+
+  delete:
+    operationId: deleteTag
+    tags:
+      - Tags
+    description: Delete a tag with the given ID. This tag will be automatically deleted from all resources where it was used.
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: tag_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the tag to delete
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    responses:
+      '204':
+        description: Tag deleted successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '403':
+        $ref: '../responses/errors.yaml#/Forbidden'
+      '404':
+        $ref: '../responses/errors.yaml#/NotFound'
+      '406':
+        $ref: '../responses/errors.yaml#/NotAcceptable'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+      '500':
+        $ref: '../responses/errors.yaml#/InternalServerError'

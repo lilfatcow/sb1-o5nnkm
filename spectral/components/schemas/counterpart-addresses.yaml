@@ -1,0 +1,76 @@
+CreateCounterpartAddressRequest:
+  type: object
+  required:
+    - city
+    - country
+    - line1
+    - postal_code
+  properties:
+    city:
+      type: string
+      description: City name
+    country:
+      type: string
+      pattern: ^[A-Z]{2}$
+      description: Two-letter ISO country code (ISO 3166-1 alpha-2)
+    line1:
+      type: string
+      description: Street address
+    line2:
+      type: string
+      description: Additional address information (if any)
+    postal_code:
+      type: string
+      description: ZIP or postal code
+    state:
+      type: string
+      description: State, region, province, or county
+
+CounterpartAddress:
+  type: object
+  required:
+    - id
+    - city
+    - counterpart_id
+    - country
+    - line1
+    - postal_code
+  properties:
+    id:
+      type: string
+      format: uuid
+      description: Unique ID of the address in the system
+    city:
+      type: string
+      description: City name
+    counterpart_id:
+      type: string
+      format: uuid
+      description: ID of the counterpart that owns the address
+    country:
+      type: string
+      pattern: ^[A-Z]{2}$
+      description: Two-letter ISO country code (ISO 3166-1 alpha-2)
+    line1:
+      type: string
+      description: Street address
+    line2:
+      type: string
+      description: Additional address information (if any)
+    postal_code:
+      type: string
+      description: ZIP or postal code
+    state:
+      type: string
+      description: State, region, province, or county
+
+CounterpartAddressList:
+  type: object
+  required:
+    - data
+  properties:
+    data:
+      type: array
+      items:
+        $ref: '#/CounterpartAddress'
+      description: List of addresses associated with the counterpart

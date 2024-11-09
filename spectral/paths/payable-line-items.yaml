@@ -1,0 +1,354 @@
+/payables/{payable_id}/line_items:
+  get:
+    operationId: getPayableLineItems
+    tags:
+      - Payable Line Items
+    description: |
+      Get a list of all line items related to a specific payable.
+      Related guide: List all payable line items
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: payable_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the payable to get line items for
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+      - $ref: '../components/parameters.yaml#/PaginationOrder'
+      - $ref: '../components/parameters.yaml#/PaginationLimit'
+      - $ref: '../components/parameters.yaml#/PaginationToken'
+      - name: sort
+        in: query
+        required: false
+        schema:
+          type: string
+          enum: [created_at, updated_at]
+        description: Field to sort by
+      - name: was_created_by_user_id
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+        description: Filter by creator's user ID
+    responses:
+      '200':
+        description: Line items retrieved successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/payable-line-items.yaml#/PayableLineItemList'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '403':
+        $ref: '../responses/errors.yaml#/Forbidden'
+      '406':
+        $ref: '../responses/errors.yaml#/NotAcceptable'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+      '500':
+        $ref: '../responses/errors.yaml#/InternalServerError'
+
+  post:
+    operationId: createPayableLineItem
+    tags:
+      - Payable Line Items
+    description: |
+      Add a new line item to a specific payable.
+
+      The subtotal and total fields of line items are automatically calculated based on the unit_price, quantity, and tax fields, therefore, are read-only and appear only in the response schema. The field ledger_account_id is required only for account integration, otherwise, it is optional.
+
+      Related guide: Add line items to a payable
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: payable_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the payable to add a line item to
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/payable-line-items.yaml#/CreatePayableLineItem'
+    responses:
+      '200':
+        description: Line item created successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/payable-line-items.yaml#/PayableLineItem'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '403':
+        $ref: '../responses/errors.yaml#/Forbidden'
+      '404':
+        $ref: '../responses/errors.yaml#/NotFound'
+      '406':
+        $ref: '../responses/errors.yaml#/NotAcceptable'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+      '500':
+        $ref: '../responses/errors.yaml#/InternalServerError'
+
+  put:
+    operationId: replacePayableLineItems
+    tags:
+      - Payable Line Items
+    description: |
+      Replaces the information of all line items of a specific payable.
+      Related guide: Replace all line items
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: payable_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the payable to replace line items for
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/payable-line-items.yaml#/ReplacePayableLineItems'
+    responses:
+      '200':
+        description: Line items replaced successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/payable-line-items.yaml#/PayableLineItemList'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '403':
+        $ref: '../responses/errors.yaml#/Forbidden'
+      '404':
+        $ref: '../responses/errors.yaml#/NotFound'
+      '406':
+        $ref: '../responses/errors.yaml#/NotAcceptable'
+      '409':
+        $ref: '../responses/errors.yaml#/Conflict'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+      '500':
+        $ref: '../responses/errors.yaml#/InternalServerError'
+
+/payables/{payable_id}/line_items/{line_item_id}:
+  get:
+    operationId: getPayableLineItem
+    tags:
+      - Payable Line Items
+    description: |
+      Get information about a specific line item with a given ID.
+      Related guide: Retrieve a line item
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: payable_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the payable that owns the line item
+      - name: line_item_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the line item to retrieve
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    responses:
+      '200':
+        description: Line item retrieved successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/payable-line-items.yaml#/PayableLineItem'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '403':
+        $ref: '../responses/errors.yaml#/Forbidden'
+      '404':
+        $ref: '../responses/errors.yaml#/NotFound'
+      '406':
+        $ref: '../responses/errors.yaml#/NotAcceptable'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+      '500':
+        $ref: '../responses/errors.yaml#/InternalServerError'
+
+  patch:
+    operationId: updatePayableLineItem
+    tags:
+      - Payable Line Items
+    description: |
+      Edits the information of a specific line item.
+      Related guide: Update a line item
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: payable_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the payable that owns the line item
+      - name: line_item_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the line item to update
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/payable-line-items.yaml#/UpdatePayableLineItem'
+    responses:
+      '200':
+        description: Line item updated successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/payable-line-items.yaml#/PayableLineItem'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '403':
+        $ref: '../responses/errors.yaml#/Forbidden'
+      '404':
+        $ref: '../responses/errors.yaml#/NotFound'
+      '406':
+        $ref: '../responses/errors.yaml#/NotAcceptable'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+      '500':
+        $ref: '../responses/errors.yaml#/InternalServerError'
+
+  delete:
+    operationId: deletePayableLineItem
+    tags:
+      - Payable Line Items
+    description: |
+      Delete the line item with the given ID.
+      Related guide: Remove a line item
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: payable_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the payable that owns the line item
+      - name: line_item_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the line item to delete
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    responses:
+      '204':
+        description: Line item deleted successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '403':
+        $ref: '../responses/errors.yaml#/Forbidden'
+      '404':
+        $ref: '../responses/errors.yaml#/NotFound'
+      '406':
+        $ref: '../responses/errors.yaml#/NotAcceptable'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+      '500':
+        $ref: '../responses/errors.yaml#/InternalServerError'

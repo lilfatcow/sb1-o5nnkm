@@ -1,0 +1,155 @@
+PaymentMethod:
+  type: string
+  enum:
+    - us_ach
+  default: us_ach
+  description: Payment method to use for the batch payment
+
+BatchPaymentStatus:
+  type: string
+  enum:
+    - created
+    - processing
+    - partially_successful
+    - succeeded
+    - failed
+  description: Status of the batch payment
+
+PaymentObject:
+  type: object
+  required:
+    - id
+    - type
+  properties:
+    id:
+      type: string
+      format: uuid
+      description: ID of the object to pay
+    type:
+      type: string
+      enum: [payable]
+      description: Type of the object to pay
+
+PaymentRecipient:
+  type: object
+  required:
+    - id
+    - type
+  properties:
+    id:
+      type: string
+      format: uuid
+      description: ID of the recipient
+    type:
+      type: string
+      enum: [counterpart]
+      description: Type of the recipient
+
+PaymentIntent:
+  type: object
+  required:
+    - object
+    - recipient
+  properties:
+    object:
+      $ref: '#/PaymentObject'
+    recipient:
+      $ref: '#/PaymentRecipient'
+
+PaymentIntentResponse:
+  type: object
+  required:
+    - id
+    - created_at
+    - amount
+    - currency
+    - object
+    - payment_reference
+    - recipient
+    - status
+  properties:
+    id:
+      type: string
+      format: uuid
+      description: Unique identifier of the payment intent
+    created_at:
+      type: string
+      format: date-time
+      description: When the payment intent was created
+    amount:
+      type: integer
+      description: Payment amount in minor units
+    currency:
+      $ref: './currencies.yaml#/Currency'
+    object:
+      $ref: '#/PaymentObject'
+    payment_reference:
+      type: string
+      description: Payment reference number
+    recipient:
+      $ref: '#/PaymentRecipient'
+    status:
+      type: string
+      description: Status of the payment intent
+    error:
+      type: object
+      additionalProperties: true
+      description: Error details if the payment failed
+
+CreateBatchPayment:
+  type: object
+  required:
+    - payer_bank_account_id
+    - payment_intents
+    - payment_method
+  properties:
+    payer_bank_account_id:
+      type: string
+      format: uuid
+      description: ID of the bank account to pay from
+    payment_intents:
+      type: array
+      items:
+        $ref: '#/PaymentIntent'
+      description: List of payment intents
+    payment_method:
+      $ref: '#/PaymentMethod'
+
+BatchPayment:
+  type: object
+  required:
+    - id
+    - created_at
+    - payer_bank_account_id
+    - payment_intents
+    - payment_method
+    - status
+  properties:
+    id:
+      type: string
+      format: uuid
+      description: Unique identifier of the batch payment
+    created_at:
+      type: string
+      format: date-time
+      description: When the batch payment was created
+    payer_bank_account_id:
+      type: string
+      format: uuid
+      description: ID of the bank account to pay from
+    payment_intents:
+      type: array
+      items:
+        $ref: '#/PaymentIntentResponse'
+      description: List of payment intents
+    payment_method:
+      $ref: '#/PaymentMethod'
+    status:
+      $ref: '#/BatchPaymentStatus'
+    error:
+      type: object
+      additionalProperties: true
+      description: Error details if the batch payment failed
+    total_amount:
+      type: integer
+      description: Total amount of all payments in minor units

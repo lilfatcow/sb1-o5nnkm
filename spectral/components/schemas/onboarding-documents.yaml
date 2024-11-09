@@ -1,0 +1,66 @@
+EntityOnboardingDocuments:
+  type: object
+  properties:
+    additional_verification_document_back:
+      type: string
+      description: Back side of additional verification document
+    additional_verification_document_front:
+      type: string
+      description: Front side of additional verification document
+    bank_account_ownership_verification:
+      type: array
+      items:
+        type: string
+      description: Documents verifying bank account ownership
+    company_license:
+      type: array
+      items:
+        type: string
+      description: Company license documents
+    company_memorandum_of_association:
+      type: array
+      items:
+        type: string
+      description: Company memorandum of association documents
+    company_ministerial_decree:
+      type: array
+      items:
+        type: string
+      description: Company ministerial decree documents
+    company_registration_verification:
+      type: array
+      items:
+        type: string
+      description: Company registration verification documents
+    company_tax_id_verification:
+      type: array
+      items:
+        type: string
+      description: Company tax ID verification documents
+    proof_of_registration:
+      type: array
+      items:
+        type: string
+      description: Proof of registration documents
+    verification_document_back:
+      type: string
+      description: Back side of primary verification document
+    verification_document_front:
+      type: string
+      description: Front side of primary verification document
+
+PersonOnboardingDocuments:
+  type: object
+  properties:
+    additional_verification_document_back:
+      type: string
+      description: Back side of additional verification document
+    additional_verification_document_front:
+      type: string
+      description: Front side of additional verification document
+    verification_document_back:
+      type: string
+      description: Back side of primary verification document
+    verification_document_front:
+      type: string
+      description: Front side of primary verification document

@@ -1,0 +1,206 @@
+/bank_accounts/complete_verification:
+  post:
+    operationId: completeBankAccountVerification
+    tags:
+      - Bank Account Verifications
+    description: Complete entity bank account verification
+    security:
+      - bearerAuth: []
+    parameters:
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/bank-account-verifications.yaml#/CompleteBankAccountVerificationRequest'
+    responses:
+      '200':
+        description: Bank account verification completed successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/bank-account-verifications.yaml#/CompleteBankAccountVerificationResponse'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+      '500':
+        $ref: '../responses/errors.yaml#/InternalServerError'
+
+/bank_accounts/start_verification:
+  post:
+    operationId: startBankAccountVerification
+    tags:
+      - Bank Account Verifications
+    description: |
+      Start entity bank account verification. The flow depends on verification type.
+      For airwallex_plaid it generates Plaid Link token to init the Plaid SDK.
+    security:
+      - bearerAuth: []
+    parameters:
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/bank-account-verifications.yaml#/StartBankAccountVerificationRequest'
+    responses:
+      '200':
+        description: Bank account verification started successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/bank-account-verifications.yaml#/StartBankAccountVerificationResponse'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+      '500':
+        $ref: '../responses/errors.yaml#/InternalServerError'
+
+/bank_accounts/{bank_account_id}/complete_verification:
+  post:
+    operationId: completeBankAccountVerificationById
+    tags:
+      - Bank Account Verifications
+    description: Complete verification of the provided entity bank account
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: bank_account_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the bank account to verify
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/bank-account-verifications.yaml#/CompleteBankAccountVerificationByIdRequest'
+    responses:
+      '200':
+        description: Bank account verification completed successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/bank-account-verifications.yaml#/CompleteBankAccountVerificationByIdResponse'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+      '500':
+        $ref: '../responses/errors.yaml#/InternalServerError'
+
+/bank_accounts/{bank_account_id}/refresh_verification:
+  post:
+    operationId: refreshBankAccountVerification
+    tags:
+      - Bank Account Verifications
+    description: Refresh verification of the provided entity bank account
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: bank_account_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the bank account to refresh verification for
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/bank-account-verifications.yaml#/RefreshBankAccountVerificationRequest'
+    responses:
+      '200':
+        description: Bank account verification refreshed successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/bank-account-verifications.yaml#/RefreshBankAccountVerificationResponse'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+      '500':
+        $ref: '../responses/errors.yaml#/InternalServerError'
+
+/bank_accounts/{bank_account_id}/verifications:
+  get:
+    operationId: getBankAccountVerifications
+    tags:
+      - Bank Account Verifications
+    description: Get a bank account verifications
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: bank_account_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the bank account to get verifications for
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    responses:
+      '200':
+        description: Bank account verifications retrieved successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/bank-account-verifications.yaml#/BankAccountVerifications'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+      '500':
+        $ref: '../responses/errors.yaml#/InternalServerError'

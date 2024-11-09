@@ -1,0 +1,100 @@
+CommentStatus:
+  type: string
+  enum: [active, deleted]
+  description: Status of the comment
+
+CreateComment:
+  type: object
+  required:
+    - object_id
+    - object_type
+    - text
+  properties:
+    object_id:
+      type: string
+      description: ID of the object this comment is associated with
+    object_type:
+      type: string
+      description: Type of object this comment is associated with
+    text:
+      type: string
+      description: Content of the comment
+    reply_to_entity_user_id:
+      type: string
+      format: uuid
+      description: ID of the user this comment is replying to
+
+UpdateComment:
+  type: object
+  properties:
+    text:
+      type: string
+      description: Content of the comment
+    reply_to_entity_user_id:
+      type: string
+      format: uuid
+      description: ID of the user this comment is replying to
+
+Comment:
+  type: object
+  required:
+    - id
+    - created_by_entity_user_id
+    - entity_id
+    - object_id
+    - object_type
+    - status
+    - text
+  properties:
+    id:
+      type: string
+      format: uuid
+      description: Unique identifier of the comment
+    created_by_entity_user_id:
+      type: string
+      format: uuid
+      description: ID of the user who created this comment
+    entity_id:
+      type: string
+      format: uuid
+      description: ID of the entity this comment belongs to
+    object_id:
+      type: string
+      description: ID of the object this comment is associated with
+    object_type:
+      type: string
+      description: Type of object this comment is associated with
+    status:
+      $ref: '#/CommentStatus'
+    text:
+      type: string
+      description: Content of the comment
+    created_at:
+      type: string
+      format: date-time
+      description: When the comment was created
+    updated_at:
+      type: string
+      format: date-time
+      description: When the comment was last updated
+    reply_to_entity_user_id:
+      type: string
+      format: uuid
+      description: ID of the user this comment is replying to
+
+CommentList:
+  type: object
+  required:
+    - data
+  properties:
+    data:
+      type: array
+      items:
+        $ref: '#/Comment'
+      description: List of comments
+    next_pagination_token:
+      type: string
+      description: Token for getting the next page of results
+    prev_pagination_token:
+      type: string
+      description: Token for getting the previous page of results

@@ -1,0 +1,399 @@
+/webhook_subscriptions:
+  get:
+    operationId: getWebhookSubscriptions
+    tags:
+      - Webhooks
+    description: Get all webhook subscriptions
+    security:
+      - bearerAuth: []
+    parameters:
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+      - $ref: '../components/parameters.yaml#/PaginationOrder'
+      - $ref: '../components/parameters.yaml#/PaginationLimit'
+      - $ref: '../components/parameters.yaml#/PaginationToken'
+      - $ref: '../components/parameters.yaml#/WebhookSort'
+      - $ref: '../components/parameters.yaml#/WebhookObjectType'
+    responses:
+      '200':
+        description: Webhook subscriptions retrieved successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/webhooks.yaml#/WebhookSubscriptionList'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+  
+  post:
+    operationId: createWebhookSubscription
+    tags:
+      - Webhooks
+    description: Create a new webhook subscription
+    security:
+      - bearerAuth: []
+    parameters:
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/webhooks.yaml#/CreateWebhookSubscription'
+    responses:
+      '200':
+        description: Webhook subscription created successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/webhooks.yaml#/WebhookSubscriptionResponse'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+
+/webhook_subscriptions/{webhook_subscription_id}:
+  get:
+    operationId: getWebhookSubscription
+    tags:
+      - Webhooks
+    description: Get a webhook subscription by ID
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: webhook_subscription_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the webhook subscription
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    responses:
+      '200':
+        description: Webhook subscription retrieved successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/webhooks.yaml#/WebhookSubscription'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '404':
+        $ref: '../responses/errors.yaml#/NotFound'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+
+  patch:
+    operationId: updateWebhookSubscription
+    tags:
+      - Webhooks
+    description: Update a webhook subscription
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: webhook_subscription_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the webhook subscription
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/webhooks.yaml#/UpdateWebhookSubscription'
+    responses:
+      '200':
+        description: Webhook subscription updated successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/webhooks.yaml#/WebhookSubscription'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '404':
+        $ref: '../responses/errors.yaml#/NotFound'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+
+  delete:
+    operationId: deleteWebhookSubscription
+    tags:
+      - Webhooks
+    description: Delete a webhook subscription
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: webhook_subscription_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the webhook subscription
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    responses:
+      '204':
+        description: Webhook subscription deleted successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '404':
+        $ref: '../responses/errors.yaml#/NotFound'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+
+/webhook_subscriptions/{webhook_subscription_id}/disable:
+  post:
+    operationId: disableWebhookSubscription
+    tags:
+      - Webhooks
+    description: Disable a webhook subscription
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: webhook_subscription_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the webhook subscription
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    responses:
+      '200':
+        description: Webhook subscription disabled successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/webhooks.yaml#/WebhookSubscription'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '404':
+        $ref: '../responses/errors.yaml#/NotFound'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+
+/webhook_subscriptions/{webhook_subscription_id}/enable:
+  post:
+    operationId: enableWebhookSubscription
+    tags:
+      - Webhooks
+    description: Enable a webhook subscription
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: webhook_subscription_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the webhook subscription
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    responses:
+      '200':
+        description: Webhook subscription enabled successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/webhooks.yaml#/WebhookSubscription'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '404':
+        $ref: '../responses/errors.yaml#/NotFound'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+
+/webhook_subscriptions/{webhook_subscription_id}/regenerate_secret:
+  post:
+    operationId: regenerateWebhookSecret
+    tags:
+      - Webhooks
+    description: Regenerate the secret key for a webhook subscription
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: webhook_subscription_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the webhook subscription
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    responses:
+      '200':
+        description: Webhook secret regenerated successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/webhooks.yaml#/WebhookSubscriptionResponse'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '404':
+        $ref: '../responses/errors.yaml#/NotFound'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+
+/webhook_deliveries:
+  get:
+    operationId: getWebhookDeliveries
+    tags:
+      - Webhooks
+    description: |
+      Returns an aggregated log of webhook delivery attempts. The data contains a list of triggered webhook events,
+      how many times Monite tried to send each event to your server, the last HTTP status code returned by your
+      webhook listener endpoint, and whether the final attempt to deliver that event was successful.
+
+      We guarantee access to webhook delivery data only from the last three months. Earlier data may be unavailable.
+
+      Note that if the same event type is included in multiple webhook subscriptions, the results will include
+      several entries for each occurrence of this event - one entry per subscription.
+    security:
+      - bearerAuth: []
+    parameters:
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+      - $ref: '../components/parameters.yaml#/PaginationOrder'
+      - $ref: '../components/parameters.yaml#/PaginationLimit'
+      - $ref: '../components/parameters.yaml#/PaginationToken'
+      - $ref: '../components/parameters.yaml#/WebhookSort'
+      - name: event_id
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+        description: Filter by event ID
+      - $ref: '../components/parameters.yaml#/WebhookObjectType'
+      - name: event_action
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Filter by event action
+      - $ref: '../components/parameters.yaml#/CreatedAtGt'
+      - $ref: '../components/parameters.yaml#/CreatedAtLt'
+      - $ref: '../components/parameters.yaml#/CreatedAtGte'
+      - $ref: '../components/parameters.yaml#/CreatedAtLte'
+    responses:
+      '200':
+        description: Webhook deliveries retrieved successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/webhooks.yaml#/WebhookDeliveryList'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'

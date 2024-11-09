@@ -1,0 +1,132 @@
+ApiVersionSettings:
+  type: object
+  required:
+    - api_version
+  properties:
+    api_version:
+      type: string
+      pattern: ^\d{4}-\d{2}-\d{2}$
+      example: "2024-01-31"
+      description: Default API version for asynchronous operations
+
+PartnerSettings:
+  type: object
+  properties:
+    accounting:
+      type: object
+      properties:
+        provider:
+          type: string
+        token:
+          type: string
+    api_version:
+      type: string
+      pattern: ^\d{4}-\d{2}-\d{2}$
+      example: "2024-01-31"
+    commercial_conditions:
+      type: array
+      items:
+        type: string
+    currency:
+      type: object
+      properties:
+        default:
+          type: string
+          pattern: ^[A-Z]{3}$
+        exchange_rates:
+          type: array
+          items:
+            type: object
+            required: [base, to, rate]
+            properties:
+              base:
+                type: string
+                pattern: ^[A-Z]{3}$
+              to:
+                type: string
+                pattern: ^[A-Z]{3}$
+              rate:
+                type: number
+                format: float
+    default_role:
+      type: object
+      additionalProperties: true
+    einvoicing:
+      type: object
+      properties:
+        provider:
+          type: string
+          enum: [avalara]
+        client_id:
+          type: string
+        client_secret:
+          type: string
+    mail:
+      type: object
+      properties:
+        from_name:
+          type: string
+        from_email_username:
+          type: string
+        attach_documents_as_pdf:
+          type: boolean
+    payable:
+      type: object
+      properties:
+        approve_page_url:
+          type: string
+          format: uri
+        allow_cancel_duplicates_automatically:
+          type: boolean
+        allow_counterpart_autocreation:
+          type: boolean
+        allow_counterpart_autolinking:
+          type: boolean
+        default_state:
+          type: string
+          enum: [new]
+        enable_line_items:
+          type: boolean
+    payments:
+      type: object
+      properties:
+        payment_page_domain:
+          type: string
+        payment_page_theme:
+          type: object
+          properties:
+            background_color:
+              type: string
+            border_radius:
+              type: string
+            font_color:
+              type: string
+            font_family:
+              type: string
+            font_link_href:
+              type: string
+            logo_src:
+              type: string
+        support_email:
+          type: string
+          format: email
+    receivable:
+      type: object
+      properties:
+        create_without_personal_info:
+          type: boolean
+        deduction_title:
+          type: string
+    units:
+      type: array
+      items:
+        type: object
+        required: [name, designation]
+        properties:
+          name:
+            type: string
+          designation:
+            type: string
+    website:
+      type: string
+      format: uri

@@ -1,0 +1,141 @@
+PaymentReminderRecipients:
+  type: object
+  properties:
+    bcc:
+      type: array
+      items:
+        type: string
+        format: email
+      description: List of BCC email addresses
+    cc:
+      type: array
+      items:
+        type: string
+        format: email
+      description: List of CC email addresses
+    to:
+      type: array
+      items:
+        type: string
+        format: email
+      description: List of recipient email addresses
+
+PaymentReminderTerm:
+  type: object
+  required:
+    - body
+    - days_before
+    - subject
+  properties:
+    body:
+      type: string
+      description: The body text of the reminder email
+    days_before:
+      type: integer
+      description: Number of days before to send this reminder
+    subject:
+      type: string
+      description: The subject line of the reminder email
+
+CreatePaymentReminder:
+  type: object
+  required:
+    - name
+  properties:
+    name:
+      type: string
+      description: Name of the payment reminder configuration
+    recipients:
+      $ref: '#/PaymentReminderRecipients'
+    term_1_reminder:
+      allOf:
+        - $ref: '#/PaymentReminderTerm'
+        - description: Reminder to send for first payment term
+    term_2_reminder:
+      allOf:
+        - $ref: '#/PaymentReminderTerm'
+        - description: Reminder to send for second payment term
+    term_final_reminder:
+      allOf:
+        - $ref: '#/PaymentReminderTerm'
+        - description: Reminder to send for final payment term
+
+UpdatePaymentReminder:
+  type: object
+  properties:
+    name:
+      type: string
+      description: Name of the payment reminder configuration
+    recipients:
+      $ref: '#/PaymentReminderRecipients'
+    term_1_reminder:
+      allOf:
+        - $ref: '#/PaymentReminderTerm'
+        - description: Reminder to send for first payment term
+    term_2_reminder:
+      allOf:
+        - $ref: '#/PaymentReminderTerm'
+        - description: Reminder to send for second payment term
+    term_final_reminder:
+      allOf:
+        - $ref: '#/PaymentReminderTerm'
+        - description: Reminder to send for final payment term
+
+PaymentReminder:
+  type: object
+  required:
+    - id
+    - created_at
+    - updated_at
+    - entity_id
+    - name
+    - status
+  properties:
+    id:
+      type: string
+      format: uuid
+      description: Unique identifier of the payment reminder
+    created_at:
+      type: string
+      format: date-time
+      description: Time at which the PaymentReminder was created. Timestamps follow the ISO 8601 standard.
+    updated_at:
+      type: string
+      format: date-time
+      description: Time at which the PaymentReminder was last updated. Timestamps follow the ISO 8601 standard.
+    entity_id:
+      type: string
+      format: uuid
+      description: The ID of the entity that owns this payment reminder
+    name:
+      type: string
+      description: Name of the payment reminder configuration
+    status:
+      type: string
+      enum: [active, deleted]
+      description: Current status of the payment reminder
+    recipients:
+      $ref: '#/PaymentReminderRecipients'
+    term_1_reminder:
+      allOf:
+        - $ref: '#/PaymentReminderTerm'
+        - description: Reminder to send for first payment term
+    term_2_reminder:
+      allOf:
+        - $ref: '#/PaymentReminderTerm'
+        - description: Reminder to send for second payment term
+    term_final_reminder:
+      allOf:
+        - $ref: '#/PaymentReminderTerm'
+        - description: Reminder to send for final payment term
+
+PaymentReminderList:
+  type: object
+  required:
+    - data
+  properties:
+    data:
+      type: array
+      items:
+        $ref: '#/PaymentReminder'
+      description: List of payment reminder configurations

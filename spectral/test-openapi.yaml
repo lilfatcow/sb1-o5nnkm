@@ -1,0 +1,125 @@
+openapi: 3.0.0
+info:
+  title: Monite API
+  version: 1.0.0
+  description: |
+    Monite API specification with authentication and security requirements.
+    All API requests must include the X-Monite-Version header to specify the API version.
+  contact:
+    name: Monite Support
+    email: support@monite.com
+    url: https://docs.monite.com
+
+tags:
+  - name: Authentication
+    description: Authentication and authorization endpoints
+  - name: Users
+    description: User management endpoints
+  - name: Settings
+    description: API settings management
+  - name: Webhooks
+    description: Webhook subscription management
+  - name: Events
+    description: Event management and retrieval
+  - name: Entities
+    description: Entity management endpoints
+  - name: Entity Users
+    description: Entity user management endpoints
+  - name: Bank Accounts
+    description: Bank account management endpoints
+  - name: Persons
+    description: Person management endpoints
+  - name: Entity VAT IDs
+    description: VAT ID management endpoints
+  - name: Roles
+    description: Role management endpoints
+  - name: Counterparts
+    description: Counterpart management endpoints
+
+servers:
+  - url: https://api.sandbox.monite.com/v1
+    description: Sandbox environment
+  - url: https://api.monite.com/v1
+    description: Production environment
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT token obtained from /auth/token endpoint
+
+paths:
+  /auth/token:
+    $ref: './paths/auth.yaml#/~1auth~1token'
+  /auth/revoke:
+    $ref: './paths/auth.yaml#/~1auth~1revoke'
+  /settings:
+    $ref: './paths/settings.yaml#/~1settings'
+  /users/{id}:
+    $ref: './paths/users.yaml#/~1users~1{id}'
+  /webhook_subscriptions:
+    $ref: './paths/webhooks.yaml#/~1webhook_subscriptions'
+  /webhook_subscriptions/{webhook_subscription_id}:
+    $ref: './paths/webhooks.yaml#/~1webhook_subscriptions~1{webhook_subscription_id}'
+  /webhook_subscriptions/{webhook_subscription_id}/disable:
+    $ref: './paths/webhooks.yaml#/~1webhook_subscriptions~1{webhook_subscription_id}~1disable'
+  /webhook_subscriptions/{webhook_subscription_id}/enable:
+    $ref: './paths/webhooks.yaml#/~1webhook_subscriptions~1{webhook_subscription_id}~1enable'
+  /webhook_subscriptions/{webhook_subscription_id}/regenerate_secret:
+    $ref: './paths/webhooks.yaml#/~1webhook_subscriptions~1{webhook_subscription_id}~1regenerate_secret'
+  /webhook_deliveries:
+    $ref: './paths/webhooks.yaml#/~1webhook_deliveries'
+  /events:
+    $ref: './paths/events.yaml#/~1events'
+  /events/{event_id}:
+    $ref: './paths/events.yaml#/~1events~1{event_id}'
+  /entities:
+    $ref: './paths/entities.yaml#/~1entities'
+  /entities/{entity_id}:
+    $ref: './paths/entities.yaml#/~1entities~1{entity_id}'
+  /entities/{entity_id}/logo:
+    $ref: './paths/entities.yaml#/~1entities~1{entity_id}~1logo'
+  /entities/{entity_id}/partner_metadata:
+    $ref: './paths/entities.yaml#/~1entities~1{entity_id}~1partner_metadata'
+  /entities/{entity_id}/vat_ids:
+    $ref: './paths/vat-ids.yaml#/~1entities~1{entity_id}~1vat_ids'
+  /entity_users:
+    $ref: './paths/entity-users.yaml#/~1entity_users'
+  /entity_users/me:
+    $ref: './paths/entity-users.yaml#/~1entity_users~1me'
+  /entity_users/my_entity:
+    $ref: './paths/entity-users.yaml#/~1entity_users~1my_entity'
+  /bank_accounts:
+    $ref: './paths/bank-accounts.yaml#/~1bank_accounts'
+  /bank_accounts/{bank_account_id}:
+    $ref: './paths/bank-accounts.yaml#/~1bank_accounts~1{bank_account_id}'
+  /bank_accounts/{bank_account_id}/make_default:
+    $ref: './paths/bank-accounts.yaml#/~1bank_accounts~1{bank_account_id}~1make_default'
+  /persons:
+    $ref: './paths/persons.yaml#/~1persons'
+  /persons/{person_id}:
+    $ref: './paths/persons.yaml#/~1persons~1{person_id}'
+  /roles:
+    $ref: './paths/roles.yaml#/~1roles'
+  /roles/{role_id}:
+    $ref: './paths/roles.yaml#/~1roles~1{role_id}'
+  /counterparts:
+    $ref: './paths/counterparts.yaml#/~1counterparts'
+  /counterparts/{counterpart_id}:
+    $ref: './paths/counterparts.yaml#/~1counterparts~1{counterpart_id}'
+  /counterparts/{counterpart_id}/partner_metadata:
+    $ref: './paths/counterparts.yaml#/~1counterparts~1{counterpart_id}~1partner_metadata'
+  /counterparts/{counterpart_id}/addresses:
+    $ref: './paths/counterpart-addresses.yaml#/~1counterparts~1{counterpart_id}~1addresses'
+  /counterparts/{counterpart_id}/addresses/{address_id}:
+    $ref: './paths/counterpart-addresses.yaml#/~1counterparts~1{counterpart_id}~1addresses~1{address_id}'
+  /counterparts/{counterpart_id}/bank_accounts:
+    $ref: './paths/counterpart-bank-accounts.yaml#/~1counterparts~1{counterpart_id}~1bank_accounts'
+  /counterparts/{counterpart_id}/bank_accounts/{bank_account_id}:
+    $ref: './paths/counterpart-bank-accounts.yaml#/~1counterparts~1{counterpart_id}~1bank_accounts~1{bank_account_id}'
+  /counterparts/{counterpart_id}/bank_accounts/{bank_account_id}/make_default:
+    $ref: './paths/counterpart-bank-accounts.yaml#/~1counterparts~1{counterpart_id}~1bank_accounts~1{bank_account_id}~1make_default'
+  /counterparts/{counterpart_id}/contacts:
+    $ref: './paths/counterpart-contacts.yaml#/~1counterparts~1{counterpart_id}~1contacts'

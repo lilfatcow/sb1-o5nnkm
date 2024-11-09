@@ -1,0 +1,111 @@
+VerificationStatus:
+  type: string
+  enum:
+    - enabled
+    - disabled
+    - pending
+  description: Status of the verification process
+
+RequirementsError:
+  type: object
+  required:
+    - code
+    - reason
+    - requirement
+  properties:
+    code:
+      type: string
+      description: Error code
+    reason:
+      type: string
+      description: Error reason
+    requirement:
+      type: string
+      description: The requirement that failed
+
+VerificationError:
+  type: object
+  required:
+    - code
+    - details
+  properties:
+    code:
+      type: string
+      description: Error code
+    details:
+      type: string
+      description: Error details
+
+Requirements:
+  type: object
+  required:
+    - currently_due
+    - eventually_due
+    - past_due
+    - pending_verification
+  properties:
+    currently_due:
+      type: array
+      items:
+        type: string
+      description: Requirements that need to be completed now
+    eventually_due:
+      type: array
+      items:
+        type: string
+      description: Requirements that need to be completed eventually
+    past_due:
+      type: array
+      items:
+        type: string
+      description: Requirements that are past due
+    pending_verification:
+      type: array
+      items:
+        type: string
+      description: Requirements pending verification
+    current_deadline:
+      type: string
+      format: date-time
+      description: Current deadline for completing requirements
+
+OnboardingRequirement:
+  type: object
+  required:
+    - payment_method
+    - requirements
+    - requirements_errors
+    - verification_errors
+    - verification_status
+  properties:
+    payment_method:
+      type: string
+      description: Payment method this requirement is for
+    requirements:
+      $ref: '#/Requirements'
+    requirements_errors:
+      type: array
+      items:
+        $ref: '#/RequirementsError'
+      description: List of requirement errors
+    verification_errors:
+      type: array
+      items:
+        $ref: '#/VerificationError'
+      description: List of verification errors
+    verification_status:
+      $ref: '#/VerificationStatus'
+    disabled_reason:
+      type: string
+      description: Reason why verification is disabled
+
+OnboardingRequirementsList:
+  type: object
+  required:
+    - data
+  properties:
+    data:
+      type: array
+      items:
+        $ref: '#/OnboardingRequirement'
+      description: List of onboarding requirements

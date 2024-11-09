@@ -1,0 +1,84 @@
+/entities/{entity_id}/onboarding_data:
+  get:
+    operationId: getEntityOnboardingData
+    tags:
+      - Entity Onboarding Data
+    description: Get entity onboarding data
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: entity_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the entity to get onboarding data for
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+    responses:
+      '200':
+        description: Entity onboarding data retrieved successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/entity-onboarding.yaml#/EntityOnboardingData'
+      '404':
+        $ref: '../responses/errors.yaml#/NotFound'
+      '409':
+        $ref: '../responses/errors.yaml#/Conflict'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+      '500':
+        $ref: '../responses/errors.yaml#/InternalServerError'
+
+  patch:
+    operationId: updateEntityOnboardingData
+    tags:
+      - Entity Onboarding Data
+    description: Patch entity onboarding data
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: entity_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the entity to update onboarding data for
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/entity-onboarding.yaml#/UpdateEntityOnboardingData'
+    responses:
+      '200':
+        description: Entity onboarding data updated successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/entity-onboarding.yaml#/EntityOnboardingData'
+      '404':
+        $ref: '../responses/errors.yaml#/NotFound'
+      '409':
+        $ref: '../responses/errors.yaml#/Conflict'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+      '500':
+        $ref: '../responses/errors.yaml#/InternalServerError'

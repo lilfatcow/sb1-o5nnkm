@@ -1,0 +1,205 @@
+PersonAddress:
+  type: object
+  required:
+    - city
+    - country
+    - line1
+    - postal_code
+  properties:
+    city:
+      type: string
+      description: City, district, suburb, town, or village
+    country:
+      type: string
+      pattern: ^[A-Z]{2}$
+      description: Two-letter country code (ISO 3166-1 alpha-2)
+    line1:
+      type: string
+      description: Address line 1 (e.g., street, PO Box, or company name)
+    line2:
+      type: string
+      description: Address line 2 (e.g., apartment, suite, unit, or building)
+    postal_code:
+      type: string
+      description: ZIP or postal code
+    state:
+      type: string
+      description: State, county, province, or region
+
+PersonRelationship:
+  type: object
+  properties:
+    title:
+      type: string
+      description: The person's title (e.g., CEO, Support Engineer)
+    percent_ownership:
+      type: number
+      format: double
+      minimum: 0
+      maximum: 100
+      description: The percent owned by the person of the account's legal entity
+    representative:
+      type: boolean
+      description: Whether the person is authorized as the primary representative of the account
+    director:
+      type: boolean
+      description: Whether the person is a director of the account's legal entity
+    executive:
+      type: boolean
+      description: Whether the person has significant responsibility to control, manage, or direct the organization
+    owner:
+      type: boolean
+      description: Whether the person is an owner of the account's legal entity
+
+CreatePersonRequest:
+  type: object
+  required:
+    - first_name
+    - last_name
+    - email
+    - relationship
+  properties:
+    first_name:
+      type: string
+      description: The person's first name
+    last_name:
+      type: string
+      description: The person's last name
+    email:
+      type: string
+      format: email
+      description: The person's email address
+    relationship:
+      $ref: '#/PersonRelationship'
+    address:
+      $ref: '#/PersonAddress'
+    citizenship:
+      type: string
+      pattern: ^[A-Z]{2}$
+      description: Required for persons of US entities. The country of the person's citizenship, as a two-letter country code (ISO 3166-1 alpha-2). In case of dual or multiple citizenship, specify any.
+    date_of_birth:
+      type: string
+      format: date
+      description: The person's date of birth
+    phone:
+      type: string
+      description: The person's phone number
+    id_number:
+      type: string
+      description: The person's ID number, as appropriate for their country
+    ssn_last_4:
+      type: string
+      pattern: ^\d{4}$
+      description: The last four digits of the person's Social Security number
+
+UpdatePersonRequest:
+  type: object
+  properties:
+    first_name:
+      type: string
+      description: The person's first name
+    last_name:
+      type: string
+      description: The person's last name
+    email:
+      type: string
+      format: email
+      description: The person's email address
+    relationship:
+      $ref: '#/PersonRelationship'
+    address:
+      $ref: '#/PersonAddress'
+    citizenship:
+      type: string
+      pattern: ^[A-Z]{2}$
+      description: Required for persons of US entities. The country of the person's citizenship, as a two-letter country code (ISO 3166-1 alpha-2). In case of dual or multiple citizenship, specify any.
+    date_of_birth:
+      type: string
+      format: date
+      description: The person's date of birth
+    phone:
+      type: string
+      description: The person's phone number
+    id_number:
+      type: string
+      description: The person's ID number, as appropriate for their country
+    ssn_last_4:
+      type: string
+      pattern: ^\d{4}$
+      description: The last four digits of the person's Social Security number
+
+Person:
+  type: object
+  required:
+    - id
+    - created_at
+    - updated_at
+    - email
+    - entity_id
+    - first_name
+    - last_name
+    - relationship
+  properties:
+    id:
+      type: string
+      format: uuid
+      description: The person's unique identifier
+    created_at:
+      type: string
+      format: date-time
+      description: Time at which the person was created
+    updated_at:
+      type: string
+      format: date-time
+      description: Time at which the person was updated
+    email:
+      type: string
+      format: email
+      description: The person's email address
+    entity_id:
+      type: string
+      format: uuid
+      description: Entity ID
+    first_name:
+      type: string
+      description: The person's first name
+    last_name:
+      type: string
+      description: The person's last name
+    relationship:
+      $ref: '#/PersonRelationship'
+    address:
+      $ref: '#/PersonAddress'
+    citizenship:
+      type: string
+      pattern: ^[A-Z]{2}$
+      description: Required for persons of US entities. The country of the person's citizenship, as a two-letter country code (ISO 3166-1 alpha-2). In case of dual or multiple citizenship, specify any.
+    created_by_entity_user_id:
+      type: string
+      format: uuid
+      description: ID of the entity user who created this person, or null if the person was created using a partner access token.
+    date_of_birth:
+      type: string
+      format: date
+      description: The person's date of birth
+    id_number:
+      type: string
+      description: The person's ID number, as appropriate for their country
+    phone:
+      type: string
+      description: The person's phone number
+    ssn_last_4:
+      type: string
+      pattern: ^\d{4}$
+      description: The last four digits of the person's Social Security number
+
+PersonList:
+  type: object
+  required:
+    - data
+  properties:
+    data:
+      type: array
+      items:
+        $ref: '#/Person'
+      description: List of persons associated with the entity

@@ -1,0 +1,290 @@
+/counterparts/{counterpart_id}/bank_accounts:
+  get:
+    operationId: getCounterpartBankAccounts
+    tags:
+      - Counterparts
+    description: Get all bank accounts associated with a counterpart
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: counterpart_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the counterpart to get bank accounts for
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    responses:
+      '200':
+        description: Bank accounts retrieved successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/counterpart-bank-accounts.yaml#/CounterpartBankAccountList'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '404':
+        $ref: '../responses/errors.yaml#/NotFound'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+
+  post:
+    operationId: createCounterpartBankAccount
+    tags:
+      - Counterparts
+    description: Create a new bank account for a counterpart
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: counterpart_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the counterpart to create a bank account for
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/counterpart-bank-accounts.yaml#/CreateCounterpartBankAccountRequest'
+    responses:
+      '200':
+        description: Bank account created successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/counterpart-bank-accounts.yaml#/CounterpartBankAccount'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '404':
+        $ref: '../responses/errors.yaml#/NotFound'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+
+/counterparts/{counterpart_id}/bank_accounts/{bank_account_id}:
+  get:
+    operationId: getCounterpartBankAccount
+    tags:
+      - Counterparts
+    description: Get a specific bank account associated with a counterpart
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: counterpart_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the counterpart that owns the bank account
+      - name: bank_account_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the bank account to retrieve
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    responses:
+      '200':
+        description: Bank account retrieved successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/counterpart-bank-accounts.yaml#/CounterpartBankAccount'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '404':
+        $ref: '../responses/errors.yaml#/NotFound'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+
+  patch:
+    operationId: updateCounterpartBankAccount
+    tags:
+      - Counterparts
+    description: Update a specific bank account associated with a counterpart
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: counterpart_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the counterpart that owns the bank account
+      - name: bank_account_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the bank account to update
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/counterpart-bank-accounts.yaml#/UpdateCounterpartBankAccountRequest'
+    responses:
+      '200':
+        description: Bank account updated successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/counterpart-bank-accounts.yaml#/CounterpartBankAccount'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '404':
+        $ref: '../responses/errors.yaml#/NotFound'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+
+  delete:
+    operationId: deleteCounterpartBankAccount
+    tags:
+      - Counterparts
+    description: Delete a specific bank account associated with a counterpart
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: counterpart_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the counterpart that owns the bank account
+      - name: bank_account_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the bank account to delete
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    responses:
+      '204':
+        description: Bank account deleted successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '404':
+        $ref: '../responses/errors.yaml#/NotFound'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+
+/counterparts/{counterpart_id}/bank_accounts/{bank_account_id}/make_default:
+  post:
+    operationId: makeCounterpartBankAccountDefault
+    tags:
+      - Counterparts
+    description: Set a bank account as the default for this counterpart per currency
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: counterpart_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the counterpart that owns the bank account
+      - name: bank_account_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the bank account to make default
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    responses:
+      '200':
+        description: Bank account set as default successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/counterpart-bank-accounts.yaml#/CounterpartBankAccount'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '404':
+        $ref: '../responses/errors.yaml#/NotFound'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'

@@ -1,0 +1,496 @@
+/receivables/{receivable_id}/mark_as_paid:
+  post:
+    operationId: markReceivableAsPaid
+    tags:
+      - Receivables
+    description: Mark an invoice as paid
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: receivable_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the receivable to mark as paid
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              comment:
+                type: string
+                description: Optional comment explaining how the payment was made
+              paid_at:
+                type: string
+                format: date-time
+                description: Date and time when the invoice was paid
+    responses:
+      '200':
+        description: Receivable marked as paid successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '../components/schemas/receivables.yaml#/Quote'
+                - $ref: '../components/schemas/receivables.yaml#/Invoice'
+                - $ref: '../components/schemas/receivables.yaml#/CreditNote'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '403':
+        $ref: '../responses/errors.yaml#/Forbidden'
+      '404':
+        $ref: '../responses/errors.yaml#/NotFound'
+      '409':
+        $ref: '../responses/errors.yaml#/Conflict'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+      '500':
+        $ref: '../responses/errors.yaml#/InternalServerError'
+
+/receivables/{receivable_id}/mark_as_uncollectible:
+  post:
+    operationId: markReceivableAsUncollectible
+    tags:
+      - Receivables
+    description: Mark an invoice as uncollectible
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: receivable_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the receivable to mark as uncollectible
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              comment:
+                type: string
+                description: Optional comment explains why the Invoice goes uncollectible
+    responses:
+      '200':
+        description: Receivable marked as uncollectible successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '../components/schemas/receivables.yaml#/Quote'
+                - $ref: '../components/schemas/receivables.yaml#/Invoice'
+                - $ref: '../components/schemas/receivables.yaml#/CreditNote'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '403':
+        $ref: '../responses/errors.yaml#/Forbidden'
+      '404':
+        $ref: '../responses/errors.yaml#/NotFound'
+      '409':
+        $ref: '../responses/errors.yaml#/Conflict'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+      '500':
+        $ref: '../responses/errors.yaml#/InternalServerError'
+
+/receivables/{receivable_id}/pdf_link:
+  get:
+    operationId: getReceivablePdfLink
+    tags:
+      - Receivables
+    description: Get a link to the PDF version of a receivable
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: receivable_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the receivable to get PDF link for
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    responses:
+      '200':
+        description: PDF links retrieved successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                file_url:
+                  type: string
+                  format: uri
+                  description: The receivable's PDF URL in the counterpart's default language
+                original_file_url:
+                  type: string
+                  format: uri
+                  description: The receivable's PDF URL in the entity's default language
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '403':
+        $ref: '../responses/errors.yaml#/Forbidden'
+      '404':
+        $ref: '../responses/errors.yaml#/NotFound'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+      '500':
+        $ref: '../responses/errors.yaml#/InternalServerError'
+
+/receivables/{receivable_id}/preview:
+  post:
+    operationId: previewReceivableEmail
+    tags:
+      - Receivables
+    description: Preview a receivable's email message
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: receivable_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the receivable to preview email for
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - body_text
+              - subject_text
+            properties:
+              body_text:
+                type: string
+                description: Body text of the content
+              subject_text:
+                type: string
+                description: Subject text of the content
+              language:
+                $ref: '../components/schemas/languages.yaml#/Language'
+                description: Language code for localization purposes
+              type:
+                type: string
+                enum: [receivable, discount_reminder, final_reminder]
+                description: The type of the preview document
+    responses:
+      '200':
+        description: Email preview generated successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - body_preview
+                - subject_preview
+              properties:
+                body_preview:
+                  type: string
+                subject_preview:
+                  type: string
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '403':
+        $ref: '../responses/errors.yaml#/Forbidden'
+      '404':
+        $ref: '../responses/errors.yaml#/NotFound'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+      '500':
+        $ref: '../responses/errors.yaml#/InternalServerError'
+
+/receivables/{receivable_id}/send:
+  post:
+    operationId: sendReceivable
+    tags:
+      - Receivables
+    description: Send a receivable via email
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: receivable_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the receivable to send
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - body_text
+              - subject_text
+            properties:
+              body_text:
+                type: string
+                description: Body text of the content
+              subject_text:
+                type: string
+                description: Subject text of the content
+              recipients:
+                $ref: '../components/schemas/receivables.yaml#/MailRecipients'
+              language:
+                type: string
+                description: Deprecated - Lowercase ISO code of language
+                deprecated: true
+    responses:
+      '200':
+        description: Receivable sent successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - mail_id
+              properties:
+                mail_id:
+                  type: string
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '403':
+        $ref: '../responses/errors.yaml#/Forbidden'
+      '404':
+        $ref: '../responses/errors.yaml#/NotFound'
+      '409':
+        $ref: '../responses/errors.yaml#/Conflict'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+      '500':
+        $ref: '../responses/errors.yaml#/InternalServerError'
+
+/receivables/{receivable_id}/send_test_reminder:
+  post:
+    operationId: sendTestReminder
+    tags:
+      - Receivables
+    description: Send a test reminder
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: receivable_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the receivable to send test reminder for
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - reminder_type
+            properties:
+              reminder_type:
+                type: string
+                enum: [term_1, term_2, term_final, overdue]
+                description: The type of the reminder to be sent
+              recipients:
+                $ref: '../components/schemas/receivables.yaml#/MailRecipients'
+    responses:
+      '200':
+        description: Test reminder sent successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - mail_ids
+              properties:
+                mail_ids:
+                  type: array
+                  items:
+                    type: string
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '403':
+        $ref: '../responses/errors.yaml#/Forbidden'
+      '404':
+        $ref: '../responses/errors.yaml#/NotFound'
+      '409':
+        $ref: '../responses/errors.yaml#/Conflict'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+      '500':
+        $ref: '../responses/errors.yaml#/InternalServerError'
+
+/receivables/{receivable_id}/verify:
+  post:
+    operationId: verifyReceivable
+    tags:
+      - Receivables
+    description: Verify a receivable
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: receivable_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the receivable to verify
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    responses:
+      '200':
+        description: Receivable verified successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                errors:
+                  type: object
+                  description: Missing fields of receivable
+                  properties:
+                    counterpart:
+                      type: array
+                      items:
+                        type: string
+                    entity:
+                      type: array
+                      items:
+                        type: string
+                    products:
+                      type: array
+                      items:
+                        type: object
+                        required:
+                          - line_item_number
+                          - missing_fields
+                        properties:
+                          line_item_number:
+                            type: integer
+                          missing_fields:
+                            type: array
+                            items:
+                              type: string
+                    receivable:
+                      type: array
+                      items:
+                        type: string
+                    vat_rates:
+                      type: array
+                      items:
+                        type: string
+                warnings:
+                  type: object
+                  description: Warning message for payment reminder
+                  properties:
+                    payment_reminders:
+                      type: string
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '403':
+        $ref: '../responses/errors.yaml#/Forbidden'
+      '404':
+        $ref: '../responses/errors.yaml#/NotFound'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+      '500':
+        $ref: '../responses/errors.yaml#/InternalServerError'

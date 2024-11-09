@@ -1,0 +1,231 @@
+EntitySettings:
+  type: object
+  properties:
+    accounting:
+      type: object
+      properties:
+        provider:
+          type: string
+        token:
+          type: string
+          description: Token for the accounting provider (Codat only)
+    allow_purchase_order_autolinking:
+      type: boolean
+      description: Automatically attempt to find a corresponding purchase order for all incoming payables.
+    api_version:
+      type: string
+      enum:
+        - "2024-01-31"
+        - "2023-09-01"
+        - "2023-06-04"
+        - "2023-04-12"
+        - "2023-03-14"
+        - "2023-03-01"
+        - "2023-02-07"
+        - "2022-11-16"
+      description: Default API version for partner
+    commercial_conditions:
+      type: array
+      items:
+        type: string
+      description: Commercial conditions for receivables
+    currency:
+      type: object
+      properties:
+        default:
+          type: string
+          pattern: ^[A-Z]{3}$
+        exchange_rates:
+          type: array
+          items:
+            type: object
+            required: [base, to, rate]
+            properties:
+              base:
+                type: string
+                pattern: ^[A-Z]{3}$
+              to:
+                type: string
+                pattern: ^[A-Z]{3}$
+              rate:
+                type: number
+                format: double
+    default_role:
+      type: object
+      additionalProperties: true
+      description: A default role to provision upon new entity creation
+    document_ids:
+      type: object
+      properties:
+        include_date:
+          type: boolean
+          description: Optionally add 4-digit of the current year
+        prefix:
+          type: string
+          description: Optional prefix. Does not substitute document_type prefix
+        separator:
+          type: string
+          enum: ["/", "-", "|", "."]
+          description: Which character should separate each part of the document_id
+        document_type_prefix:
+          type: object
+          properties:
+            quote:
+              type: string
+              default: "Q"
+            invoice:
+              type: string
+              default: "INV"
+            credit_note:
+              type: string
+              default: "CN"
+            purchase_order:
+              type: string
+              default: "PO"
+        min_digits:
+          type: integer
+          default: 5
+          description: Minimal size of number in document ID. Number will be left padded with zeros if less
+    einvoicing:
+      type: object
+      properties:
+        client_id:
+          type: string
+        client_secret:
+          type: string
+        provider:
+          type: string
+          enum: [avalara]
+          default: avalara
+    generate_paid_invoice_pdf:
+      type: boolean
+      description: If enabled, the paid invoice's PDF will be in a new layout set by the user
+    language:
+      type: string
+      pattern: ^[a-z]{2}$
+      description: Two-letter language code (ISO 639-1)
+    mail:
+      type: object
+      properties:
+        attach_documents_as_pdf:
+          type: boolean
+        from_email_username:
+          type: string
+        from_name:
+          type: string
+    payable:
+      type: object
+      properties:
+        approve_page_url:
+          type: string
+          format: uri
+        allow_cancel_duplicates_automatically:
+          type: boolean
+        allow_counterpart_autocreation:
+          type: boolean
+        allow_counterpart_autolinking:
+          type: boolean
+        default_state:
+          type: string
+        enable_line_items:
+          type: boolean
+          deprecated: true
+    payables_ocr_auto_tagging:
+      type: array
+      items:
+        type: object
+        required: [tag_id, keywords, enabled]
+        properties:
+          tag_id:
+            type: string
+            description: Tag identifier that will be assigned to the payable document if one of the words listed in keywords is found during OCR
+          keywords:
+            type: array
+            items:
+              type: string
+              minLength: 2
+              maxLength: 25
+            description: A list of words that will be searched for assigning a tag in the recognized fields of the document after OCR processing
+          enabled:
+            type: boolean
+            description: A switch to temporarily disable a keyword without removing it from the list
+    payment_priority:
+      type: string
+      enum: [working_capital, balanced, bottom_line]
+      description: Payment preferences for entity to automate calculating suggested payment date
+    payments:
+      type: object
+      properties:
+        payment_page_domain:
+          type: string
+        payment_page_theme:
+          type: object
+          properties:
+            background_color:
+              type: string
+            border_radius:
+              type: string
+            button:
+              type: object
+              properties:
+                primary_color:
+                  type: string
+                primary_hover_color:
+                  type: string
+                secondary_color:
+                  type: string
+                secondary_hover_color:
+                  type: string
+            card:
+              type: object
+              properties:
+                background_color:
+                  type: string
+            font_color:
+              type: string
+            font_family:
+              type: string
+            font_link_href:
+              type: string
+            logo_src:
+              type: string
+        support_email:
+          type: string
+          format: email
+          description: The support email address
+    quote_signature_required:
+      type: boolean
+      description: Sets the default behavior of whether a signature is required to accept quotes
+    receivable:
+      type: object
+      properties:
+        create_without_personal_info:
+          type: boolean
+        deduction_title:
+          type: string
+    receivable_edit_flow:
+      type: string
+      enum: [compliant, partially_compliant, non_compliant]
+    reminder:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+    units:
+      type: array
+      items:
+        type: object
+        required: [name, designation]
+        properties:
+          name:
+            type: string
+          designation:
+            type: string
+      description: Measurement units
+    vat_mode:
+      type: string
+      enum: [exclusive, inclusive]
+      description: Defines whether the prices of products in receivables will already include VAT or not
+    website:
+      type: string
+      format: uri

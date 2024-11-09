@@ -1,0 +1,133 @@
+RecipientType:
+  type: string
+  enum:
+    - entity
+    - counterpart
+  description: Type of recipient for the onboarding link
+
+Recipient:
+  type: object
+  required:
+    - id
+    - type
+  properties:
+    id:
+      type: string
+      format: uuid
+      description: ID of the recipient
+    type:
+      $ref: '#/RecipientType'
+      description: Type of the recipient
+
+CreateOnboardingLink:
+  type: object
+  required:
+    - expires_at
+    - refresh_url
+    - return_url
+  properties:
+    expires_at:
+      type: string
+      format: date-time
+      description: When the onboarding link expires
+    refresh_url:
+      type: string
+      format: uri
+      description: URL to redirect to when refreshing the onboarding flow
+    return_url:
+      type: string
+      format: uri
+      description: URL to redirect to after completing onboarding
+
+OnboardingLink:
+  type: object
+  required:
+    - id
+    - entity_id
+    - expires_at
+    - refresh_url
+    - return_url
+    - url
+  properties:
+    id:
+      type: string
+      format: uuid
+      description: Unique identifier of the onboarding link
+    entity_id:
+      type: string
+      format: uuid
+      description: ID of the entity this link is for
+    expires_at:
+      type: string
+      format: date-time
+      description: When the onboarding link expires
+    refresh_url:
+      type: string
+      format: uri
+      description: URL to redirect to when refreshing the onboarding flow
+    return_url:
+      type: string
+      format: uri
+      description: URL to redirect to after completing onboarding
+    url:
+      type: string
+      format: uri
+      description: The generated onboarding URL
+
+CreatePaymentOnboardingLink:
+  type: object
+  required:
+    - recipient
+    - refresh_url
+    - return_url
+  properties:
+    recipient:
+      $ref: '#/Recipient'
+      description: The recipient for this payment onboarding link
+    refresh_url:
+      type: string
+      format: uri
+      description: URL to redirect to when refreshing the onboarding flow
+    return_url:
+      type: string
+      format: uri
+      description: URL to redirect to after completing onboarding
+
+PaymentOnboardingLink:
+  type: object
+  required:
+    - id
+    - created_at
+    - expires_at
+    - recipient
+    - refresh_url
+    - return_url
+    - url
+  properties:
+    id:
+      type: string
+      format: uuid
+      description: Unique identifier of the payment onboarding link
+    created_at:
+      type: string
+      format: date-time
+      description: When the payment onboarding link was created
+    expires_at:
+      type: string
+      format: date-time
+      description: When the payment onboarding link expires
+    recipient:
+      $ref: '#/Recipient'
+      description: The recipient for this payment onboarding link
+    refresh_url:
+      type: string
+      format: uri
+      description: URL to redirect to when refreshing the onboarding flow
+    return_url:
+      type: string
+      format: uri
+      description: URL to redirect to after completing onboarding
+    url:
+      type: string
+      format: uri
+      description: The generated payment onboarding URL

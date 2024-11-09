@@ -1,0 +1,200 @@
+/roles:
+  get:
+    operationId: getRoles
+    tags:
+      - Roles
+    description: Find all roles that match the search criteria
+    security:
+      - bearerAuth: []
+    parameters:
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+      - $ref: '../components/parameters.yaml#/PaginationOrder'
+      - $ref: '../components/parameters.yaml#/PaginationLimit'
+      - $ref: '../components/parameters.yaml#/PaginationToken'
+      - name: sort
+        in: query
+        required: false
+        schema:
+          type: string
+          enum: [updated_at, created_at]
+        description: Field to sort by
+      - name: id__in
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Filter by role IDs (comma-separated)
+      - name: name
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Filter by role name
+      - name: created_at
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+        description: Filter by creation date
+      - $ref: '../components/parameters.yaml#/CreatedAtGt'
+      - $ref: '../components/parameters.yaml#/CreatedAtLt'
+      - $ref: '../components/parameters.yaml#/CreatedAtGte'
+      - $ref: '../components/parameters.yaml#/CreatedAtLte'
+    responses:
+      '200':
+        description: Roles retrieved successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/roles.yaml#/RoleList'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '403':
+        $ref: '../responses/errors.yaml#/Forbidden'
+      '406':
+        $ref: '../responses/errors.yaml#/NotAcceptable'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+
+  post:
+    operationId: createRole
+    tags:
+      - Roles
+    description: Create a new role from the specified values
+    security:
+      - bearerAuth: []
+    parameters:
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/roles.yaml#/CreateRoleRequest'
+    responses:
+      '200':
+        description: Role created successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/roles.yaml#/Role'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+
+/roles/{role_id}:
+  get:
+    operationId: getRoleById
+    tags:
+      - Roles
+    description: Get a role by its ID
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: role_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the role to retrieve
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    responses:
+      '200':
+        description: Role retrieved successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/roles.yaml#/Role'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '404':
+        $ref: '../responses/errors.yaml#/NotFound'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+
+  patch:
+    operationId: updateRole
+    tags:
+      - Roles
+    description: Change the specified fields with the provided values
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: role_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the role to update
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/roles.yaml#/UpdateRoleRequest'
+    responses:
+      '200':
+        description: Role updated successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/roles.yaml#/Role'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '404':
+        $ref: '../responses/errors.yaml#/NotFound'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'

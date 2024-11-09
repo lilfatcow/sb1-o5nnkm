@@ -1,0 +1,223 @@
+openapi: 3.0.0
+paths:
+  /measure_units:
+    get:
+      operationId: getMeasureUnits
+      tags:
+        - Measure Units
+      description: Get all measure units
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '../components/parameters.yaml#/MoniteVersion'
+        - $ref: '../components/parameters.yaml#/MoniteEntityId'
+      responses:
+        '200':
+          description: Measure units retrieved successfully
+          headers:
+            x-monite-version:
+              $ref: '../components/headers.yaml#/MoniteVersion'
+            x-request-id:
+              $ref: '../components/headers.yaml#/RequestId'
+            x-process-time:
+              $ref: '../components/headers.yaml#/ProcessTime'
+            x-monite-entity-id:
+              $ref: '../components/headers.yaml#/MoniteEntityId'
+          content:
+            application/json:
+              schema:
+                $ref: '../components/schemas/measure-units.yaml#/MeasureUnitList'
+        '400':
+          $ref: '../responses/errors.yaml#/BadRequest'
+        '401':
+          $ref: '../responses/errors.yaml#/Unauthorized'
+        '403':
+          $ref: '../responses/errors.yaml#/Forbidden'
+        '422':
+          $ref: '../responses/errors.yaml#/UnprocessableEntity'
+        '500':
+          $ref: '../responses/errors.yaml#/InternalServerError'
+
+    post:
+      operationId: createMeasureUnit
+      tags:
+        - Measure Units
+      description: Create a new measure unit
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '../components/parameters.yaml#/MoniteVersion'
+        - $ref: '../components/parameters.yaml#/MoniteEntityId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/measure-units.yaml#/CreateMeasureUnit'
+      responses:
+        '200':
+          description: Measure unit created successfully
+          headers:
+            x-monite-version:
+              $ref: '../components/headers.yaml#/MoniteVersion'
+            x-request-id:
+              $ref: '../components/headers.yaml#/RequestId'
+            x-process-time:
+              $ref: '../components/headers.yaml#/ProcessTime'
+            x-monite-entity-id:
+              $ref: '../components/headers.yaml#/MoniteEntityId'
+          content:
+            application/json:
+              schema:
+                $ref: '../components/schemas/measure-units.yaml#/MeasureUnit'
+        '400':
+          $ref: '../responses/errors.yaml#/BadRequest'
+        '401':
+          $ref: '../responses/errors.yaml#/Unauthorized'
+        '403':
+          $ref: '../responses/errors.yaml#/Forbidden'
+        '422':
+          $ref: '../responses/errors.yaml#/UnprocessableEntity'
+        '500':
+          $ref: '../responses/errors.yaml#/InternalServerError'
+
+  /measure_units/{unit_id}:
+    get:
+      operationId: getMeasureUnitById
+      tags:
+        - Measure Units
+      description: Get a measure unit by ID
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: unit_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: The ID of the measure unit to retrieve
+        - $ref: '../components/parameters.yaml#/MoniteVersion'
+        - $ref: '../components/parameters.yaml#/MoniteEntityId'
+      responses:
+        '200':
+          description: Measure unit retrieved successfully
+          headers:
+            x-monite-version:
+              $ref: '../components/headers.yaml#/MoniteVersion'
+            x-request-id:
+              $ref: '../components/headers.yaml#/RequestId'
+            x-process-time:
+              $ref: '../components/headers.yaml#/ProcessTime'
+            x-monite-entity-id:
+              $ref: '../components/headers.yaml#/MoniteEntityId'
+          content:
+            application/json:
+              schema:
+                $ref: '../components/schemas/measure-units.yaml#/MeasureUnit'
+        '400':
+          $ref: '../responses/errors.yaml#/BadRequest'
+        '401':
+          $ref: '../responses/errors.yaml#/Unauthorized'
+        '403':
+          $ref: '../responses/errors.yaml#/Forbidden'
+        '404':
+          $ref: '../responses/errors.yaml#/NotFound'
+        '422':
+          $ref: '../responses/errors.yaml#/UnprocessableEntity'
+        '500':
+          $ref: '../responses/errors.yaml#/InternalServerError'
+
+    patch:
+      operationId: updateMeasureUnit
+      tags:
+        - Measure Units
+      description: Update a measure unit
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: unit_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: The ID of the measure unit to update
+        - $ref: '../components/parameters.yaml#/MoniteVersion'
+        - $ref: '../components/parameters.yaml#/MoniteEntityId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/measure-units.yaml#/UpdateMeasureUnit'
+      responses:
+        '200':
+          description: Measure unit updated successfully
+          headers:
+            x-monite-version:
+              $ref: '../components/headers.yaml#/MoniteVersion'
+            x-request-id:
+              $ref: '../components/headers.yaml#/RequestId'
+            x-process-time:
+              $ref: '../components/headers.yaml#/ProcessTime'
+            x-monite-entity-id:
+              $ref: '../components/headers.yaml#/MoniteEntityId'
+          content:
+            application/json:
+              schema:
+                $ref: '../components/schemas/measure-units.yaml#/MeasureUnit'
+        '400':
+          $ref: '../responses/errors.yaml#/BadRequest'
+        '401':
+          $ref: '../responses/errors.yaml#/Unauthorized'
+        '403':
+          $ref: '../responses/errors.yaml#/Forbidden'
+        '404':
+          $ref: '../responses/errors.yaml#/NotFound'
+        '422':
+          $ref: '../responses/errors.yaml#/UnprocessableEntity'
+        '500':
+          $ref: '../responses/errors.yaml#/InternalServerError'
+
+    delete:
+      operationId: deleteMeasureUnit
+      tags:
+        - Measure Units
+      description: Delete a measure unit
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: unit_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: The ID of the measure unit to delete
+        - $ref: '../components/parameters.yaml#/MoniteVersion'
+        - $ref: '../components/parameters.yaml#/MoniteEntityId'
+      responses:
+        '204':
+          description: Measure unit deleted successfully
+          headers:
+            x-monite-version:
+              $ref: '../components/headers.yaml#/MoniteVersion'
+            x-request-id:
+              $ref: '../components/headers.yaml#/RequestId'
+            x-process-time:
+              $ref: '../components/headers.yaml#/ProcessTime'
+            x-monite-entity-id:
+              $ref: '../components/headers.yaml#/MoniteEntityId'
+        '400':
+          $ref: '../responses/errors.yaml#/BadRequest'
+        '401':
+          $ref: '../responses/errors.yaml#/Unauthorized'
+        '403':
+          $ref: '../responses/errors.yaml#/Forbidden'
+        '404':
+          $ref: '../responses/errors.yaml#/NotFound'
+        '422':
+          $ref: '../responses/errors.yaml#/UnprocessableEntity'
+        '500':
+          $ref: '../responses/errors.yaml#/InternalServerError'

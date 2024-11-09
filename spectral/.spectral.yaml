@@ -1,0 +1,23 @@
+extends: spectral:oas
+rules:
+  operation-description:
+    description: Operation should have a description.
+    severity: warn
+    given: $.paths.*[get,post,put,delete,patch]
+    then:
+      field: description
+      function: truthy
+  operation-tags:
+    description: Operation must have tags.
+    severity: warn
+    given: $.paths.*[get,post,put,delete,patch]
+    then:
+      field: tags
+      function: truthy
+  operation-operationId:
+    description: Operation must have operationId.
+    severity: warn
+    given: $.paths.*[get,post,put,delete,patch]
+    then:
+      field: operationId
+      function: truthy

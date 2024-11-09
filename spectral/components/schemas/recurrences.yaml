@@ -1,0 +1,153 @@
+DayOfMonth:
+  type: string
+  enum:
+    - first_day
+    - last_day
+  description: Day of the month when the recurrence should be triggered
+
+RecurrenceStatus:
+  type: string
+  enum:
+    - active
+    - canceled
+    - completed
+  description: Status of the recurrence
+
+IterationStatus:
+  type: string
+  enum:
+    - pending
+    - completed
+    - canceled
+    - issue_failed
+    - send_failed
+  description: Status of a single iteration
+
+Iteration:
+  type: object
+  required:
+    - issue_at
+    - status
+  properties:
+    issue_at:
+      type: string
+      description: When this iteration should be issued
+    status:
+      $ref: '#/IterationStatus'
+    issued_invoice_id:
+      type: string
+      format: uuid
+      description: ID of the invoice issued for this iteration
+    iteration:
+      type: integer
+      default: 1
+      description: The iteration number
+
+CreateRecurrence:
+  type: object
+  required:
+    - day_of_month
+    - end_month
+    - end_year
+    - invoice_id
+    - start_month
+    - start_year
+  properties:
+    day_of_month:
+      $ref: '#/DayOfMonth'
+    end_month:
+      type: integer
+      description: Month when the recurrence should end
+    end_year:
+      type: integer
+      description: Year when the recurrence should end
+    invoice_id:
+      type: string
+      format: uuid
+      description: ID of the invoice to recur
+    start_month:
+      type: integer
+      description: Month when the recurrence should start
+    start_year:
+      type: integer
+      description: Year when the recurrence should start
+
+UpdateRecurrence:
+  type: object
+  properties:
+    day_of_month:
+      $ref: '#/DayOfMonth'
+    end_month:
+      type: integer
+      description: Month when the recurrence should end
+    end_year:
+      type: integer
+      description: Year when the recurrence should end
+
+Recurrence:
+  type: object
+  required:
+    - id
+    - created_at
+    - updated_at
+    - current_iteration
+    - day_of_month
+    - end_month
+    - end_year
+    - invoice_id
+    - iterations
+    - start_month
+    - start_year
+    - status
+  properties:
+    id:
+      type: string
+      format: uuid
+      description: Unique identifier of the recurrence
+    created_at:
+      type: string
+      format: date-time
+      description: Time at which the receivable was created. Timestamps follow the ISO 8601 standard.
+    updated_at:
+      type: string
+      format: date-time
+      description: Time at which the receivable was last updated. Timestamps follow the ISO 8601 standard.
+    current_iteration:
+      type: integer
+      description: Current iteration number
+    day_of_month:
+      $ref: '#/DayOfMonth'
+    end_month:
+      type: integer
+      description: Month when the recurrence should end
+    end_year:
+      type: integer
+      description: Year when the recurrence should end
+    invoice_id:
+      type: string
+      format: uuid
+      description: ID of the invoice to recur
+    iterations:
+      type: array
+      items:
+        $ref: '#/Iteration'
+      description: List of iterations for this recurrence
+    start_month:
+      type: integer
+      description: Month when the recurrence should start
+    start_year:
+      type: integer
+      description: Year when the recurrence should start
+    status:
+      $ref: '#/RecurrenceStatus'
+
+RecurrenceList:
+  type: object
+  required:
+    - data
+  properties:
+    data:
+      type: array
+      items:
+        $ref: '#/Recurrence'
+      description: List of recurrences

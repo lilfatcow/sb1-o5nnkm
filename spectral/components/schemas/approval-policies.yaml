@@ -1,0 +1,266 @@
+ApprovalPolicyStatus:
+  type: string
+  enum: [active, pending]
+  description: The current status of the approval policy.
+
+ApprovalPolicyScript:
+  oneOf:
+    - type: boolean
+    - type: number
+      format: double
+    - type: string
+    - type: array
+      items: {}
+    - type: object
+      additionalProperties: true
+
+ApprovalPolicyTrigger:
+  oneOf:
+    - type: boolean
+    - type: number
+      format: double
+    - type: string
+    - type: array
+      items: {}
+    - type: object
+      additionalProperties: true
+
+CreateApprovalPolicy:
+  type: object
+  required:
+    - name
+    - description
+    - script
+  properties:
+    name:
+      type: string
+      description: The name of the approval policy.
+    description:
+      type: string
+      description: A brief description of the approval policy.
+    script:
+      type: array
+      items:
+        $ref: '#/ApprovalPolicyScript'
+      description: A list of JSON objects that represents the approval policy script. The script contains the logic that determines whether an action should be sent to approval. This field is required, and it should contain at least one script object.
+    starts_at:
+      type: string
+      format: date-time
+      description: The date and time (in the ISO 8601 format) when the approval policy becomes active. Only payables submitted for approval during the policy's active period will trigger this policy. If omitted or null, the policy is effective immediately. The value will be converted to UTC.
+    ends_at:
+      type: string
+      format: date-time
+      description: The date and time (in the ISO 8601 format) when the approval policy stops being active and stops triggering approval workflows.If ends_at is provided in the request, then starts_at must also be provided and ends_at must be later than starts_at. The value will be converted to UTC.
+    trigger:
+      $ref: '#/ApprovalPolicyTrigger'
+      description: A JSON object that represents the trigger for the approval policy. The trigger specifies the event that will trigger the policy to be evaluated.
+
+UpdateApprovalPolicy:
+  type: object
+  properties:
+    name:
+      type: string
+      description: The name of the approval policy.
+    description:
+      type: string
+      description: A brief description of the approval policy.
+    script:
+      type: array
+      items:
+        $ref: '#/ApprovalPolicyScript'
+      description: A list of JSON objects that represents the approval policy script. The script contains the logic that determines whether an action should be sent to approval. This field is required, and it should contain at least one script object.
+    starts_at:
+      type: string
+      format: date-time
+      description: The date and time (in the ISO 8601 format) when the approval policy becomes active. Only payables submitted for approval during the policy's active period will trigger this policy. If omitted or null, the policy is effective immediately. The value will be converted to UTC.
+    ends_at:
+      type: string
+      format: date-time
+      description: The date and time (in the ISO 8601 format) when the approval policy stops being active and stops triggering approval workflows.If ends_at is provided in the request, then starts_at must also be provided and ends_at must be later than starts_at. The value will be converted to UTC.
+    trigger:
+      $ref: '#/ApprovalPolicyTrigger'
+      description: A JSON object that represents the trigger for the approval policy. The trigger specifies the event that will trigger the policy to be evaluated.
+    status:
+      type: string
+      enum: [active, deleted, pending]
+      description: A string that represents the current status of the approval policy.
+
+ApprovalPolicy:
+  type: object
+  required:
+    - name
+    - description
+    - script
+    - id
+    - status
+    - created_at
+    - updated_at
+    - created_by
+  properties:
+    name:
+      type: string
+      description: The name of the approval policy.
+    description:
+      type: string
+      description: A brief description of the approval policy.
+    script:
+      type: array
+      items:
+        $ref: '#/ApprovalPolicyScript'
+      description: A list of JSON objects that represents the approval policy script. The script contains the logic that determines whether an action should be sent to approval. This field is required, and it should contain at least one script object.
+    id:
+      type: string
+      format: uuid
+    status:
+      $ref: '#/ApprovalPolicyStatus'
+    created_at:
+      type: string
+      format: date-time
+    updated_at:
+      type: string
+      format: date-time
+    created_by:
+      type: string
+    starts_at:
+      type: string
+      format: date-time
+      description: The date and time (in the ISO 8601 format) when the approval policy becomes active. Only payables submitted for approval during the policy's active period will trigger this policy. If omitted or null, the policy is effective immediately. The value will be converted to UTC.
+    ends_at:
+      type: string
+      format: date-time
+      description: The date and time (in the ISO 8601 format) when the approval policy stops being active and stops triggering approval workflows.If ends_at is provided in the request, then starts_at must also be provided and ends_at must be later than starts_at. The value will be converted to UTC.
+    trigger:
+      $ref: '#/ApprovalPolicyTrigger'
+      description: A JSON object that represents the trigger for the approval policy. The trigger specifies the event that will trigger the policy to be evaluated.
+    updated_by:
+      type: string
+
+ApprovalPolicyList:
+  type: object
+  required:
+    - data
+  properties:
+    data:
+      type: array
+      items:
+        $ref: '#/ApprovalPolicy'
+    prev_pagination_token:
+      type: string
+      description: A token that can be sent in the pagination_token query parameter to get the previous page of results, or null if there is no previous page (i.e. you've reached the first page).
+    next_pagination_token:
+      type: string
+      description: A token that can be sent in the pagination_token query parameter to get the next page of results, or null if there is no next page (i.e. you've reached the last page).
+
+ApprovalProcessStatus:
+  type: string
+  enum:
+    - succeeded
+    - failed
+    - cancelled
+    - waiting
+    - in_progress
+    - rejected
+  description: The current status of the approval policy process.
+
+ApprovalProcess:
+  type: object
+  required:
+    - id
+    - status
+    - input
+    - metadata
+    - created_at
+  properties:
+    id:
+      type: string
+      format: uuid
+    status:
+      $ref: '#/ApprovalProcessStatus'
+    input:
+      type: object
+      additionalProperties: true
+      description: The input for the script.
+    metadata:
+      type: object
+      additionalProperties: true
+      description: The metadata for the process.
+    created_at:
+      type: string
+      format: date-time
+    error:
+      type: object
+      additionalProperties: true
+      description: The error for the process.
+    script_snapshot:
+      $ref: '#/ApprovalPolicyScript'
+      description: The script snapshot taken when script started.
+    updated_at:
+      type: string
+      format: date-time
+    created_by:
+      type: string
+    updated_by:
+      type: string
+
+ApprovalProcessList:
+  type: object
+  required:
+    - data
+  properties:
+    data:
+      type: array
+      items:
+        $ref: '#/ApprovalProcess'
+
+ApprovalProcessStep:
+  type: object
+  required:
+    - object_id
+    - required_approval_count
+    - status
+    - user_ids
+    - role_ids
+  properties:
+    object_id:
+      type: string
+      description: The ID of the object this step is for
+    required_approval_count:
+      type: integer
+      minimum: 1
+      description: Number of approvals required for this step
+    status:
+      type: string
+      enum: [waiting, approved, rejected]
+      description: Current status of this step
+    user_ids:
+      type: array
+      items:
+        type: string
+        format: uuid
+      description: List of user IDs who can approve this step
+    role_ids:
+      type: array
+      items:
+        type: string
+        format: uuid
+      description: List of role IDs who can approve this step
+    approved_by:
+      type: array
+      items:
+        type: string
+        format: uuid
+      description: List of user IDs who have approved this step
+    rejected_by:
+      type: string
+      format: uuid
+      description: ID of the user who rejected this step
+
+ApprovalProcessStepList:
+  type: object
+  required:
+    - data
+  properties:
+    data:
+      type: array
+      items:
+        $ref: '#/ApprovalProcessStep'

@@ -1,0 +1,63 @@
+VatRateCreatedBy:
+  type: string
+  enum:
+    - monite
+    - accounting
+  description: By whom this rate was recorded - monite employee or accounting system
+
+VatRateStatus:
+  type: string
+  enum:
+    - active
+    - inactive
+  description: Status for this VAT rate
+
+VatRate:
+  type: object
+  required:
+    - id
+    - created_at
+    - updated_at
+    - country
+    - value
+  properties:
+    id:
+      type: string
+      format: uuid
+      description: Unique identifier of the VAT rate object
+    created_at:
+      type: string
+      format: date-time
+      description: Date/time when this rate was recorded in the table
+    updated_at:
+      type: string
+      format: date-time
+      description: Date/time when this rate was updated in the table
+    country:
+      type: string
+      pattern: ^[A-Z]{2}$
+      description: Two-letter ISO country code (ISO 3166-1 alpha-2)
+    value:
+      type: integer
+      description: Percent minor units. Example - 12.5% is 1250
+    created_by:
+      $ref: '#/VatRateCreatedBy'
+    status:
+      $ref: '#/VatRateStatus'
+    valid_from:
+      type: string
+      description: Date starting from when this rate can be used
+    valid_until:
+      type: string
+      description: Date when this rate was depreciated, after this date rate cannot be used
+
+VatRateList:
+  type: object
+  required:
+    - data
+  properties:
+    data:
+      type: array
+      items:
+        $ref: '#/VatRate'
+      description: List of VAT rates

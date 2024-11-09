@@ -1,0 +1,316 @@
+/products:
+  get:
+    operationId: getProducts
+    tags:
+      - Products
+    description: Get all products
+    security:
+      - bearerAuth: []
+    parameters:
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+      - $ref: '../components/parameters.yaml#/PaginationOrder'
+      - $ref: '../components/parameters.yaml#/PaginationLimit'
+      - $ref: '../components/parameters.yaml#/PaginationToken'
+      - name: sort
+        in: query
+        required: false
+        schema:
+          type: string
+          enum: [name]
+          default: name
+        description: Field to sort by
+      - name: id__in
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Filter by product IDs (comma-separated)
+      - name: name
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Filter by product name
+      - name: name__contains
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Filter by product name containing string (case sensitive)
+      - name: name__icontains
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Filter by product name containing string (case insensitive)
+      - name: type
+        in: query
+        required: false
+        schema:
+          type: string
+          enum: [product, service]
+        description: Filter by product type
+      - name: price
+        in: query
+        required: false
+        schema:
+          type: integer
+        description: Filter by exact price
+      - name: price__gt
+        in: query
+        required: false
+        schema:
+          type: integer
+        description: Filter by price greater than
+      - name: price__lt
+        in: query
+        required: false
+        schema:
+          type: integer
+        description: Filter by price less than
+      - name: price__gte
+        in: query
+        required: false
+        schema:
+          type: integer
+        description: Filter by price greater than or equal
+      - name: price__lte
+        in: query
+        required: false
+        schema:
+          type: integer
+        description: Filter by price less than or equal
+      - name: currency
+        in: query
+        required: false
+        schema:
+          $ref: '../components/schemas/currencies.yaml#/Currency'
+        description: Filter by currency
+      - name: currency__in
+        in: query
+        required: false
+        schema:
+          $ref: '../components/schemas/currencies.yaml#/Currency'
+        description: Filter by currencies (comma-separated)
+      - name: measure_unit_id
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+        description: Filter by measure unit ID
+      - $ref: '../components/parameters.yaml#/CreatedAtGt'
+      - $ref: '../components/parameters.yaml#/CreatedAtLt'
+      - $ref: '../components/parameters.yaml#/CreatedAtGte'
+      - $ref: '../components/parameters.yaml#/CreatedAtLte'
+    responses:
+      '200':
+        description: Products retrieved successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/products.yaml#/ProductList'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '403':
+        $ref: '../responses/errors.yaml#/Forbidden'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+      '500':
+        $ref: '../responses/errors.yaml#/InternalServerError'
+
+  post:
+    operationId: createProduct
+    tags:
+      - Products
+    description: Create a new product
+    security:
+      - bearerAuth: []
+    parameters:
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/products.yaml#/CreateProduct'
+    responses:
+      '200':
+        description: Product created successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/products.yaml#/Product'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '403':
+        $ref: '../responses/errors.yaml#/Forbidden'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+      '500':
+        $ref: '../responses/errors.yaml#/InternalServerError'
+
+/products/{product_id}:
+  get:
+    operationId: getProductById
+    tags:
+      - Products
+    description: Get a product by ID
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: product_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the product to retrieve
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    responses:
+      '200':
+        description: Product retrieved successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/products.yaml#/Product'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '403':
+        $ref: '../responses/errors.yaml#/Forbidden'
+      '404':
+        $ref: '../responses/errors.yaml#/NotFound'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+      '500':
+        $ref: '../responses/errors.yaml#/InternalServerError'
+
+  patch:
+    operationId: updateProduct
+    tags:
+      - Products
+    description: Update a product
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: product_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the product to update
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/products.yaml#/UpdateProduct'
+    responses:
+      '200':
+        description: Product updated successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/products.yaml#/Product'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '403':
+        $ref: '../responses/errors.yaml#/Forbidden'
+      '404':
+        $ref: '../responses/errors.yaml#/NotFound'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+      '500':
+        $ref: '../responses/errors.yaml#/InternalServerError'
+
+  delete:
+    operationId: deleteProduct
+    tags:
+      - Products
+    description: Delete a product
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: product_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the product to delete
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    responses:
+      '204':
+        description: Product deleted successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '403':
+        $ref: '../responses/errors.yaml#/Forbidden'
+      '404':
+        $ref: '../responses/errors.yaml#/NotFound'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+      '500':
+        $ref: '../responses/errors.yaml#/InternalServerError'

@@ -1,0 +1,290 @@
+/counterparts/{counterpart_id}/contacts:
+  get:
+    operationId: getCounterpartContacts
+    tags:
+      - Counterparts
+    description: Get all contacts associated with a counterpart
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: counterpart_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the counterpart to get contacts for
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    responses:
+      '200':
+        description: Contacts retrieved successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/counterpart-contacts.yaml#/CounterpartContactList'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '404':
+        $ref: '../responses/errors.yaml#/NotFound'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+
+  post:
+    operationId: createCounterpartContact
+    tags:
+      - Counterparts
+    description: Create a new contact for a counterpart
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: counterpart_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the counterpart to create a contact for
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/counterpart-contacts.yaml#/CreateCounterpartContactRequest'
+    responses:
+      '200':
+        description: Contact created successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/counterpart-contacts.yaml#/CounterpartContact'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '404':
+        $ref: '../responses/errors.yaml#/NotFound'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+
+/counterparts/{counterpart_id}/contacts/{contact_id}:
+  get:
+    operationId: getCounterpartContact
+    tags:
+      - Counterparts
+    description: Get a specific contact associated with a counterpart
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: counterpart_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the counterpart that owns the contact
+      - name: contact_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the contact to retrieve
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    responses:
+      '200':
+        description: Contact retrieved successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/counterpart-contacts.yaml#/CounterpartContact'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '404':
+        $ref: '../responses/errors.yaml#/NotFound'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+
+  patch:
+    operationId: updateCounterpartContact
+    tags:
+      - Counterparts
+    description: Update a specific contact associated with a counterpart
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: counterpart_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the counterpart that owns the contact
+      - name: contact_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the contact to update
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/counterpart-contacts.yaml#/UpdateCounterpartContactRequest'
+    responses:
+      '200':
+        description: Contact updated successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/counterpart-contacts.yaml#/CounterpartContact'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '404':
+        $ref: '../responses/errors.yaml#/NotFound'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+
+  delete:
+    operationId: deleteCounterpartContact
+    tags:
+      - Counterparts
+    description: Delete a specific contact associated with a counterpart
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: counterpart_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the counterpart that owns the contact
+      - name: contact_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the contact to delete
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    responses:
+      '204':
+        description: Contact deleted successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '404':
+        $ref: '../responses/errors.yaml#/NotFound'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+
+/counterparts/{counterpart_id}/contacts/{contact_id}/make_default:
+  post:
+    operationId: makeCounterpartContactDefault
+    tags:
+      - Counterparts
+    description: Set a contact as the default contact for this counterpart
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: counterpart_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the counterpart that owns the contact
+      - name: contact_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the contact to make default
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    responses:
+      '200':
+        description: Contact set as default successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/counterpart-contacts.yaml#/CounterpartContact'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '404':
+        $ref: '../responses/errors.yaml#/NotFound'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'

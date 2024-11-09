@@ -1,0 +1,215 @@
+BadRequest:
+  description: Invalid request parameters or missing version header
+  headers:
+    x-monite-version:
+      $ref: '../components/headers.yaml#/MoniteVersion'
+    x-request-id:
+      $ref: '../components/headers.yaml#/RequestId'
+    x-process-time:
+      $ref: '../components/headers.yaml#/ProcessTime'
+  content:
+    application/json:
+      schema:
+        type: object
+        required: [error]
+        properties:
+          error:
+            type: object
+            required: [type, message]
+            properties:
+              type:
+                type: string
+              message:
+                type: string
+
+Unauthorized:
+  description: Invalid credentials or missing Bearer token
+  headers:
+    x-monite-version:
+      $ref: '../components/headers.yaml#/MoniteVersion'
+    x-request-id:
+      $ref: '../components/headers.yaml#/RequestId'
+    x-process-time:
+      $ref: '../components/headers.yaml#/ProcessTime'
+  content:
+    application/json:
+      schema:
+        type: object
+        required: [error]
+        properties:
+          error:
+            type: object
+            required: [type, message]
+            properties:
+              type:
+                type: string
+              message:
+                type: string
+
+Forbidden:
+  description: Insufficient permissions
+  headers:
+    x-monite-version:
+      $ref: '../components/headers.yaml#/MoniteVersion'
+    x-request-id:
+      $ref: '../components/headers.yaml#/RequestId'
+    x-process-time:
+      $ref: '../components/headers.yaml#/ProcessTime'
+  content:
+    application/json:
+      schema:
+        type: object
+        required: [error]
+        properties:
+          error:
+            type: object
+            required: [type, message]
+            properties:
+              type:
+                type: string
+              message:
+                type: string
+
+NotFound:
+  description: Resource not found
+  headers:
+    x-monite-version:
+      $ref: '../components/headers.yaml#/MoniteVersion'
+    x-request-id:
+      $ref: '../components/headers.yaml#/RequestId'
+    x-process-time:
+      $ref: '../components/headers.yaml#/ProcessTime'
+  content:
+    application/json:
+      schema:
+        type: object
+        required: [error]
+        properties:
+          error:
+            type: object
+            required: [type, message]
+            properties:
+              type:
+                type: string
+              message:
+                type: string
+
+NotAcceptable:
+  description: Not acceptable response type
+  headers:
+    x-monite-version:
+      $ref: '../components/headers.yaml#/MoniteVersion'
+    x-request-id:
+      $ref: '../components/headers.yaml#/RequestId'
+    x-process-time:
+      $ref: '../components/headers.yaml#/ProcessTime'
+  content:
+    application/json:
+      schema:
+        type: object
+        required: [error]
+        properties:
+          error:
+            type: object
+            required: [type, message]
+            properties:
+              type:
+                type: string
+              message:
+                type: string
+
+UnprocessableEntity:
+  description: Invalid request payload
+  headers:
+    x-monite-version:
+      $ref: '../components/headers.yaml#/MoniteVersion'
+    x-request-id:
+      $ref: '../components/headers.yaml#/RequestId'
+    x-process-time:
+      $ref: '../components/headers.yaml#/ProcessTime'
+  content:
+    application/json:
+      schema:
+        type: object
+        required: [error]
+        properties:
+          error:
+            type: object
+            required: [type, message]
+            properties:
+              type:
+                type: string
+              message:
+                type: string
+
+Conflict:
+  description: Resource conflict
+  headers:
+    x-monite-version:
+      $ref: '../components/headers.yaml#/MoniteVersion'
+    x-request-id:
+      $ref: '../components/headers.yaml#/RequestId'
+    x-process-time:
+      $ref: '../components/headers.yaml#/ProcessTime'
+  content:
+    application/json:
+      schema:
+        type: object
+        required: [error]
+        properties:
+          error:
+            type: object
+            required: [type, message]
+            properties:
+              type:
+                type: string
+              message:
+                type: string
+
+RangeNotSatisfiable:
+  description: Requested range not satisfiable
+  headers:
+    x-monite-version:
+      $ref: '../components/headers.yaml#/MoniteVersion'
+    x-request-id:
+      $ref: '../components/headers.yaml#/RequestId'
+    x-process-time:
+      $ref: '../components/headers.yaml#/ProcessTime'
+  content:
+    application/json:
+      schema:
+        type: object
+        required: [error]
+        properties:
+          error:
+            type: object
+            required: [type, message]
+            properties:
+              type:
+                type: string
+              message:
+                type: string
+
+InternalServerError:
+  description: Internal server error
+  headers:
+    x-monite-version:
+      $ref: '../components/headers.yaml#/MoniteVersion'
+    x-request-id:
+      $ref: '../components/headers.yaml#/RequestId'
+    x-process-time:
+      $ref: '../components/headers.yaml#/ProcessTime'
+  content:
+    application/json:
+      schema:
+        type: object
+        required: [error]
+        properties:
+          error:
+            type: object
+            required: [type, message]
+            properties:
+              type:
+                type: string
+              message:
+                type: string

@@ -1,0 +1,111 @@
+extends: spectral:oas
+functions: []
+
+rules:
+  required-response-headers:
+    description: All responses must include required Monite headers
+    severity: error
+    given: $.paths[*][*].responses[*]
+    then:
+      field: headers
+      function: schema
+      functionOptions:
+        schema:
+          type: object
+          required:
+            - x-monite-version
+            - x-request-id
+            - x-process-time
+          properties:
+            x-monite-version:
+              schema:
+                type: string
+            x-request-id:
+              schema:
+                type: string
+            x-process-time:
+              schema:
+                type: string
+
+  https-only:
+    description: All servers must use HTTPS
+    severity: error
+    given: $.servers[*].url
+    then:
+      function: pattern
+      functionOptions:
+        match: ^https://.*
+
+  require-auth:
+    description: Operations must require authentication except for auth endpoints
+    severity: error
+    given: $.paths[?(!@property.match(/^\/auth/))][*]
+    then:
+      field: security
+      function: defined
+
+  require-version-header:
+    description: All operations must require x-monite-version header
+    severity: error
+    given: $.paths[*][*]
+    then:
+      field: parameters
+      function: schema
+      functionOptions:
+        schema:
+          type: array
+          contains:
+            type: object
+            required: [name, required]
+            properties:
+              name:
+                const: x-monite-version
+              in:
+                const: header
+              required:
+                const: true
+
+  entity-id-header:
+    description: Protected operations must require x-monite-entity-id header
+    severity: error
+    given: $.paths[?(!@property.match(/^\/auth/))][*]
+    then:
+      field: parameters
+      function: schema
+      functionOptions:
+        schema:
+          type: array
+          contains:
+            type: object
+            required: [name, required]
+            properties:
+              name:
+                const: x-monite-entity-id
+              in:
+                const: header
+              required:
+                const: true
+
+  operation-description:
+    description: Operation should have a description
+    severity: warn
+    given: $.paths[*][get,post,put,delete,patch]
+    then:
+      field: description
+      function: defined
+
+  operation-tags:
+    description: Operation must have tags
+    severity: warn
+    given: $.paths[*][get,post,put,delete,patch]
+    then:
+      field: tags
+      function: defined
+
+  operation-operationId:
+    description: Operation must have operationId
+    severity: warn
+    given: $.paths[*][get,post,put,delete,patch]
+    then:
+      field: operationId
+      function: defined

@@ -1,0 +1,147 @@
+RoleAction:
+  type: object
+  properties:
+    action_name:
+      type: string
+      enum:
+        - create
+        - read
+        - update
+        - delete
+        - pay
+        - approve
+        - cancel
+        - submit
+        - create_from_mail
+        - reopen
+      description: Action name
+    permission:
+      type: string
+      enum:
+        - allowed
+        - allowed_for_own
+        - not_allowed
+      description: Permission type
+
+RoleObjectPermission:
+  type: object
+  properties:
+    object_type:
+      type: string
+      enum:
+        - person
+        - onboarding
+        - comment
+        - counterpart
+        - entity_user
+        - entity
+        - entity_vat_ids
+        - counterpart_vat_id
+        - entity_bank_account
+        - export
+        - payables_purchase_order
+        - payment_reminder
+        - overdue_reminder
+        - product
+        - project
+        - receivable
+        - reconciliation
+        - role
+        - tag
+        - todo_task
+        - todo_task_mute
+        - transaction
+        - workflow
+        - approval_request
+        - approval_policy
+        - payment_record
+        - payable
+      description: Type of object the permissions apply to
+    actions:
+      type: array
+      items:
+        $ref: '#/RoleAction'
+      description: List of actions and their permissions
+
+RolePermissions:
+  type: object
+  properties:
+    objects:
+      type: array
+      items:
+        $ref: '#/RoleObjectPermission'
+      description: List of object permissions
+
+CreateRoleRequest:
+  type: object
+  required:
+    - name
+    - permissions
+  properties:
+    name:
+      type: string
+      description: Role name
+    permissions:
+      $ref: '#/RolePermissions'
+      description: Access permissions
+
+UpdateRoleRequest:
+  type: object
+  properties:
+    name:
+      type: string
+      description: Role name
+    permissions:
+      $ref: '#/RolePermissions'
+      description: Access permissions
+
+Role:
+  type: object
+  required:
+    - id
+    - created_at
+    - updated_at
+    - name
+    - permissions
+    - status
+  properties:
+    id:
+      type: string
+      format: uuid
+      description: UUID role ID
+    created_at:
+      type: string
+      format: date-time
+      description: UTC datetime
+    updated_at:
+      type: string
+      format: date-time
+      description: UTC datetime
+    name:
+      type: string
+      description: Role name
+    permissions:
+      $ref: '#/RolePermissions'
+      description: Access permissions
+    status:
+      type: string
+      enum: [active, deleted]
+      default: active
+      description: Record status, 'active' by default
+
+RoleList:
+  type: object
+  required:
+    - data
+  properties:
+    data:
+      type: array
+      items:
+        $ref: '#/Role'
+      description: List of roles
+    next_pagination_token:
+      type: string
+      description: Token for getting the next page of results
+    prev_pagination_token:
+      type: string
+      description: Token for getting the previous page of results

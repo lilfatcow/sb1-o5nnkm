@@ -1,0 +1,266 @@
+openapi: 3.0.0
+paths:
+  /payables/{payable_id}/validate:
+    post:
+      operationId: validatePayable
+      tags:
+        - Payables
+      description: Check the invoice for compliance with the requirements for movement from draft to new status.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: payable_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: The ID of the payable to validate
+        - $ref: '../components/parameters.yaml#/MoniteVersion'
+        - $ref: '../components/parameters.yaml#/MoniteEntityId'
+      responses:
+        '200':
+          description: Validation completed successfully
+          headers:
+            x-monite-version:
+              $ref: '../components/headers.yaml#/MoniteVersion'
+            x-request-id:
+              $ref: '../components/headers.yaml#/RequestId'
+            x-process-time:
+              $ref: '../components/headers.yaml#/ProcessTime'
+            x-monite-entity-id:
+              $ref: '../components/headers.yaml#/MoniteEntityId'
+          content:
+            application/json:
+              schema:
+                $ref: '../components/schemas/payables.yaml#/PayableValidationResponse'
+        '400':
+          $ref: '../responses/errors.yaml#/BadRequest'
+        '403':
+          $ref: '../responses/errors.yaml#/Forbidden'
+        '404':
+          $ref: '../responses/errors.yaml#/NotFound'
+        '409':
+          $ref: '../responses/errors.yaml#/Conflict'
+        '422':
+          $ref: '../responses/errors.yaml#/UnprocessableEntity'
+        '500':
+          $ref: '../responses/errors.yaml#/InternalServerError'
+
+  /payables/{payable_id}/submit_for_approval:
+    post:
+      operationId: submitPayableForApproval
+      tags:
+        - Payables
+      description: Starts the approval process once the uploaded payable is validated.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: payable_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: The ID of the payable to submit for approval
+        - $ref: '../components/parameters.yaml#/MoniteVersion'
+        - $ref: '../components/parameters.yaml#/MoniteEntityId'
+      responses:
+        '200':
+          description: Payable submitted for approval successfully
+          headers:
+            x-monite-version:
+              $ref: '../components/headers.yaml#/MoniteVersion'
+            x-request-id:
+              $ref: '../components/headers.yaml#/RequestId'
+            x-process-time:
+              $ref: '../components/headers.yaml#/ProcessTime'
+            x-monite-entity-id:
+              $ref: '../components/headers.yaml#/MoniteEntityId'
+          content:
+            application/json:
+              schema:
+                $ref: '../components/schemas/payables.yaml#/Payable'
+        '400':
+          $ref: '../responses/errors.yaml#/BadRequest'
+        '401':
+          $ref: '../responses/errors.yaml#/Unauthorized'
+        '403':
+          $ref: '../responses/errors.yaml#/Forbidden'
+        '404':
+          $ref: '../responses/errors.yaml#/NotFound'
+        '409':
+          $ref: '../responses/errors.yaml#/Conflict'
+        '422':
+          $ref: '../responses/errors.yaml#/UnprocessableEntity'
+        '500':
+          $ref: '../responses/errors.yaml#/InternalServerError'
+
+  /payables/{payable_id}/reopen:
+    post:
+      operationId: reopenPayable
+      tags:
+        - Payables
+      description: Reset payable state from rejected to new.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: payable_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: The ID of the payable to reopen
+        - $ref: '../components/parameters.yaml#/MoniteVersion'
+        - $ref: '../components/parameters.yaml#/MoniteEntityId'
+      responses:
+        '200':
+          description: Payable reopened successfully
+          headers:
+            x-monite-version:
+              $ref: '../components/headers.yaml#/MoniteVersion'
+            x-request-id:
+              $ref: '../components/headers.yaml#/RequestId'
+            x-process-time:
+              $ref: '../components/headers.yaml#/ProcessTime'
+            x-monite-entity-id:
+              $ref: '../components/headers.yaml#/MoniteEntityId'
+          content:
+            application/json:
+              schema:
+                $ref: '../components/schemas/payables.yaml#/Payable'
+        '400':
+          $ref: '../responses/errors.yaml#/BadRequest'
+        '401':
+          $ref: '../responses/errors.yaml#/Unauthorized'
+        '403':
+          $ref: '../responses/errors.yaml#/Forbidden'
+        '404':
+          $ref: '../responses/errors.yaml#/NotFound'
+        '409':
+          $ref: '../responses/errors.yaml#/Conflict'
+        '422':
+          $ref: '../responses/errors.yaml#/UnprocessableEntity'
+        '500':
+          $ref: '../responses/errors.yaml#/InternalServerError'
+
+  /payables/{payable_id}/reject:
+    post:
+      operationId: rejectPayable
+      tags:
+        - Payables
+      description: Declines the payable when an approver finds any mismatch or discrepancies.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: payable_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: The ID of the payable to reject
+        - $ref: '../components/parameters.yaml#/MoniteVersion'
+        - $ref: '../components/parameters.yaml#/MoniteEntityId'
+      responses:
+        '200':
+          description: Payable rejected successfully
+          headers:
+            x-monite-version:
+              $ref: '../components/headers.yaml#/MoniteVersion'
+            x-request-id:
+              $ref: '../components/headers.yaml#/RequestId'
+            x-process-time:
+              $ref: '../components/headers.yaml#/ProcessTime'
+            x-monite-entity-id:
+              $ref: '../components/headers.yaml#/MoniteEntityId'
+          content:
+            application/json:
+              schema:
+                $ref: '../components/schemas/payables.yaml#/Payable'
+        '400':
+          $ref: '../responses/errors.yaml#/BadRequest'
+        '401':
+          $ref: '../responses/errors.yaml#/Unauthorized'
+        '403':
+          $ref: '../responses/errors.yaml#/Forbidden'
+        '404':
+          $ref: '../responses/errors.yaml#/NotFound'
+        '409':
+          $ref: '../responses/errors.yaml#/Conflict'
+        '422':
+          $ref: '../responses/errors.yaml#/UnprocessableEntity'
+        '500':
+          $ref: '../responses/errors.yaml#/InternalServerError'
+
+  /payables/{payable_id}/mark_as_partially_paid:
+    post:
+      operationId: markPayableAsPartiallyPaid
+      tags:
+        - Payables
+      description: |
+        Mark a payable as partially paid.
+
+        If the payable is partially paid, its status is moved to partially_paid. The value of the amount_paid field must be the sum of all payments made, not only the last one.
+
+        Notes:
+          - This endpoint can be used for payables in the waiting_to_be_paid status.
+          - The amount_paid must be greater than 0 and less than the total payable amount specified by the amount field.
+          - You can use this endpoint multiple times for the same payable to reflect multiple partial payments, always setting the sum of all payments made.
+          - To use this endpoint with an entity user token, this entity user must have a role that includes the pay permission for payables.
+          - The amount_to_pay field is automatically calculated based on the amount_due less the percentage described in the payment_terms.discount value.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: payable_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: The ID of the payable to mark as partially paid
+        - $ref: '../components/parameters.yaml#/MoniteVersion'
+        - $ref: '../components/parameters.yaml#/MoniteEntityId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - amount_paid
+              properties:
+                amount_paid:
+                  type: integer
+                  description: How much was paid on the invoice (in minor units).
+      responses:
+        '200':
+          description: Payable marked as partially paid successfully
+          headers:
+            x-monite-version:
+              $ref: '../components/headers.yaml#/MoniteVersion'
+            x-request-id:
+              $ref: '../components/headers.yaml#/RequestId'
+            x-process-time:
+              $ref: '../components/headers.yaml#/ProcessTime'
+            x-monite-entity-id:
+              $ref: '../components/headers.yaml#/MoniteEntityId'
+          content:
+            application/json:
+              schema:
+                $ref: '../components/schemas/payables.yaml#/Payable'
+        '400':
+          $ref: '../responses/errors.yaml#/BadRequest'
+        '401':
+          $ref: '../responses/errors.yaml#/Unauthorized'
+        '403':
+          $ref: '../responses/errors.yaml#/Forbidden'
+        '404':
+          $ref: '../responses/errors.yaml#/NotFound'
+        '409':
+          $ref: '../responses/errors.yaml#/Conflict'
+        '422':
+          $ref: '../responses/errors.yaml#/UnprocessableEntity'
+        '500':
+          $ref: '../responses/errors.yaml#/InternalServerError'

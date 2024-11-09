@@ -1,0 +1,189 @@
+ApprovalRequestStatus:
+  type: string
+  enum:
+    - waiting
+    - approved
+    - rejected
+    - canceled
+  description: The current status of the approval request.
+
+ApprovalRequestObjectType:
+  type: string
+  enum:
+    - account
+    - approval_policy
+    - approval_request
+    - comment
+    - counterpart
+    - counterpart_bank_account
+    - counterpart_contact
+    - counterpart_relationship
+    - counterpart_vat_id
+    - credit_note
+    - entity
+    - entity_bank_account
+    - entity_user
+    - entity_vat_id
+    - export
+    - file
+    - invoice
+    - mail
+    - onboarding
+    - overdue_reminder
+    - payable
+    - payables_purchase_order
+    - payment
+    - payment_record
+    - payment_reminder
+    - person
+    - product
+    - project
+    - receivable
+    - receivable_reminder
+    - receivables_purchase_order
+    - role
+    - tag
+    - template
+    - unit
+    - webhook_subscription
+    - workflow
+    - approval_policy_process
+    - approval_policy_process_step
+    - approval_policy_process_step_approval
+    - approval_policy_process_step_rejection
+    - approval_policy_process_step_cancellation
+    - approval_policy_process_step_completion
+    - approval_policy_process_step_expiration
+    - approval_policy_process_step_reminder
+    - approval_policy_process_step_escalation
+    - approval_policy_process_step_delegation
+    - approval_policy_process_step_reassignment
+    - approval_policy_process_step_comment
+    - approval_policy_process_step_attachment
+    - approval_policy_process_step_note
+    - approval_policy_process_step_history
+  description: The type of object that requires approval.
+
+CreateApprovalRequestBase:
+  type: object
+  required:
+    - object_id
+    - object_type
+    - required_approval_count
+  properties:
+    object_id:
+      type: string
+      description: The ID of the object that requires approval
+    object_type:
+      $ref: '#/ApprovalRequestObjectType'
+    required_approval_count:
+      type: integer
+      minimum: 1
+      description: Number of approvals required
+
+CreateApprovalRequestByRole:
+  allOf:
+    - $ref: '#/CreateApprovalRequestBase'
+    - type: object
+      required:
+        - role_ids
+      properties:
+        role_ids:
+          type: array
+          items:
+            type: string
+            format: uuid
+          description: List of role IDs who can approve this request
+
+CreateApprovalRequestByUser:
+  allOf:
+    - $ref: '#/CreateApprovalRequestBase'
+    - type: object
+      required:
+        - user_ids
+      properties:
+        user_ids:
+          type: array
+          items:
+            type: string
+            format: uuid
+          description: List of user IDs who can approve this request
+
+ApprovalRequest:
+  type: object
+  required:
+    - id
+    - created_at
+    - updated_at
+    - approved_by
+    - created_by
+    - object_id
+    - object_type
+    - required_approval_count
+    - role_ids
+    - status
+    - user_ids
+  properties:
+    id:
+      type: string
+      format: uuid
+    created_at:
+      type: string
+      format: date-time
+    updated_at:
+      type: string
+      format: date-time
+    approved_by:
+      type: array
+      items:
+        type: string
+        format: uuid
+      description: List of user IDs who have approved this request
+    created_by:
+      type: string
+      format: uuid
+      description: ID of the user who created the approval request
+    object_id:
+      type: string
+      description: The ID of the object that requires approval
+    object_type:
+      $ref: '#/ApprovalRequestObjectType'
+    required_approval_count:
+      type: integer
+      minimum: 1
+      description: Number of approvals required
+    role_ids:
+      type: array
+      items:
+        type: string
+        format: uuid
+      description: List of role IDs who can approve this request
+    status:
+      $ref: '#/ApprovalRequestStatus'
+    user_ids:
+      type: array
+      items:
+        type: string
+        format: uuid
+      description: List of user IDs who can approve this request
+    rejected_by:
+      type: string
+      format: uuid
+      description: ID of the user who rejected this request
+
+ApprovalRequestList:
+  type: object
+  required:
+    - data
+  properties:
+    data:
+      type: array
+      items:
+        $ref: '#/ApprovalRequest'
+      description: List of approval requests
+    next_pagination_token:
+      type: string
+      description: Token for getting the next page of results
+    prev_pagination_token:
+      type: string
+      description: Token for getting the previous page of results

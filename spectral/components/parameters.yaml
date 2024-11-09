@@ -1,0 +1,111 @@
+MoniteVersion:
+  name: x-monite-version
+  in: header
+  required: true
+  description: API version to use for this request
+  schema:
+    type: string
+    pattern: ^\d{4}-\d{2}-\d{2}$
+    example: "2024-01-31"
+
+MoniteEntityId:
+  name: x-monite-entity-id
+  in: header
+  required: true
+  description: Unique identifier of the entity owning the resource
+  schema:
+    type: string
+    format: uuid
+
+PaginationOrder:
+  name: order
+  in: query
+  required: false
+  description: Sort order direction
+  schema:
+    type: string
+    enum: [asc, desc]
+    default: asc
+
+PaginationLimit:
+  name: limit
+  in: query
+  required: false
+  description: Maximum number of items per page (1-100)
+  schema:
+    type: integer
+    minimum: 1
+    maximum: 100
+    default: 100
+
+PaginationToken:
+  name: pagination_token
+  in: query
+  required: false
+  description: Token for getting the next or previous page of results
+  schema:
+    type: string
+
+EntitySort:
+  name: sort
+  in: query
+  required: false
+  description: Field to sort by
+  schema:
+    type: string
+    enum: [created_at, updated_at]
+    default: created_at
+
+WebhookSort:
+  name: sort
+  in: query
+  required: false
+  description: Field to sort by
+  schema:
+    type: string
+    enum: [created_at, updated_at]
+    default: created_at
+
+WebhookObjectType:
+  name: object_type
+  in: query
+  required: false
+  description: Filter by webhook object type
+  schema:
+    $ref: '../components/schemas/webhooks.yaml#/WebhookObjectType'
+
+CreatedAtGt:
+  name: created_at__gt
+  in: query
+  required: false
+  description: Filter by creation date (greater than)
+  schema:
+    type: string
+    format: date-time
+
+CreatedAtLt:
+  name: created_at__lt
+  in: query
+  required: false
+  description: Filter by creation date (less than)
+  schema:
+    type: string
+    format: date-time
+
+CreatedAtGte:
+  name: created_at__gte
+  in: query
+  required: false
+  description: Filter by creation date (greater than or equal)
+  schema:
+    type: string
+    format: date-time
+
+CreatedAtLte:
+  name: created_at__lte
+  in: query
+  required: false
+  description: Filter by creation date (less than or equal)
+  schema:
+    type: string
+    format: date-time

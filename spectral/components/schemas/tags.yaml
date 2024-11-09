@@ -1,0 +1,87 @@
+TagCategory:
+  type: string
+  enum:
+    - document_type
+    - department
+    - project
+    - cost_center
+    - vendor_type
+    - payment_method
+    - approval_status
+  description: The tag category.
+
+CreateTag:
+  type: object
+  required:
+    - name
+  properties:
+    name:
+      type: string
+      description: The tag name. Must be unique.
+    category:
+      $ref: '#/TagCategory'
+    description:
+      type: string
+      description: The tag description.
+
+UpdateTag:
+  type: object
+  properties:
+    name:
+      type: string
+      description: The tag name. Must be unique.
+    category:
+      $ref: '#/TagCategory'
+    description:
+      type: string
+      description: The tag description.
+
+Tag:
+  type: object
+  required:
+    - id
+    - created_at
+    - updated_at
+    - name
+  properties:
+    id:
+      type: string
+      format: uuid
+      description: A unique ID of this tag.
+    created_at:
+      type: string
+      format: date-time
+      description: Date and time when the tag was created. Timestamps follow the ISO 8601 standard.
+    updated_at:
+      type: string
+      format: date-time
+      description: Date and time when the tag was last updated. Timestamps follow the ISO 8601 standard.
+    name:
+      type: string
+      description: The tag name.
+    category:
+      $ref: '#/TagCategory'
+    created_by_entity_user_id:
+      type: string
+      format: uuid
+      description: ID of the user who created the tag.
+    description:
+      type: string
+      description: The tag description.
+
+TagList:
+  type: object
+  required:
+    - data
+  properties:
+    data:
+      type: array
+      items:
+        $ref: '#/Tag'
+      description: List of tags
+    next_pagination_token:
+      type: string
+      description: Token for getting the next page of results
+    prev_pagination_token:
+      type: string
+      description: Token for getting the previous page of results

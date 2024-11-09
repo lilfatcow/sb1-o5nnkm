@@ -1,0 +1,141 @@
+ProductType:
+  type: string
+  enum: [product, service]
+  description: Type of the product
+
+ProductPrice:
+  type: object
+  required:
+    - currency
+    - value
+  properties:
+    currency:
+      $ref: './currencies.yaml#/Currency'
+      description: The currency in which the price is set
+    value:
+      type: integer
+      description: The price value in minor units
+
+CreateProduct:
+  type: object
+  required:
+    - name
+  properties:
+    name:
+      type: string
+      description: Name of the product
+    description:
+      type: string
+      description: Description of the product
+    ledger_account_id:
+      type: string
+      format: uuid
+      description: ID of the ledger account associated with this product
+    measure_unit_id:
+      type: string
+      format: uuid
+      description: ID of the measure unit used for this product
+    price:
+      $ref: '#/ProductPrice'
+    smallest_amount:
+      type: number
+      format: double
+      description: Smallest allowed amount for this product
+    type:
+      $ref: '#/ProductType'
+
+UpdateProduct:
+  type: object
+  properties:
+    name:
+      type: string
+      description: Name of the product
+    description:
+      type: string
+      description: Description of the product
+    ledger_account_id:
+      type: string
+      format: uuid
+      description: ID of the ledger account associated with this product
+    measure_unit_id:
+      type: string
+      format: uuid
+      description: ID of the measure unit used for this product
+    price:
+      $ref: '#/ProductPrice'
+    smallest_amount:
+      type: number
+      format: double
+      description: Smallest allowed amount for this product
+    type:
+      $ref: '#/ProductType'
+
+Product:
+  type: object
+  required:
+    - id
+    - created_at
+    - updated_at
+    - entity_id
+    - name
+    - type
+  properties:
+    id:
+      type: string
+      format: uuid
+      description: Unique identifier of the product
+    created_at:
+      type: string
+      format: date-time
+      description: When the product was created
+    updated_at:
+      type: string
+      format: date-time
+      description: When the product was last updated
+    entity_id:
+      type: string
+      format: uuid
+      description: ID of the entity that owns this product
+    name:
+      type: string
+      description: Name of the product
+    description:
+      type: string
+      description: Description of the product
+    entity_user_id:
+      type: string
+      format: uuid
+      description: ID of the entity user who created this product
+    ledger_account_id:
+      type: string
+      format: uuid
+      description: ID of the ledger account associated with this product
+    measure_unit_id:
+      type: string
+      format: uuid
+      description: ID of the measure unit used for this product
+    price:
+      $ref: '#/ProductPrice'
+    smallest_amount:
+      type: number
+      format: double
+      description: Smallest allowed amount for this product
+    type:
+      $ref: '#/ProductType'
+
+ProductList:
+  type: object
+  required:
+    - data
+  properties:
+    data:
+      type: array
+      items:
+        $ref: '#/Product'
+      description: List of products
+    next_pagination_token:
+      type: string
+      description: Token for getting the next page of results
+    prev_pagination_token:
+      type: string
+      description: Token for getting the previous page of results

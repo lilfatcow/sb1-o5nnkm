@@ -1,0 +1,477 @@
+/counterparts:
+  get:
+    operationId: getCounterparts
+    tags:
+      - Counterparts
+    description: Get all counterparts
+    security:
+      - bearerAuth: []
+    parameters:
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+      - $ref: '../components/parameters.yaml#/PaginationOrder'
+      - $ref: '../components/parameters.yaml#/PaginationLimit'
+      - $ref: '../components/parameters.yaml#/PaginationToken'
+      - name: sort
+        in: query
+        required: false
+        schema:
+          type: string
+          enum: [counterpart_name]
+          default: counterpart_name
+        description: Field to sort by
+      - name: iban
+        in: query
+        required: false
+        schema:
+          type: string
+        description: The IBAN of the counterpart's bank account
+      - name: sort_code
+        in: query
+        required: false
+        schema:
+          type: string
+        description: The bank's sort code
+      - name: account_number
+        in: query
+        required: false
+        schema:
+          type: string
+        description: The bank account number
+      - name: tax_id
+        in: query
+        required: false
+        schema:
+          type: string
+        description: The tax ID of the counterpart
+      - name: vat_id
+        in: query
+        required: false
+        schema:
+          type: string
+        description: The VAT ID of the counterpart
+      - name: id__in
+        in: query
+        required: false
+        schema:
+          type: string
+        description: A list of counterpart IDs to search through
+      - name: type
+        in: query
+        required: false
+        schema:
+          type: string
+          enum: [individual, organization]
+        description: Filter by counterpart type
+      - name: counterpart_name
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Filter by counterpart name
+      - name: counterpart_name__iexact
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Filter by exact counterpart name (case insensitive)
+      - name: counterpart_name__contains
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Filter by counterpart name containing string (case sensitive)
+      - name: counterpart_name__icontains
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Filter by counterpart name containing string (case insensitive)
+      - name: is_vendor
+        in: query
+        required: false
+        schema:
+          type: boolean
+        description: Filter by vendor status
+      - name: is_customer
+        in: query
+        required: false
+        schema:
+          type: boolean
+        description: Filter by customer status
+      - name: email
+        in: query
+        required: false
+        schema:
+          type: string
+          format: email
+        description: Filter by email address
+      - name: email__contains
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Filter by email containing string (case sensitive)
+      - name: email__icontains
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Filter by email containing string (case insensitive)
+      - $ref: '../components/parameters.yaml#/CreatedAtGt'
+      - $ref: '../components/parameters.yaml#/CreatedAtLt'
+      - $ref: '../components/parameters.yaml#/CreatedAtGte'
+      - $ref: '../components/parameters.yaml#/CreatedAtLte'
+      - name: address.country
+        in: query
+        required: false
+        schema:
+          type: string
+          pattern: ^[A-Z]{2}$
+        description: Filter by address country code
+      - name: address.city
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Filter by address city
+      - name: address.postal_code
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Filter by address postal code
+      - name: address.state
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Filter by address state
+      - name: address.line1
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Filter by address line 1
+      - name: address.line2
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Filter by address line 2
+      - name: tag_ids__in
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Filter by tag IDs (comma-separated)
+    responses:
+      '200':
+        description: Counterparts retrieved successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/counterparts.yaml#/CounterpartList'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '404':
+        $ref: '../responses/errors.yaml#/NotFound'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+
+  post:
+    operationId: createCounterpart
+    tags:
+      - Counterparts
+    description: Create a new counterpart
+    security:
+      - bearerAuth: []
+    parameters:
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            oneOf:
+              - $ref: '../components/schemas/counterparts.yaml#/CreateCounterpartIndividual'
+              - $ref: '../components/schemas/counterparts.yaml#/CreateCounterpartOrganization'
+    responses:
+      '200':
+        description: Counterpart created successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '../components/schemas/counterparts.yaml#/CounterpartIndividualResponse'
+                - $ref: '../components/schemas/counterparts.yaml#/CounterpartOrganizationResponse'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+
+/counterparts/{counterpart_id}:
+  get:
+    operationId: getCounterpartById
+    tags:
+      - Counterparts
+    description: Get a counterpart by ID
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: counterpart_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the counterpart to retrieve
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    responses:
+      '200':
+        description: Counterpart retrieved successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '../components/schemas/counterparts.yaml#/CounterpartIndividualResponse'
+                - $ref: '../components/schemas/counterparts.yaml#/CounterpartOrganizationResponse'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '404':
+        $ref: '../responses/errors.yaml#/NotFound'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+
+  patch:
+    operationId: updateCounterpart
+    tags:
+      - Counterparts
+    description: Update a counterpart by ID
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: counterpart_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the counterpart to update
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            oneOf:
+              - $ref: '../components/schemas/counterparts.yaml#/UpdateCounterpartIndividual'
+              - $ref: '../components/schemas/counterparts.yaml#/UpdateCounterpartOrganization'
+    responses:
+      '200':
+        description: Counterpart updated successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '../components/schemas/counterparts.yaml#/CounterpartIndividualResponse'
+                - $ref: '../components/schemas/counterparts.yaml#/CounterpartOrganizationResponse'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '404':
+        $ref: '../responses/errors.yaml#/NotFound'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+
+  delete:
+    operationId: deleteCounterpart
+    tags:
+      - Counterparts
+    description: Delete a counterpart by ID
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: counterpart_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the counterpart to delete
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    responses:
+      '204':
+        description: Counterpart deleted successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '404':
+        $ref: '../responses/errors.yaml#/NotFound'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+
+/counterparts/{counterpart_id}/partner_metadata:
+  get:
+    operationId: getCounterpartMetadata
+    tags:
+      - Counterparts
+    description: Get metadata associated with this counterpart
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: counterpart_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the counterpart to get metadata for
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    responses:
+      '200':
+        description: Counterpart metadata retrieved successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                metadata:
+                  type: object
+                  additionalProperties: true
+                  description: Metadata for partner needs
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '404':
+        $ref: '../responses/errors.yaml#/NotFound'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+
+  put:
+    operationId: replaceCounterpartMetadata
+    tags:
+      - Counterparts
+    description: Replace the current metadata with new values
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: counterpart_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the counterpart to update metadata for
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - metadata
+            properties:
+              metadata:
+                type: object
+                additionalProperties: true
+                description: Metadata for partner needs
+    responses:
+      '200':
+        description: Counterpart metadata updated successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                metadata:
+                  type: object
+                  additionalProperties: true
+                  description: Metadata for partner needs
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '404':
+        $ref: '../responses/errors.yaml#/NotFound'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'

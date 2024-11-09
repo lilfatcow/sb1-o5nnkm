@@ -1,0 +1,94 @@
+/events:
+  get:
+    operationId: getEvents
+    tags:
+      - Events
+    description: |
+      Returns all webhook events that were triggered for the specified entity based on your enabled webhook subscriptions.
+      These are the same events that were sent to your configured webhook listener endpoints, aggregated into a single list.
+      Results can be filtered by the related object type or time period.
+      
+      You can use this to get the missed events for the time periods when your webhook listener was temporarily unavailable.
+      
+      We guarantee access to event data only from the last three months. Earlier events may be unavailable.
+    security:
+      - bearerAuth: []
+    parameters:
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+      - $ref: '../components/parameters.yaml#/PaginationOrder'
+      - $ref: '../components/parameters.yaml#/PaginationLimit'
+      - $ref: '../components/parameters.yaml#/PaginationToken'
+      - $ref: '../components/parameters.yaml#/WebhookSort'
+      - $ref: '../components/parameters.yaml#/WebhookObjectType'
+      - $ref: '../components/parameters.yaml#/CreatedAtGt'
+      - $ref: '../components/parameters.yaml#/CreatedAtLt'
+      - $ref: '../components/parameters.yaml#/CreatedAtGte'
+      - $ref: '../components/parameters.yaml#/CreatedAtLte'
+    responses:
+      '200':
+        description: Events retrieved successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/events.yaml#/EventList'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+
+/events/{event_id}:
+  get:
+    operationId: getEventById
+    tags:
+      - Events
+    description: |
+      Get a webhook event by its ID. The data is the same as you might have previously 
+      received in a webhook sent by Monite to your server.
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: event_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: ID of the webhook event. This is the id value you might have received in a webhook or retrieved from GET /events.
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    responses:
+      '200':
+        description: Event retrieved successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/events.yaml#/Event'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '404':
+        $ref: '../responses/errors.yaml#/NotFound'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'

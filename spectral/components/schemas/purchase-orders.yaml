@@ -1,0 +1,225 @@
+PurchaseOrderItem:
+  type: object
+  required:
+    - currency
+    - name
+    - price
+    - quantity
+    - unit
+    - vat_rate
+  properties:
+    currency:
+      $ref: './currencies.yaml#/Currency'
+      description: The currency in which the price of the product is set
+    name:
+      type: string
+      description: Name of the item
+    price:
+      type: integer
+      description: Price of the item in minor units
+    quantity:
+      type: integer
+      description: Quantity of the item
+    unit:
+      type: string
+      description: Unit of measurement
+    vat_rate:
+      type: integer
+      description: VAT rate in percent minor units
+
+CreatePurchaseOrder:
+  type: object
+  required:
+    - counterpart_id
+    - currency
+    - items
+    - message
+    - valid_for_days
+  properties:
+    counterpart_id:
+      type: string
+      format: uuid
+      description: Counterpart unique ID
+    currency:
+      $ref: './currencies.yaml#/Currency'
+      description: The currency in which the price of the product is set (all items need to have the same currency)
+    items:
+      type: array
+      items:
+        $ref: '#/PurchaseOrderItem'
+      description: List of items to purchase
+    message:
+      type: string
+      description: Message which will be sent to counterpart for who the purchase order is issued
+    valid_for_days:
+      type: integer
+      description: Number of days for which purchase order is valid
+    counterpart_address_id:
+      type: string
+      format: uuid
+      description: The ID of counterpart address object stored in counterparts service. If not provided, counterpart's default address is used.
+    entity_vat_id_id:
+      type: string
+      format: uuid
+      description: Entity VAT ID identifier that applied to purchase order
+
+PurchaseOrder:
+  type: object
+  required:
+    - id
+    - created_at
+    - updated_at
+    - counterpart
+    - counterpart_id
+    - currency
+    - document_id
+    - entity
+    - entity_id
+    - items
+    - message
+    - status
+    - valid_for_days
+  properties:
+    id:
+      type: string
+      format: uuid
+      description: A unique ID assigned to this purchase order
+    created_at:
+      type: string
+      format: date-time
+      description: Time at which the purchase order was created
+    updated_at:
+      type: string
+      format: date-time
+      description: Time at which the purchase order was last updated
+    counterpart:
+      oneOf:
+        - $ref: './counterparts.yaml#/CounterpartIndividualResponse'
+        - $ref: './counterparts.yaml#/CounterpartOrganizationResponse'
+      description: Counterpart information
+    counterpart_id:
+      type: string
+      format: uuid
+      description: Counterpart unique ID
+    currency:
+      $ref: './currencies.yaml#/Currency'
+      description: The currency in which the price of the product is set
+    document_id:
+      type: string
+      description: Unique document identifier
+    entity:
+      oneOf:
+        - $ref: './entities.yaml#/EntityIndividual'
+        - $ref: './entities.yaml#/EntityOrganization'
+      description: Data of the entity (address, name, contact)
+    entity_id:
+      type: string
+      format: uuid
+      description: The ID of the entity which issued the purchase order
+    items:
+      type: array
+      items:
+        $ref: '#/PurchaseOrderItem'
+      description: List of items to purchase
+    message:
+      type: string
+      description: Message which will be sent to counterpart
+    status:
+      type: string
+      description: Purchase order can be in 'draft' state before sending it to counterpart. After that state is 'issued'
+    valid_for_days:
+      type: integer
+      description: Number of days for which purchase order is valid
+    counterpart_address:
+      $ref: './counterparts.yaml#/CounterpartAddress'
+      description: Counterpart address data saved on creation or update of the purchase order
+    counterpart_address_id:
+      type: string
+      format: uuid
+      description: The ID of counterpart address object stored in counterparts service
+    created_by_user_id:
+      type: string
+      format: uuid
+      description: ID of the creator of the purchase order
+    entity_vat_id:
+      $ref: './vat-ids.yaml#/VatId'
+    file_id:
+      type: string
+      format: uuid
+      description: ID of the file containing the purchase order document
+    file_url:
+      type: string
+      format: uri
+      description: URL to download the purchase order document
+    issued_at:
+      type: string
+      format: date-time
+      description: When status changed from 'draft' to 'issued'
+
+PurchaseOrderList:
+  type: object
+  required:
+    - data
+  properties:
+    data:
+      type: array
+      items:
+        $ref: '#/PurchaseOrder'
+      description: List of purchase orders
+    next_pagination_token:
+      type: string
+      description: Token for getting the next page of results
+    prev_pagination_token:
+      type: string
+      description: Token for getting the previous page of results
+
+PurchaseOrderVariable:
+  type: object
+  required:
+    - description
+    - name
+  properties:
+    description:
+      type: string
+      description: Description of the variable
+    name:
+      type: string
+      description: Name of the variable
+
+PurchaseOrderVariableGroup:
+  type: object
+  required:
+    - object_subtype
+    - object_type
+    - variables
+  properties:
+    object_subtype:
+      type: string
+      enum:
+        - quote
+        - invoice
+        - credit_note
+        - discount_reminder
+        - final_reminder
+        - payables_purchase_order
+        - overdue_reminder
+      description: Type of document the variables are for
+    object_type:
+      type: string
+      description: Type of object the variables are for
+    variables:
+      type: array
+      items:
+        $ref: '#/PurchaseOrderVariable'
+      description: List of available variables
+
+PurchaseOrderVariables:
+  type: object
+  required:
+    - data
+  properties:
+    data:
+      type: array
+      items:
+        $ref: '#/PurchaseOrderVariableGroup'
+      description: List of variable groups

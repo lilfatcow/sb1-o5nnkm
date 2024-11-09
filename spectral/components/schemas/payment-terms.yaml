@@ -1,0 +1,109 @@
+PaymentTermFinal:
+  type: object
+  required:
+    - number_of_days
+  properties:
+    number_of_days:
+      type: integer
+      description: The amount of days after the invoice issue date.
+
+PaymentTermDiscount:
+  type: object
+  required:
+    - discount
+    - number_of_days
+  properties:
+    discount:
+      type: integer
+      description: The discount percentage in minor units. E.g., 200 means 2%. 1050 means 10.5%.
+    number_of_days:
+      type: integer
+      description: The amount of days after the invoice issue date.
+
+CreatePaymentTerm:
+  type: object
+  required:
+    - name
+    - term_final
+  properties:
+    name:
+      type: string
+      description: Name of the payment term
+    description:
+      type: string
+      description: Description of the payment term
+    term_final:
+      allOf:
+        - $ref: '#/PaymentTermFinal'
+        - description: The final tier of the payment term. Defines the invoice due date.
+    term_1:
+      allOf:
+        - $ref: '#/PaymentTermDiscount'
+        - description: The first tier of the payment term. Represents the terms of the first early discount.
+    term_2:
+      allOf:
+        - $ref: '#/PaymentTermDiscount'
+        - description: The second tier of the payment term. Defines the terms of the second early discount.
+
+UpdatePaymentTerm:
+  type: object
+  properties:
+    name:
+      type: string
+      description: Name of the payment term
+    description:
+      type: string
+      description: Description of the payment term
+    term_final:
+      allOf:
+        - $ref: '#/PaymentTermFinal'
+        - description: The final tier of the payment term. Defines the invoice due date.
+    term_1:
+      allOf:
+        - $ref: '#/PaymentTermDiscount'
+        - description: The first tier of the payment term. Represents the terms of the first early discount.
+    term_2:
+      allOf:
+        - $ref: '#/PaymentTermDiscount'
+        - description: The second tier of the payment term. Defines the terms of the second early discount.
+
+PaymentTerm:
+  type: object
+  required:
+    - id
+    - name
+    - term_final
+  properties:
+    id:
+      type: string
+      format: uuid
+      description: Unique identifier of the payment term
+    name:
+      type: string
+      description: Name of the payment term
+    description:
+      type: string
+      description: Description of the payment term
+    term_final:
+      allOf:
+        - $ref: '#/PaymentTermFinal'
+        - description: The final tier of the payment term. Defines the invoice due date.
+    term_1:
+      allOf:
+        - $ref: '#/PaymentTermDiscount'
+        - description: The first tier of the payment term. Represents the terms of the first early discount.
+    term_2:
+      allOf:
+        - $ref: '#/PaymentTermDiscount'
+        - description: The second tier of the payment term. Defines the terms of the second early discount.
+
+PaymentTermList:
+  type: object
+  required:
+    - data
+  properties:
+    data:
+      type: array
+      items:
+        $ref: '#/PaymentTerm'
+      description: List of payment terms

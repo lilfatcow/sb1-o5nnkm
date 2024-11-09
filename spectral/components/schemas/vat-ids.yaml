@@ -1,0 +1,119 @@
+VatIdType:
+  type: string
+  enum:
+    - ae_trn
+    - au_abn
+    - au_arn
+    - bg_uic
+    - br_cnpj
+    - br_cpf
+    - ca_bn
+    - ca_gst_hst
+    - ca_pst_bc
+    - ca_pst_mb
+    - ca_pst_sk
+    - ca_qst
+    - ch_vat
+    - cl_tin
+    - es_cif
+    - eu_oss_vat
+    - eu_vat
+    - gb_vat
+    - ge_vat
+    - hk_br
+    - hu_tin
+    - id_npwp
+    - il_vat
+    - in_gst
+    - is_vat
+    - jp_cn
+    - jp_rn
+    - kr_brn
+    - li_uid
+    - mx_rfc
+    - my_frp
+    - my_itn
+    - my_sst
+    - no_vat
+    - nz_gst
+    - ru_inn
+    - ru_kpp
+    - sa_vat
+    - sg_gst
+    - sg_uen
+    - si_tin
+    - th_vat
+    - tw_vat
+    - ua_vat
+    - us_ein
+    - za_vat
+    - unknown
+
+CreateVatIdRequest:
+  type: object
+  required:
+    - country
+    - value
+  properties:
+    country:
+      type: string
+      pattern: ^[A-Z]{2}$
+      description: Two-letter country code (ISO 3166-1 alpha-2)
+    value:
+      type: string
+      description: The actual VAT ID value
+    type:
+      $ref: '#/VatIdType'
+      description: Type of VAT ID
+
+UpdateVatIdRequest:
+  type: object
+  properties:
+    country:
+      type: string
+      pattern: ^[A-Z]{2}$
+      description: Two-letter country code (ISO 3166-1 alpha-2)
+    value:
+      type: string
+      description: The actual VAT ID value
+    type:
+      $ref: '#/VatIdType'
+      description: Type of VAT ID
+
+VatId:
+  type: object
+  required:
+    - id
+    - country
+    - entity_id
+    - value
+  properties:
+    id:
+      type: string
+      format: uuid
+      description: Unique identifier of the VAT ID
+    country:
+      type: string
+      pattern: ^[A-Z]{2}$
+      description: Two-letter country code (ISO 3166-1 alpha-2)
+    entity_id:
+      type: string
+      format: uuid
+      description: ID of the entity this VAT ID belongs to
+    value:
+      type: string
+      description: The actual VAT ID value
+    type:
+      $ref: '#/VatIdType'
+      description: Type of VAT ID
+
+VatIdList:
+  type: object
+  required:
+    - data
+  properties:
+    data:
+      type: array
+      items:
+        $ref: '#/VatId'
+      description: List of VAT IDs associated with the entity

@@ -1,0 +1,96 @@
+PayableLineItemBase:
+  type: object
+  properties:
+    accounting_tax_rate_id:
+      type: string
+      format: uuid
+      description: ID of the tax rate reference used for accounting integration. May be used to override auto-picked tax rate reference in accounting platform in case of any platform-specific constraints.
+    description:
+      type: string
+      description: Description of the product.
+    ledger_account_id:
+      type: string
+      format: uuid
+      description: ID of the account record used to store bookkeeping entries for balance-sheet and income-statement transactions.
+    name:
+      type: string
+      description: Name of the product.
+    quantity:
+      type: number
+      format: double
+      description: The quantity of each of the goods, materials, or services listed in the payable.
+    tax:
+      type: integer
+      description: VAT rate in percent minor units. Example 12.5% is 1250.
+    unit:
+      type: string
+      description: The unit of the product
+    unit_price:
+      type: integer
+      description: The unit price of the product, in minor units. For example, $12.50 is represented as 1250.
+
+CreatePayableLineItem:
+  allOf:
+    - $ref: '#/PayableLineItemBase'
+
+UpdatePayableLineItem:
+  allOf:
+    - $ref: '#/PayableLineItemBase'
+
+ReplacePayableLineItems:
+  type: object
+  required:
+    - data
+  properties:
+    data:
+      type: array
+      items:
+        $ref: '#/PayableLineItemBase'
+      description: List of line items to replace existing ones with
+
+PayableLineItem:
+  allOf:
+    - $ref: '#/PayableLineItemBase'
+    - type: object
+      required:
+        - id
+        - payable_id
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier of the line item
+        payable_id:
+          type: string
+          format: uuid
+          description: ID of the payable this line item belongs to
+        subtotal:
+          type: integer
+          description: The subtotal (excluding VAT), in minor units.
+        tax_amount:
+          type: integer
+          description: Tax amount in minor units. For example, $12.50 is represented as 1250.
+        total:
+          type: integer
+          description: The actual price of the product.
+        was_created_by_user_id:
+          type: string
+          format: uuid
+          description: ID of the user who created the tag.
+
+PayableLineItemList:
+  type: object
+  required:
+    - data
+  properties:
+    data:
+      type: array
+      items:
+        $ref: '#/PayableLineItem'
+      description: List of line items
+    next_pagination_token:
+      type: string
+      description: Token for getting the next page of results
+    prev_pagination_token:
+      type: string
+      description: Token for getting the previous page of results

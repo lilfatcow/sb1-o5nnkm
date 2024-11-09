@@ -1,0 +1,23 @@
+MoniteVersion:
+  description: API version used to process the request
+  schema:
+    type: string
+    pattern: ^\d{4}-\d{2}-\d{2}$
+
+RequestId:
+  description: Unique identifier for tracking the request
+  schema:
+    type: string
+    format: uuid
+
+ProcessTime:
+  description: Time spent processing the request
+  schema:
+    type: string
+    pattern: ^\d+(\.\d+)?ms$
+
+MoniteEntityId:
+  description: Entity ID from the original request
+  schema:
+    type: string
+    format: uuid

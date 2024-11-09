@@ -1,0 +1,208 @@
+WebhookObjectType:
+  type: string
+  enum:
+    - account
+    - approval_policy
+    - approval_request
+    - comment
+    - counterpart
+    - counterpart_bank_account
+    - counterpart_contact
+    - counterpart_relationship
+    - counterpart_vat_id
+    - credit_note
+    - entity
+    - entity_bank_account
+    - entity_user
+    - entity_vat_id
+    - export
+    - file
+    - invoice
+    - mail
+    - onboarding
+    - overdue_reminder
+    - payable
+    - payables_purchase_order
+    - payment
+    - payment_record
+    - payment_reminder
+    - person
+    - product
+    - project
+    - receivable
+    - receivable_reminder
+    - receivables_purchase_order
+    - role
+    - tag
+    - template
+    - unit
+    - webhook_subscription
+    - workflow
+
+WebhookDelivery:
+  type: object
+  required:
+    - id
+    - event_id
+    - event_type
+    - object_type
+    - event_action
+    - attempts
+    - last_status_code
+    - success
+  properties:
+    id:
+      type: string
+      format: uuid
+      description: Unique identifier of the webhook delivery
+    event_id:
+      type: string
+      format: uuid
+      description: ID of the event that triggered this webhook
+    event_type:
+      type: string
+      description: Type of the event that triggered this webhook
+    object_type:
+      $ref: '#/WebhookObjectType'
+    event_action:
+      type: string
+      description: Action that triggered this webhook (e.g., created, updated, deleted)
+    attempts:
+      type: integer
+      minimum: 1
+      description: Number of delivery attempts made
+    last_status_code:
+      type: integer
+      description: HTTP status code from the last delivery attempt
+    success:
+      type: boolean
+      description: Whether the final delivery attempt was successful
+
+WebhookDeliveryList:
+  type: object
+  required:
+    - data
+  properties:
+    data:
+      type: array
+      items:
+        $ref: '#/WebhookDelivery'
+      description: List of webhook deliveries
+    next_pagination_token:
+      type: string
+      description: Token for getting the next page of results
+    prev_pagination_token:
+      type: string
+      description: Token for getting the previous page of results
+
+CreateWebhookSubscription:
+  type: object
+  required:
+    - object_type
+    - url
+  properties:
+    object_type:
+      $ref: '#/WebhookObjectType'
+    url:
+      type: string
+      format: uri
+      description: URL where webhook events will be sent
+    event_types:
+      type: array
+      items:
+        type: string
+      description: List of event types to subscribe to
+
+UpdateWebhookSubscription:
+  type: object
+  properties:
+    object_type:
+      $ref: '#/WebhookObjectType'
+    url:
+      type: string
+      format: uri
+      description: URL where webhook events will be sent
+    event_types:
+      type: array
+      items:
+        type: string
+      description: List of event types to subscribe to
+
+WebhookSubscriptionResponse:
+  type: object
+  required:
+    - id
+    - object_type
+    - status
+    - url
+    - secret
+  properties:
+    id:
+      type: string
+      format: uuid
+      description: Unique identifier of the webhook subscription
+    event_types:
+      type: array
+      items:
+        type: string
+      description: List of event types to subscribe to
+    object_type:
+      $ref: '#/WebhookObjectType'
+    status:
+      type: string
+      enum: [enabled, disabled]
+      default: enabled
+      description: Current status of the webhook subscription
+    url:
+      type: string
+      format: uri
+      description: URL where webhook events will be sent
+    secret:
+      type: string
+      description: Secret key for validating webhook signatures
+
+WebhookSubscription:
+  type: object
+  required:
+    - id
+    - event_types
+    - object_type
+    - status
+    - url
+  properties:
+    id:
+      type: string
+      format: uuid
+      description: Unique identifier of the webhook subscription
+    event_types:
+      type: array
+      items:
+        type: string
+      description: List of event types to subscribe to
+    object_type:
+      $ref: '#/WebhookObjectType'
+    status:
+      type: string
+      enum: [enabled, disabled]
+      description: Current status of the webhook subscription
+    url:
+      type: string
+      format: uri
+      description: URL where webhook events will be sent
+
+WebhookSubscriptionList:
+  type: object
+  required:
+    - data
+  properties:
+    data:
+      type: array
+      items:
+        $ref: '#/WebhookSubscription'
+      description: List of webhook subscriptions
+    next_pagination_token:
+      type: string
+      description: Token for getting the next page of results
+    prev_pagination_token:
+      type: string
+      description: Token for getting the previous page of results

@@ -1,0 +1,170 @@
+/payment_intents:
+  get:
+    operationId: getPaymentIntents
+    tags:
+      - Payment Intents
+    description: Get all payment intents
+    security:
+      - bearerAuth: []
+    parameters:
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+      - $ref: '../components/parameters.yaml#/PaginationOrder'
+      - $ref: '../components/parameters.yaml#/PaginationLimit'
+      - $ref: '../components/parameters.yaml#/PaginationToken'
+      - name: sort
+        in: query
+        required: false
+        schema:
+          type: string
+          enum: [id, created_at]
+        description: Field to sort by
+      - name: object_id
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+        description: ID of a payable or receivable invoice. If provided, returns only payment intents associated with the specified invoice.
+    responses:
+      '200':
+        description: Payment intents retrieved successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/payment-intents.yaml#/PaymentIntentList'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+      '500':
+        $ref: '../responses/errors.yaml#/InternalServerError'
+
+/payment_intents/{payment_intent_id}:
+  get:
+    operationId: getPaymentIntentById
+    tags:
+      - Payment Intents
+    description: Get a payment intent by ID
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: payment_intent_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the payment intent to retrieve
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    responses:
+      '200':
+        description: Payment intent retrieved successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/payment-intents.yaml#/PaymentIntent'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+      '500':
+        $ref: '../responses/errors.yaml#/InternalServerError'
+
+  patch:
+    operationId: updatePaymentIntent
+    tags:
+      - Payment Intents
+    description: Update the payment intent amount
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: payment_intent_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the payment intent to update
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/payment-intents.yaml#/UpdatePaymentIntent'
+    responses:
+      '200':
+        description: Payment intent updated successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/payment-intents.yaml#/PaymentIntent'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+      '500':
+        $ref: '../responses/errors.yaml#/InternalServerError'
+
+/payment_intents/{payment_intent_id}/history:
+  get:
+    operationId: getPaymentIntentHistory
+    tags:
+      - Payment Intents
+    description: Get the payment intent history
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: payment_intent_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the payment intent to get history for
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    responses:
+      '200':
+        description: Payment intent history retrieved successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/payment-intents.yaml#/PaymentIntentHistoryList'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+      '500':
+        $ref: '../responses/errors.yaml#/InternalServerError'

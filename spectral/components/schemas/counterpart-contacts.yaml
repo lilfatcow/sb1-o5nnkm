@@ -1,0 +1,129 @@
+CounterpartContactAddress:
+  type: object
+  required:
+    - city
+    - country
+    - line1
+    - postal_code
+  properties:
+    city:
+      type: string
+      description: City name
+    country:
+      type: string
+      pattern: ^[A-Z]{2}$
+      description: Two-letter ISO country code (ISO 3166-1 alpha-2)
+    line1:
+      type: string
+      description: Street address
+    line2:
+      type: string
+      description: Additional address information (if any)
+    postal_code:
+      type: string
+      description: ZIP or postal code
+    state:
+      type: string
+      description: State, region, province, or county
+
+CreateCounterpartContactRequest:
+  type: object
+  required:
+    - address
+    - first_name
+    - last_name
+  properties:
+    address:
+      $ref: '#/CounterpartContactAddress'
+      description: The address of a contact person
+    first_name:
+      type: string
+      description: The first name of a contact person
+    last_name:
+      type: string
+      description: The last name of a contact person
+    email:
+      type: string
+      format: email
+      description: The email address of a contact person
+    phone:
+      type: string
+      description: The phone number of a contact person
+    title:
+      type: string
+      description: The title or honorific of a contact person. Examples - Mr., Ms., Dr., Prof.
+
+UpdateCounterpartContactRequest:
+  type: object
+  properties:
+    address:
+      $ref: '#/CounterpartContactAddress'
+      description: The address of a contact person
+    email:
+      type: string
+      format: email
+      description: The email address of a contact person
+    first_name:
+      type: string
+      description: The first name of a contact person
+    last_name:
+      type: string
+      description: The last name of a contact person
+    phone:
+      type: string
+      description: The phone number of a contact person
+    title:
+      type: string
+      description: The title or honorific of a contact person. Examples - Mr., Ms., Dr., Prof.
+
+CounterpartContact:
+  type: object
+  required:
+    - id
+    - address
+    - counterpart_id
+    - first_name
+    - is_default
+    - last_name
+  properties:
+    id:
+      type: string
+      format: uuid
+      description: Unique identifier of the contact
+    address:
+      $ref: '#/CounterpartContactAddress'
+      description: The address of a contact person
+    counterpart_id:
+      type: string
+      format: uuid
+      description: ID of the counterpart this contact belongs to
+    first_name:
+      type: string
+      description: The first name of a contact person
+    is_default:
+      type: boolean
+      description: Whether this is the default contact for the counterpart
+    last_name:
+      type: string
+      description: The last name of a contact person
+    email:
+      type: string
+      format: email
+      description: The email address of a contact person
+    phone:
+      type: string
+      description: The phone number of a contact person
+    title:
+      type: string
+      description: The title or honorific of a contact person. Examples - Mr., Ms., Dr., Prof.
+
+CounterpartContactList:
+  type: object
+  required:
+    - data
+  properties:
+    data:
+      type: array
+      items:
+        $ref: '#/CounterpartContact'
+      description: List of contacts associated with the counterpart

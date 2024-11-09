@@ -1,0 +1,72 @@
+/auth/token:
+  post:
+    operationId: createToken
+    tags:
+      - Authentication
+    description: Create a new access token using client credentials or entity user credentials
+    security: []
+    parameters:
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/auth.yaml#/TokenRequest'
+    responses:
+      '200':
+        description: Token created successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/auth.yaml#/TokenResponse'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+
+/auth/revoke:
+  post:
+    operationId: revokeToken
+    tags:
+      - Authentication
+    description: Revoke an existing access token immediately
+    security:
+      - bearerAuth: []
+    parameters:
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/auth.yaml#/RevokeRequest'
+    responses:
+      '200':
+        description: Token revoked successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/auth.yaml#/RevokeResponse'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'

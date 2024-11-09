@@ -1,0 +1,143 @@
+CreateCounterpartBankAccountRequest:
+  type: object
+  required:
+    - country
+    - currency
+  properties:
+    country:
+      type: string
+      pattern: ^[A-Z]{2}$
+      description: Two-letter ISO country code (ISO 3166-1 alpha-2)
+    currency:
+      type: string
+      pattern: ^[A-Z]{3}$
+      description: Three-letter ISO currency code
+    account_holder_name:
+      type: string
+      description: The name of the person or business that owns this bank account. Required for US bank accounts to accept ACH payments.
+    account_number:
+      type: string
+      description: The bank account number. Required for US bank accounts to accept ACH payments. US account numbers contain 9 to 12 digits. UK account numbers typically contain 8 digits.
+    bic:
+      type: string
+      description: The BIC/SWIFT code of the bank.
+    iban:
+      type: string
+      description: The IBAN of the bank account.
+    is_default_for_currency:
+      type: boolean
+      description: Whether this account should be the default for its currency.
+    name:
+      type: string
+      description: Display name for the bank account.
+    partner_metadata:
+      type: object
+      additionalProperties: true
+      description: Metadata for partner needs.
+    routing_number:
+      type: string
+      description: The bank's routing transit number (RTN). Required for US bank accounts to accept ACH payments. US routing numbers consist of 9 digits.
+    sort_code:
+      type: string
+      description: The bank's sort code.
+
+UpdateCounterpartBankAccountRequest:
+  type: object
+  properties:
+    account_holder_name:
+      type: string
+      description: The name of the person or business that owns this bank account. Required for US bank accounts to accept ACH payments.
+    account_number:
+      type: string
+      description: The bank account number. Required for US bank accounts to accept ACH payments. US account numbers contain 9 to 12 digits. UK account numbers typically contain 8 digits.
+    bic:
+      type: string
+      description: The BIC/SWIFT code of the bank.
+    country:
+      type: string
+      pattern: ^[A-Z]{2}$
+      description: Two-letter ISO country code (ISO 3166-1 alpha-2)
+    currency:
+      type: string
+      pattern: ^[A-Z]{3}$
+      description: Three-letter ISO currency code
+    iban:
+      type: string
+      description: The IBAN of the bank account.
+    name:
+      type: string
+      description: Display name for the bank account.
+    partner_metadata:
+      type: object
+      additionalProperties: true
+      description: Metadata for partner needs.
+    routing_number:
+      type: string
+      description: The bank's routing transit number (RTN). Required for US bank accounts to accept ACH payments. US routing numbers consist of 9 digits.
+    sort_code:
+      type: string
+      description: The bank's sort code.
+
+CounterpartBankAccount:
+  type: object
+  required:
+    - id
+    - counterpart_id
+    - country
+    - currency
+  properties:
+    id:
+      type: string
+      format: uuid
+      description: Unique identifier for the bank account.
+    counterpart_id:
+      type: string
+      format: uuid
+      description: ID of the counterpart that owns this bank account.
+    country:
+      type: string
+      pattern: ^[A-Z]{2}$
+      description: Two-letter ISO country code (ISO 3166-1 alpha-2)
+    currency:
+      type: string
+      pattern: ^[A-Z]{3}$
+      description: Three-letter ISO currency code
+    account_holder_name:
+      type: string
+      description: The name of the person or business that owns this bank account. Required for US bank accounts to accept ACH payments.
+    account_number:
+      type: string
+      description: The bank account number. Required for US bank accounts to accept ACH payments. US account numbers contain 9 to 12 digits. UK account numbers typically contain 8 digits.
+    bic:
+      type: string
+      description: The BIC/SWIFT code of the bank.
+    iban:
+      type: string
+      description: The IBAN of the bank account.
+    is_default_for_currency:
+      type: boolean
+      description: Whether this is the default account for its currency.
+    name:
+      type: string
+      description: Display name for the bank account.
+    partner_metadata:
+      type: object
+      additionalProperties: true
+      description: Metadata for partner needs.
+    routing_number:
+      type: string
+      description: The bank's routing transit number (RTN). Required for US bank accounts to accept ACH payments. US routing numbers consist of 9 digits.
+    sort_code:
+      type: string
+      description: The bank's sort code.
+
+CounterpartBankAccountList:
+  type: object
+  required:
+    - data
+  properties:
+    data:
+      type: array
+      items:
+        $ref: '#/CounterpartBankAccount'
+      description: List of bank accounts associated with the counterpart

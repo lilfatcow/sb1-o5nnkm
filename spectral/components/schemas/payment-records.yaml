@@ -1,0 +1,112 @@
+PaymentObjectType:
+  type: string
+  enum: [receivable, payable]
+  description: Type of the object the payment is associated with
+
+PaymentObject:
+  type: object
+  required:
+    - id
+    - type
+  properties:
+    id:
+      type: string
+      description: ID of the invoice
+    type:
+      $ref: '#/PaymentObjectType'
+    new_status:
+      type: string
+      description: Status, in which object has been moved
+    old_status:
+      type: string
+      description: Status, in which object was before payment
+
+CreatePaymentRecord:
+  type: object
+  required:
+    - amount
+    - currency
+    - object
+    - paid_at
+    - payment_intent_id
+  properties:
+    amount:
+      type: integer
+      description: Payment amount
+    currency:
+      type: string
+      pattern: ^[A-Z]{3}$
+      description: Three-letter currency code
+    object:
+      $ref: '#/PaymentObject'
+    paid_at:
+      type: string
+      format: date-time
+      description: When the payment was made
+    payment_intent_id:
+      type: string
+      description: ID of the payment intent
+    entity_user_id:
+      type: string
+      format: uuid
+      description: ID of the entity user who created this payment record
+
+PaymentRecord:
+  type: object
+  required:
+    - id
+    - amount
+    - currency
+    - is_external
+    - object
+    - paid_at
+    - payment_intent_id
+  properties:
+    id:
+      type: string
+      format: uuid
+      description: Unique identifier of the payment record
+    amount:
+      type: integer
+      description: Payment amount
+    currency:
+      type: string
+      pattern: ^[A-Z]{3}$
+      description: Three-letter currency code
+    is_external:
+      type: boolean
+      description: Whether this is an external payment
+    object:
+      $ref: '#/PaymentObject'
+    paid_at:
+      type: string
+      format: date-time
+      description: When the payment was made
+    payment_intent_id:
+      type: string
+      description: ID of the payment intent
+    entity_user_id:
+      type: string
+      format: uuid
+      description: ID of the entity user who created this payment record
+    overpaid_amount:
+      type: integer
+      default: 0
+      description: Amount overpaid, if any. Filled if payment amount exceeds total amount.
+
+PaymentRecordList:
+  type: object
+  required:
+    - data
+  properties:
+    data:
+      type: array
+      items:
+        $ref: '#/PaymentRecord'
+      description: List of payment records
+    next_pagination_token:
+      type: string
+      description: Token for getting the next page of results
+    prev_pagination_token:
+      type: string
+      description: Token for getting the previous page of results

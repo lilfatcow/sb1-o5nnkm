@@ -1,0 +1,395 @@
+/counterparts/{counterpart_id}/vat_ids:
+  get:
+    operationId: getCounterpartVatIds
+    tags:
+      - Counterparts
+    description: Get all VAT IDs associated with a counterpart
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: counterpart_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the counterpart to get VAT IDs for
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    responses:
+      '200':
+        description: VAT IDs retrieved successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - data
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/CounterpartVatId'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+      '500':
+        description: Internal Server Error
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [error]
+              properties:
+                error:
+                  type: object
+                  required: [type, message]
+                  properties:
+                    type:
+                      type: string
+                    message:
+                      type: string
+
+  post:
+    operationId: createCounterpartVatId
+    tags:
+      - Counterparts
+    description: Create a new VAT ID for a counterpart
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: counterpart_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the counterpart to create a VAT ID for
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreateCounterpartVatId'
+    responses:
+      '200':
+        description: VAT ID created successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CounterpartVatId'
+      '404':
+        $ref: '../responses/errors.yaml#/NotFound'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+      '500':
+        description: Internal Server Error
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [error]
+              properties:
+                error:
+                  type: object
+                  required: [type, message]
+                  properties:
+                    type:
+                      type: string
+                    message:
+                      type: string
+
+/counterparts/{counterpart_id}/vat_ids/{vat_id}:
+  get:
+    operationId: getCounterpartVatId
+    tags:
+      - Counterparts
+    description: Get a specific VAT ID associated with a counterpart
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: counterpart_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the counterpart that owns the VAT ID
+      - name: vat_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the VAT ID to retrieve
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    responses:
+      '200':
+        description: VAT ID retrieved successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CounterpartVatId'
+      '404':
+        $ref: '../responses/errors.yaml#/NotFound'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+      '500':
+        description: Internal Server Error
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [error]
+              properties:
+                error:
+                  type: object
+                  required: [type, message]
+                  properties:
+                    type:
+                      type: string
+                    message:
+                      type: string
+
+  patch:
+    operationId: updateCounterpartVatId
+    tags:
+      - Counterparts
+    description: Update a VAT ID associated with a counterpart
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: counterpart_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the counterpart that owns the VAT ID
+      - name: vat_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the VAT ID to update
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UpdateCounterpartVatId'
+    responses:
+      '200':
+        description: VAT ID updated successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CounterpartVatId'
+      '404':
+        $ref: '../responses/errors.yaml#/NotFound'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+      '500':
+        description: Internal Server Error
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [error]
+              properties:
+                error:
+                  type: object
+                  required: [type, message]
+                  properties:
+                    type:
+                      type: string
+                    message:
+                      type: string
+
+  delete:
+    operationId: deleteCounterpartVatId
+    tags:
+      - Counterparts
+    description: Delete a VAT ID associated with a counterpart
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: counterpart_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the counterpart that owns the VAT ID
+      - name: vat_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the VAT ID to delete
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    responses:
+      '204':
+        description: VAT ID deleted successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+      '404':
+        $ref: '../responses/errors.yaml#/NotFound'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+      '500':
+        description: Internal Server Error
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [error]
+              properties:
+                error:
+                  type: object
+                  required: [type, message]
+                  properties:
+                    type:
+                      type: string
+                    message:
+                      type: string
+
+components:
+  schemas:
+    CounterpartVatId:
+      type: object
+      required:
+        - id
+        - counterpart_id
+        - value
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier of the VAT ID
+        counterpart_id:
+          type: string
+          format: uuid
+          description: ID of the counterpart this VAT ID belongs to
+        value:
+          type: string
+          description: The actual VAT ID value
+        country:
+          type: string
+          pattern: ^[A-Z]{2}$
+          description: Two-letter country code (ISO 3166-1 alpha-2)
+        type:
+          $ref: '../components/schemas/vat-ids.yaml#/VatIdType'
+
+    CreateCounterpartVatId:
+      type: object
+      required:
+        - value
+      properties:
+        value:
+          type: string
+          description: The actual VAT ID value
+        country:
+          type: string
+          pattern: ^[A-Z]{2}$
+          description: Two-letter country code (ISO 3166-1 alpha-2)
+        type:
+          $ref: '../components/schemas/vat-ids.yaml#/VatIdType'
+
+    UpdateCounterpartVatId:
+      type: object
+      properties:
+        value:
+          type: string
+          description: The actual VAT ID value
+        country:
+          type: string
+          pattern: ^[A-Z]{2}$
+          description: Two-letter country code (ISO 3166-1 alpha-2)
+        type:
+          $ref: '../components/schemas/vat-ids.yaml#/VatIdType'

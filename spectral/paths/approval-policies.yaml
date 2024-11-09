@@ -1,0 +1,504 @@
+/approval_policies:
+  get:
+    operationId: getApprovalPolicies
+    tags:
+      - Approval Policies
+    description: Retrieve a list of all approval policies with pagination.
+    security:
+      - bearerAuth: []
+    parameters:
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+      - $ref: '../components/parameters.yaml#/PaginationOrder'
+      - $ref: '../components/parameters.yaml#/PaginationLimit'
+      - $ref: '../components/parameters.yaml#/PaginationToken'
+      - name: sort
+        in: query
+        required: false
+        schema:
+          type: string
+          enum: [created_at, updated_at]
+        description: Field to sort by
+      - name: process_id
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Filter by process ID
+      - name: id__in
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Filter by policy IDs (comma-separated)
+      - name: status
+        in: query
+        required: false
+        schema:
+          $ref: '../components/schemas/approval-policies.yaml#/ApprovalPolicyStatus'
+      - name: status__in
+        in: query
+        required: false
+        schema:
+          $ref: '../components/schemas/approval-policies.yaml#/ApprovalPolicyStatus'
+      - name: name
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Filter by policy name
+      - name: name__contains
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Filter by policy name containing string
+      - name: name__ncontains
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Filter by policy name not containing string
+      - name: created_by
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Filter by creator
+      - $ref: '../components/parameters.yaml#/CreatedAtGt'
+      - $ref: '../components/parameters.yaml#/CreatedAtLt'
+      - $ref: '../components/parameters.yaml#/CreatedAtGte'
+      - $ref: '../components/parameters.yaml#/CreatedAtLte'
+      - name: updated_at__gt
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+        description: Filter by update date (greater than)
+      - name: updated_at__lt
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+        description: Filter by update date (less than)
+      - name: updated_at__gte
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+        description: Filter by update date (greater than or equal)
+      - name: updated_at__lte
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+        description: Filter by update date (less than or equal)
+    responses:
+      '200':
+        description: Approval policies retrieved successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/approval-policies.yaml#/ApprovalPolicyList'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '409':
+        $ref: '../responses/errors.yaml#/Conflict'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+      '500':
+        $ref: '../responses/errors.yaml#/InternalServerError'
+
+  post:
+    operationId: createApprovalPolicy
+    tags:
+      - Approval Policies
+    description: Create a new approval policy.
+    security:
+      - bearerAuth: []
+    parameters:
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/approval-policies.yaml#/CreateApprovalPolicy'
+    responses:
+      '200':
+        description: Approval policy created successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/approval-policies.yaml#/ApprovalPolicy'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '409':
+        $ref: '../responses/errors.yaml#/Conflict'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+      '500':
+        $ref: '../responses/errors.yaml#/InternalServerError'
+
+/approval_policies/{approval_policy_id}:
+  get:
+    operationId: getApprovalPolicyById
+    tags:
+      - Approval Policies
+    description: Retrieve a specific approval policy.
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: approval_policy_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the approval policy to retrieve
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    responses:
+      '200':
+        description: Approval policy retrieved successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/approval-policies.yaml#/ApprovalPolicy'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '404':
+        $ref: '../responses/errors.yaml#/NotFound'
+      '409':
+        $ref: '../responses/errors.yaml#/Conflict'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+      '500':
+        $ref: '../responses/errors.yaml#/InternalServerError'
+
+  patch:
+    operationId: updateApprovalPolicy
+    tags:
+      - Approval Policies
+    description: Update an existing approval policy.
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: approval_policy_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the approval policy to update
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/approval-policies.yaml#/UpdateApprovalPolicy'
+    responses:
+      '200':
+        description: Approval policy updated successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/approval-policies.yaml#/ApprovalPolicy'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '404':
+        $ref: '../responses/errors.yaml#/NotFound'
+      '409':
+        $ref: '../responses/errors.yaml#/Conflict'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+      '500':
+        $ref: '../responses/errors.yaml#/InternalServerError'
+
+  delete:
+    operationId: deleteApprovalPolicy
+    tags:
+      - Approval Policies
+    description: Delete an existing approval policy.
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: approval_policy_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the approval policy to delete
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    responses:
+      '204':
+        description: Approval policy deleted successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '404':
+        $ref: '../responses/errors.yaml#/NotFound'
+      '409':
+        $ref: '../responses/errors.yaml#/Conflict'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+      '500':
+        $ref: '../responses/errors.yaml#/InternalServerError'
+
+/approval_policies/{approval_policy_id}/processes:
+  get:
+    operationId: getApprovalPolicyProcesses
+    tags:
+      - Approval Policies
+    description: Retrieve a list of all approval policy processes.
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: approval_policy_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the approval policy
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    responses:
+      '200':
+        description: Approval policy processes retrieved successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/approval-policies.yaml#/ApprovalProcessList'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '404':
+        $ref: '../responses/errors.yaml#/NotFound'
+      '409':
+        $ref: '../responses/errors.yaml#/Conflict'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+      '500':
+        $ref: '../responses/errors.yaml#/InternalServerError'
+
+/approval_policies/{approval_policy_id}/processes/{process_id}:
+  get:
+    operationId: getApprovalProcess
+    tags:
+      - Approval Policies
+    description: Retrieve a specific approval policy process.
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: approval_policy_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the approval policy
+      - name: process_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the process
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    responses:
+      '200':
+        description: Approval process retrieved successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/approval-policies.yaml#/ApprovalProcess'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '404':
+        $ref: '../responses/errors.yaml#/NotFound'
+      '409':
+        $ref: '../responses/errors.yaml#/Conflict'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+      '500':
+        $ref: '../responses/errors.yaml#/InternalServerError'
+
+/approval_policies/{approval_policy_id}/processes/{process_id}/cancel:
+  post:
+    operationId: cancelApprovalProcess
+    tags:
+      - Approval Policies
+    description: Cancel an ongoing approval process for a specific approval policy.
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: approval_policy_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the approval policy
+      - name: process_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the process to cancel
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    responses:
+      '200':
+        description: Approval process cancelled successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/approval-policies.yaml#/ApprovalProcess'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '404':
+        $ref: '../responses/errors.yaml#/NotFound'
+      '409':
+        $ref: '../responses/errors.yaml#/Conflict'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+      '500':
+        $ref: '../responses/errors.yaml#/InternalServerError'
+
+/approval_policies/{approval_policy_id}/processes/{process_id}/steps:
+  get:
+    operationId: getApprovalProcessSteps
+    tags:
+      - Approval Policies
+    description: Retrieve a list of approval policy process steps.
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: approval_policy_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the approval policy
+      - name: process_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the process
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+    responses:
+      '200':
+        description: Process steps retrieved successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/approval-policies.yaml#/ApprovalProcessStepList'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '404':
+        $ref: '../responses/errors.yaml#/NotFound'
+      '409':
+        $ref: '../responses/errors.yaml#/Conflict'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+      '500':
+        $ref: '../responses/errors.yaml#/InternalServerError'

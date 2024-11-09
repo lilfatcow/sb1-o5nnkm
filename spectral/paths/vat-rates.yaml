@@ -1,0 +1,74 @@
+/vat_rates:
+  get:
+    operationId: getVatRates
+    tags:
+      - VAT Rates
+    description: Get all VAT rates
+    security:
+      - bearerAuth: []
+    parameters:
+      - $ref: '../components/parameters.yaml#/MoniteVersion'
+      - $ref: '../components/parameters.yaml#/MoniteEntityId'
+      - name: counterpart_address_id
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+        description: Filter by counterpart address ID
+      - name: counterpart_id
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+        description: Filter by counterpart ID
+      - name: counterpart_vat_id_id
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+        description: Filter by counterpart VAT ID
+      - name: entity_vat_id_id
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+        description: Filter by entity VAT ID
+      - name: product_type
+        in: query
+        required: false
+        schema:
+          type: string
+          enum: [product, service]
+        description: Filter by product type
+    responses:
+      '200':
+        description: VAT rates retrieved successfully
+        headers:
+          x-monite-version:
+            $ref: '../components/headers.yaml#/MoniteVersion'
+          x-request-id:
+            $ref: '../components/headers.yaml#/RequestId'
+          x-process-time:
+            $ref: '../components/headers.yaml#/ProcessTime'
+          x-monite-entity-id:
+            $ref: '../components/headers.yaml#/MoniteEntityId'
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/vat-rates.yaml#/VatRateList'
+      '400':
+        $ref: '../responses/errors.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/errors.yaml#/Unauthorized'
+      '403':
+        $ref: '../responses/errors.yaml#/Forbidden'
+      '404':
+        $ref: '../responses/errors.yaml#/NotFound'
+      '422':
+        $ref: '../responses/errors.yaml#/UnprocessableEntity'
+      '500':
+        $ref: '../responses/errors.yaml#/InternalServerError'

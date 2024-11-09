@@ -1,0 +1,110 @@
+OverdueReminderRecipients:
+  type: object
+  properties:
+    bcc:
+      type: array
+      items:
+        type: string
+        format: email
+      description: List of BCC email addresses
+    cc:
+      type: array
+      items:
+        type: string
+        format: email
+      description: List of CC email addresses
+    to:
+      type: array
+      items:
+        type: string
+        format: email
+      description: List of recipient email addresses
+
+OverdueReminderTerm:
+  type: object
+  required:
+    - body
+    - days_after
+    - subject
+  properties:
+    body:
+      type: string
+      description: The body text of the reminder email
+    days_after:
+      type: integer
+      description: Number of days after which to send this reminder
+    subject:
+      type: string
+      description: The subject line of the reminder email
+
+CreateOverdueReminder:
+  type: object
+  required:
+    - name
+  properties:
+    name:
+      type: string
+      description: Name of the overdue reminder configuration
+    recipients:
+      $ref: '#/OverdueReminderRecipients'
+    terms:
+      type: array
+      items:
+        $ref: '#/OverdueReminderTerm'
+      description: Overdue reminder terms to send for payment
+
+UpdateOverdueReminder:
+  type: object
+  properties:
+    name:
+      type: string
+      description: Name of the overdue reminder configuration
+    recipients:
+      $ref: '#/OverdueReminderRecipients'
+    terms:
+      type: array
+      items:
+        $ref: '#/OverdueReminderTerm'
+      description: Overdue reminder terms to send for payment
+
+OverdueReminder:
+  type: object
+  required:
+    - id
+    - created_at
+    - updated_at
+    - name
+  properties:
+    id:
+      type: string
+      format: uuid
+      description: Unique identifier of the overdue reminder
+    created_at:
+      type: string
+      format: date-time
+      description: Time at which the OverdueReminder was created. Timestamps follow the ISO 8601 standard.
+    updated_at:
+      type: string
+      format: date-time
+      description: Time at which the OverdueReminder was last updated. Timestamps follow the ISO 8601 standard.
+    name:
+      type: string
+      description: Name of the overdue reminder configuration
+    recipients:
+      $ref: '#/OverdueReminderRecipients'
+    terms:
+      type: array
+      items:
+        $ref: '#/OverdueReminderTerm'
+      description: Overdue reminder terms to send for payment
+
+OverdueReminderList:
+  type: object
+  required:
+    - data
+  properties:
+    data:
+      type: array
+      items:
+        $ref: '#/OverdueReminder'
+      description: List of overdue reminder configurations

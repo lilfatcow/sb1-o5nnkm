@@ -1,0 +1,249 @@
+openapi: 3.0.0
+paths:
+  /payable_purchase_orders:
+    get:
+      operationId: getPurchaseOrders
+      tags:
+        - Purchase Orders
+      description: Get all purchase orders for entity
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '../components/parameters.yaml#/MoniteVersion'
+        - $ref: '../components/parameters.yaml#/MoniteEntityId'
+        - $ref: '../components/parameters.yaml#/PaginationOrder'
+        - $ref: '../components/parameters.yaml#/PaginationLimit'
+        - $ref: '../components/parameters.yaml#/PaginationToken'
+        - name: sort
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [id, created_at]
+          description: Field to sort by
+        - $ref: '../components/parameters.yaml#/CreatedAtGt'
+        - $ref: '../components/parameters.yaml#/CreatedAtLt'
+        - $ref: '../components/parameters.yaml#/CreatedAtGte'
+        - $ref: '../components/parameters.yaml#/CreatedAtLte'
+        - name: issued_at__gt
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date-time
+          description: Filter by issue date (greater than)
+        - name: issued_at__lt
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date-time
+          description: Filter by issue date (less than)
+        - name: issued_at__gte
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date-time
+          description: Filter by issue date (greater than or equal)
+        - name: issued_at__lte
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date-time
+          description: Filter by issue date (less than or equal)
+        - name: status
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [draft, issued]
+          description: Filter by status
+        - name: document_id
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Filter by document ID
+        - name: document_id__in
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Filter by document IDs (comma-separated)
+        - name: created_by
+          in: query
+          required: false
+          schema:
+            type: string
+            format: uuid
+          description: Filter by creator
+        - name: counterpart_id
+          in: query
+          required: false
+          schema:
+            type: string
+            format: uuid
+          description: Filter by counterpart ID
+        - name: counterpart_id__in
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Filter by counterpart IDs (comma-separated)
+        - name: counterpart.name
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Filter by counterpart name
+        - name: currency
+          in: query
+          required: false
+          schema:
+            $ref: '../components/schemas/currencies.yaml#/Currency'
+        - name: currency__in
+          in: query
+          required: false
+          schema:
+            $ref: '../components/schemas/currencies.yaml#/Currency'
+      responses:
+        '200':
+          description: Purchase orders retrieved successfully
+          headers:
+            x-monite-version:
+              $ref: '../components/headers.yaml#/MoniteVersion'
+            x-request-id:
+              $ref: '../components/headers.yaml#/RequestId'
+            x-process-time:
+              $ref: '../components/headers.yaml#/ProcessTime'
+            x-monite-entity-id:
+              $ref: '../components/headers.yaml#/MoniteEntityId'
+          content:
+            application/json:
+              schema:
+                $ref: '../components/schemas/purchase-orders.yaml#/PurchaseOrderList'
+        '400':
+          $ref: '../responses/errors.yaml#/BadRequest'
+        '404':
+          $ref: '../responses/errors.yaml#/NotFound'
+        '422':
+          $ref: '../responses/errors.yaml#/UnprocessableEntity'
+        '500':
+          $ref: '../responses/errors.yaml#/InternalServerError'
+
+    post:
+      operationId: createPurchaseOrder
+      tags:
+        - Purchase Orders
+      description: Create a new purchase order
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '../components/parameters.yaml#/MoniteVersion'
+        - $ref: '../components/parameters.yaml#/MoniteEntityId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/purchase-orders.yaml#/CreatePurchaseOrder'
+      responses:
+        '200':
+          description: Purchase order created successfully
+          headers:
+            x-monite-version:
+              $ref: '../components/headers.yaml#/MoniteVersion'
+            x-request-id:
+              $ref: '../components/headers.yaml#/RequestId'
+            x-process-time:
+              $ref: '../components/headers.yaml#/ProcessTime'
+            x-monite-entity-id:
+              $ref: '../components/headers.yaml#/MoniteEntityId'
+          content:
+            application/json:
+              schema:
+                $ref: '../components/schemas/purchase-orders.yaml#/PurchaseOrder'
+        '400':
+          $ref: '../responses/errors.yaml#/BadRequest'
+        '404':
+          $ref: '../responses/errors.yaml#/NotFound'
+        '422':
+          $ref: '../responses/errors.yaml#/UnprocessableEntity'
+        '500':
+          $ref: '../responses/errors.yaml#/InternalServerError'
+
+  /payable_purchase_orders/variables:
+    get:
+      operationId: getPurchaseOrderVariables
+      tags:
+        - Purchase Orders
+      description: Get a list of placeholders allowed to insert into an email template for customization
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '../components/parameters.yaml#/MoniteVersion'
+      responses:
+        '200':
+          description: Variables retrieved successfully
+          headers:
+            x-monite-version:
+              $ref: '../components/headers.yaml#/MoniteVersion'
+            x-request-id:
+              $ref: '../components/headers.yaml#/RequestId'
+            x-process-time:
+              $ref: '../components/headers.yaml#/ProcessTime'
+          content:
+            application/json:
+              schema:
+                $ref: '../components/schemas/purchase-orders.yaml#/PurchaseOrderVariables'
+        '404':
+          $ref: '../responses/errors.yaml#/NotFound'
+        '422':
+          $ref: '../responses/errors.yaml#/UnprocessableEntity'
+        '500':
+          $ref: '../responses/errors.yaml#/InternalServerError'
+
+  /payable_purchase_orders/{purchase_order_id}:
+    get:
+      operationId: getPurchaseOrderById
+      tags:
+        - Purchase Orders
+      description: Get a purchase order by ID
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: purchase_order_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: The ID of the purchase order to retrieve
+        - $ref: '../components/parameters.yaml#/MoniteVersion'
+        - $ref: '../components/parameters.yaml#/MoniteEntityId'
+      responses:
+        '200':
+          description: Purchase order retrieved successfully
+          headers:
+            x-monite-version:
+              $ref: '../components/headers.yaml#/MoniteVersion'
+            x-request-id:
+              $ref: '../components/headers.yaml#/RequestId'
+            x-process-time:
+              $ref: '../components/headers.yaml#/ProcessTime'
+            x-monite-entity-id:
+              $ref: '../components/headers.yaml#/MoniteEntityId'
+          content:
+            application/json:
+              schema:
+                $ref: '../components/schemas/purchase-orders.yaml#/PurchaseOrder'
+        '400':
+          $ref: '../responses/errors.yaml#/BadRequest'
+        '404':
+          $ref: '../responses/errors.yaml#/NotFound'
+        '422':
+          $ref: '../responses/errors.yaml#/UnprocessableEntity'
+        '500':
+          $ref: '../responses/errors.yaml#/InternalServerError'
